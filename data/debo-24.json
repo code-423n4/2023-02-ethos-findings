@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "debo",
+  "risk": "3",
+  "title": "SWC-105 Unprotected Ether Withdrawal in _withdraw() function",
+  "issueId": 24,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/24"
+}
