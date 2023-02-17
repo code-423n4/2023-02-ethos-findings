@@ -16,10 +16,11 @@
 | [G-12](#g-12-x--y-costs-more-gas-than-x--x--y-for-state-variables) | x += y costs more gas than x = x + y for state variables | 3 | 22 | 2486 |
 | [G-13](#g-13-when-possible-use-non-strict-comparison--andor--instead-of--) | When possible, use non-strict comparison >= and/or =< instead of > < | 9 | 64 | 960 |
 | [G-14](#g-14-if-possible-use-private-rather-than-public-for-constants) | If possible, use private rather than public for constants | 10 | 30 | 102180 |
+| [G-15](#g15-use-a-more-recent-version-of-solidity-to-save-gas) | Use a more recent version of Solidity to save gas | 12 | 12 | - |
 
 | Total issues | Total contexts | Total instances | Total minimum gas saved |
 | ------------ | -------------- | --------------- | ----------------------- |
-| 14           | 68             | 250             | 259787                  |
+| 15           | 80             | 262             | 259787                  |
 
 ## [G-01] Using bools for storage incurs overhead
 
@@ -60,7 +61,7 @@ Use uint256 for true/false to avoid a Gwarmaccess (100 gas), and to avoid Gsset 
 
 ### Description
 
-Caching the length eliminates the additional `DUP<N>` required to store the stack offset and converts each of them to a `DUP<N>` (3 gas).
+Caching the length eliminates the additional `DUP<N>` required to store the stack offset and converts each of them to a `DUP<N>` (3 gas).
 
 ### Findings
 
@@ -666,3 +667,68 @@ The compiler doesn't have to write non-payable getter functions for deployment c
 
 ### References
 - [[G‑16]  Using private rather than public for constants, saves gas](https://code4rena.com/reports/2022-12-backed/#g16--using-private-rather-than-public-for-constants-saves-gas)
+
+
+## [G‑15] Use a more recent version of Solidity to save gas
+
+### Description
+
+Use a version of Solidity at least `0.8.10` to:
+- have external calls skip contract existence checks if the external call has a return value (from v `0.8.10`);
+- get custom errors, which are cheaper at deployment than `revert()`/`require()` strings (from v `0.8.4`);
+- get better struct packing and cheaper multiple storage reads (from v `0.8.3`);
+- get simple compiler automatic inlining (from v `0.8.2`).
+
+### Findings
+
+- [Ethos-Core/contracts/ActivePool.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/ActivePool.sol)
+  ```Solidity
+  pragma solidity 0.6.11;
+  ```
+- [Ethos-Core/contracts/BorrowerOperations.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol)
+  ```Solidity
+  pragma solidity 0.6.11;
+  ```
+- [Ethos-Core/contracts/CollateralConfig.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/CollateralConfig.sol)
+  ```Solidity
+  pragma solidity 0.6.11;
+  ```
+- [Ethos-Core/contracts/LQTY/CommunityIssuance.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/CommunityIssuance.sol)
+  ```Solidity
+  pragma solidity 0.6.11;
+  ```
+- [Ethos-Core/contracts/LQTY/LQTYStaking.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/LQTYStaking.sol)
+  ```Solidity
+  pragma solidity 0.6.11;
+  ```
+- [Ethos-Core/contracts/LUSDToken.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LUSDToken.sol)
+  ```Solidity
+  pragma solidity 0.6.11;
+  ```
+- [Ethos-Core/contracts/StabilityPool.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/StabilityPool.sol)
+  ```Solidity
+  pragma solidity 0.6.11;
+  ```
+- [Ethos-Core/contracts/TroveManager.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol)
+  ```Solidity
+  pragma solidity 0.6.11;
+  ```
+- [Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol)
+  ```Solidity
+  pragma solidity ^0.8.0;
+  ```
+- [Ethos-Vault/contracts/ReaperVaultERC4626.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperVaultERC4626.sol)
+  ```Solidity
+  pragma solidity ^0.8.0;
+  ```
+- [Ethos-Vault/contracts/ReaperVaultV2.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperVaultV2.sol)
+  ```Solidity
+  pragma solidity ^0.8.0;
+  ```
+- [Ethos-Vault/contracts/abstract/ReaperBaseStrategyV4.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol)
+  ```Solidity
+  pragma solidity ^0.8.0;
+  ```
+
+### References
+- [[G-06] Use a more recent version of Solidity](https://code4rena.com/reports/2022-12-backed/#g06--use-a-more-recent-version-of-solidity)
