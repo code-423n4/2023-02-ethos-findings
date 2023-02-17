@@ -95,3 +95,13 @@ Proof Of Concept:
 Tools Used
 ------------
 * Manual Review
+
+
+Expressions for constant values such as a call to `keccak256()` should use immutable rather than constant.
+=====================================================================
+Proof Of Concept:
+--------------------
+* https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol#L49
+* https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol#L50
+* https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol#L51
+* https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol#L52
