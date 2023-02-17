@@ -106,3 +106,22 @@ Proof Of Concept:
 * https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol#L51
 * https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol#L52
 * https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperVaultV2.sol#L73-L76
+
+
+
+Public functions that are not called by the contract should be declared external instead.
+========================================================
+Description:
+-------------
+Contracts are allowed to override their parents` functions and change the visibility from external to public and can save gas by doing so.
+
+Proof Of Concept:
+--------------------
+`getNominalICR`
+* https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L1045
+
+`getRedemptionFee`
+* https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L1440
+
+`getPricePerFullShare`
+* https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperVaultV2.sol#L295
