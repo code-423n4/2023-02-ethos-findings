@@ -23,4 +23,5 @@ The standard method of handling initialize() functions is by using openzeppelin'
 ### Recommendation:
 Use the standard method of handling initialize() functions which is Openzeppelin's initializer() modifier.
 
-# [L-04] 
+# [L-04] issueOath() in CommunityIssuance.sol is supposed to be called by StabilityPool.sol 
+(i know this because of this comment ``` // @dev issues a set amount of Oath to the stability pool``` and this require statement here ```          _requireCallerIsStabilityPool(); ``` ) but ICommunityIssuance.sol's own was used instead. Please rectify this.
