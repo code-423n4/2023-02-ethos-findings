@@ -19,6 +19,7 @@
 | [G-12](#G13) | Use assembly to check for address(0)                                                                                                                  |     4     |
 
 *Total: 12 issues.*
+*The instances of the issue with ID `G-12 ` differ from the ones on the c4udit output.*
 
 ---
 
