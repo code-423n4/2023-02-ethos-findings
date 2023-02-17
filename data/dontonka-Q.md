@@ -1,0 +1,1 @@
+**ReaperAccessControl._cascadingAccessRoles** should be **pure** instead of **view** has it is not relying on the state variable of the contract and the same goes for the contract(s) that inherits this contract.
