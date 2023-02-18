@@ -27,3 +27,21 @@ manually
 
 Sample report approved by C4 judges team.
 https://github.com/code-423n4/2022-01-sandclock-findings/issues/55
+
+#########  require() or revert() statements that check input arguments should be at the top of the function ######### 
+
+#### Impact
+Checks that involve constants should come before checks that involve state variables, function calls, and calculations. By doing these checks first, the function is able to revert before wasting a Gcoldsload (2100 gas*) in a function that may ultimately revert in the unhappy case.
+
+in the ActivePool._rebalance function, in line 257, we call vars.finalBalance = collAmount[_collateral].sub(_amountLeavingPool); but this will get revert if _amountLeavingPool is more than collAmount[_collateral].
+
+So we need to first check that _amountLeavingPool  is <= collAmount[_collateral], in order to prevent wasting a Gcoldsload (2100 gas*) in _rebalance function that may ultimately revert in the case than _amountLeavingPool is more than collAmount[_collateral].
+
+#### Findings:
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L257
+
+#### Tools used
+manually
+
+Sample report approved by C4 judges team.
+https://code4rena.com/reports/2022-11-non-fungible/#g-09-require-or-revert-statements-that-check-input-arguments-should-be-at-the-top-of-the-function
