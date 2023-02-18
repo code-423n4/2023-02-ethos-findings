@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "SaeedAlipoor01988",
+  "risk": "2",
+  "title": "Low accuracy in calculating the present value of _collateral shares in vault can cause mistakes in _rebalance function calculations",
+  "issueId": 45,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/45"
+}
