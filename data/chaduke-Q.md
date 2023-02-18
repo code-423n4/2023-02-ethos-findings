@@ -53,3 +53,12 @@ Mitigation: we multiply ``rewardPerSecond`` by WAD and then divide ``issuance`` 
 }
 ```
 
+QA3. The ``permit()`` function fails to check v ∈ {27, 28}, so it might be subject to signature malleability.
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L262-L290
+
+Mitigation: 
+Use Zeppelin's ECDSA: https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/cryptography/ECDSA.sol
+
+
+
