@@ -120,6 +120,92 @@ This modifier can be replaced with function like below :
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/CollateralConfig.sol#L128-L132)
 
+##
+
+## [G-5]  BYTES CONSTANTS ARE MORE EFFICIENT THAN STRING CONSTANTS
+
+If data can fit into 32 bytes, then you should use bytes32 datatype rather than bytes or strings as it is cheaper in solidity.
+
+bytes32 is a fixed-size data type, meaning that its size is known at compile time and cannot change during runtime. This allows Solidity to allocate the exact amount of memory needed for a bytes32 variable, which can be more efficient than allocating memory dynamically for a string variable
+
+Because string variables are dynamically-sized and can grow or shrink during runtime, performing operations on them can be more expensive in terms of gas costs than operations on fixed-size data types like bytes32.
+
+PROOF OF CONCEPT :
+
+IDE USED REMIX : 
+
+> USING STRING :
+
+pragma solidity ^0.8.17;
+
+contract StorageTest {
+
+ string constant public NAME = "BorrowerOperations";
+
+}
+
+Remix Reports : 
+
+gas                      :  152195 gas
+transaction cost  :  132343 gas 
+execution cost	   :   73523 gas 
+
+
+> USING BYTES32 :
+
+pragma solidity ^0.8.17;
+
+contract StorageTest {
+
+bytes32 constant public NAME = bytes32("BorrowerOperations");
+
+}
+
+           gas	               : 113157 gas
+           transaction cost   : 98397 gas 
+           execution cost	: 41893 gas
+
+GAS SAVED :
+
+       gas :                        39038
+       transaction cost      33946
+       execution cost	       31630
+
+File :  BorrowerOperations.sol
+
+
+         21 : string constant public NAME = "BorrowerOperations";
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L21)
+
+##
+
+## [G-6]  USE REQUIRE INSTEAD OF ASSERT
+
+When a require statement fails, any gas spent after the failing condition is refunded to the caller. This can help prevent unnecessary gas usage and make the contract more efficient. On the other hand, when an assert statement fails, all remaining gas is consumed and cannot be refunded, which can be wasteful and lead to more expensive transactions
+
+The assert() and require() functions are a part of the error handling aspect in Solidity. Solidity makes use of state-reverting error handling exceptions. This means all changes made to the contract on that call or any sub-calls are undone if an error is thrown. It also flags an error.
+
+They are quite similar as both check for conditions and if they are not met, would throw an error.
+
+The big difference between the two is that the assert() function when false, uses up all the remaining gas and reverts all the changes made.
+
+Meanwhile, a require() function when false, also reverts back all the changes made to the contract but does refund all the remaining gas fees we offered to pay. This is the most common Solidity function used by developers for debugging and error handling.
+
+
+File :  BorrowerOperations.sol
+
+
+   128:  assert(MIN_NET_DEBT > 0);
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L128)
+
+
+
+
+       
+
+
 
 
       
