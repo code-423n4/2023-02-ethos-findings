@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "chaduke",
+  "risk": "3",
+  "title": "``lastFeeOperationTime`` is not modified correctly in function ``_updateLastFeeOpTime()``, resuling a much slower decay model for borrowing base rate",
+  "issueId": 33,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/33"
+}
