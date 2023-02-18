@@ -60,5 +60,10 @@ https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8
 Mitigation: 
 Use Zeppelin's ECDSA: https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/cryptography/ECDSA.sol
 
+QA4. The ``BorrowerOperations`` contract might not work for fees-on-transfer collateral tokens. 
 
+For example, the function ``_moveTokensAndCollateralFromAdjust calls ``safeTransferFrom()`` at L 497 to try to move ``_collchange`` amount of collateral tokens to the ``BorrowerOperations`` contract, however, the contract might receive less amount due to fees-on-transfer, as a result, the next statement that pull ``_collChange``, the same amount, to the ``_activePool`` will fail due to insufficient balance of collateral tokens. 
 
+[https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L476-L502](https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L476-L502)
+
+Mitigation: always measure the  balance before and after transfer to decide the amount that has been transferred for fees-on-transfer tokens. 
