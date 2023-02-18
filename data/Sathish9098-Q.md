@@ -2,7 +2,7 @@
 
 ##
 
-### [L-1]  OWNER CAN RENOUNCE OWNERSHIP
+### [1]  OWNER CAN RENOUNCE OWNERSHIP
 
 Description
 
@@ -31,6 +31,10 @@ File : CollateralConfig.sol
 
 [LINK TO CODE](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/CollateralConfig.sol)
 
+File : BorrowerOperations.sol
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L110-L126)
+
 Recommended Mitigation Steps
 
 We recommend either reimplementing the function to disable it or to clearly specify if it is part of the contract design.
@@ -38,7 +42,7 @@ We recommend either reimplementing the function to disable it or to clearly spec
 
 ##
 
-### [L-2]  OUTDATED COMPILER
+### [2]  OUTDATED COMPILER
 
 ### ALL CONTRACTS USING THE OUTDATED COMPILER VERSIONS  solidity 0.6.11
 
@@ -74,9 +78,15 @@ Code Generation: Fix data corruption that affected ABI-encoding of calldata valu
 Yul Optimizer: Prevent the incorrect removal of storage writes before calls to Yul functions that conditionally terminate the external EVM call.
 Apart from these, there are several minor bug fixes and improvements
 
+File : BorrowerOperations.sol
+
+          3: pragma solidity 0.6.11;
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L3)
+
 ##
 
-### [L-3]  USE NAMED IMPORTS INSTEAD OF PLAIN `IMPORT ‘FILE.SOL’
+### [3]  USE NAMED IMPORTS INSTEAD OF PLAIN `IMPORT ‘FILE.SOL’
 
 Using named imports instead of plain imports can make your Solidity code more readable and reduce the risk of naming conflicts between different contracts and libraries
 
@@ -88,26 +98,10 @@ Recommended Mitigation Steps :
     - 5:  import "./Dependencies/CheckContract.sol";
     +5:  import {CheckContract} from "./Dependencies/CheckContract.sol"; 
 
-### Need to modify all import statements like above mitigation way
-
-File : CollateralConfig.sol
-
-     6:  import "./Dependencies/Ownable.sol";
-     7:  import "./Dependencies/SafeERC20.sol";
-     8:  import "./Interfaces/ICollateralConfig.sol";
-
-[LINK TO CODE](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/CollateralConfig.sol)
+### All scope contracts using the plain imports. So modify the all scope contracts to named imports
 
 
-
-
-##
-
-# NON CRITICAL FINDINGS
-
-##
-
-### [N-1]  USE A MORE RECENT VERSION OF SOLIDITY
+### [4]  USE A MORE RECENT VERSION OF SOLIDITY
 
 Use a solidity version of at least 0.8.12 to get string.concat() to be used instead of abi.encodePacked(<str>,<str>)
 
@@ -115,6 +109,68 @@ File : CollateralConfig.sol
 
 
      3 :  pragma solidity 0.6.11;
+
+##
+
+### [5]  CONSTANT REDEFINED ELSEWHERE
+
+Consider defining in only one contract so that values cannot become out of sync when only one location is updated.
+
+A cheap way to store constants in a single location is to create an internal constant in a library. If the variable is a local cache of another contract’s value, consider making the cache variable internal or private, which will require external users to query the contract with the source of truth, so that callers don’t get out of sync.
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L21)
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/CollateralConfig.sol#L21-L25)
+
+##
+
+### [6] ADD A LIMIT FOR THE MAXIMUM NUMBER OF CHARACTERS PER LINE
+
+The solidity (documentation)[https://docs.soliditylang.org/en/v0.8.17/style-guide.html#maximum-line-length] recommends a maximum of 120 characters
+
+Consider adding a limit of 120 characters or less to prevent large lines.
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L637)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L645)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L675)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L697)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L538)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L528-L530)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L517)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L511)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L343)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L312)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L282)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L268-L272)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L259)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L254)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L248)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L233-L235)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L190)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L172)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L105)
+
+##
+
+### [7] CONTRACT LAYOUT AND ORDER OF FUNCTIONS
+
+The Solidity style guide (recommends)[https://docs.soliditylang.org/en/v0.8.17/style-guide.html#order-of-layout] declaring modifiers before the functions. Now modifiers declared bottom of the contract .
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/CollateralConfig.sol#L128-L132)
+
+Another recommendation is to declare internal functions below external functions
+
+ If possible, consider adding internal functions below external functions for the contract layout. So please move external function on top of the internal function.
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L724-L751)
+
+
+
+
+
+
+
+
 
 
 
