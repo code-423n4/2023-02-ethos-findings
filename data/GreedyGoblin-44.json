@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "GreedyGoblin",
+  "risk": "2",
+  "title": "Withdrawer can be incur heavy loss due to bad withdraw timing",
+  "issueId": 44,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/44"
+}
