@@ -31,6 +31,10 @@ File : CollateralConfig.sol
 
 [LINK TO CODE](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/CollateralConfig.sol)
 
+Recommended Mitigation Steps
+
+We recommend either reimplementing the function to disable it or to clearly specify if it is part of the contract design.
+
 
 ##
 
