@@ -35,6 +35,12 @@ File : CollateralConfig.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/CollateralConfig.sol#L3)
 
+File: 2023-02-ethos/Ethos-Core/contracts/BorrowerOperations.sol
+
+     3:  pragma solidity 0.6.11;
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L3)
+
 ##
 
 ### [G-3] CAN MAKE THE VARIABLE OUTSIDE THE LOOP TO SAVE GAS
@@ -200,13 +206,213 @@ File :  BorrowerOperations.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L128)
 
+   197:  assert(vars.compositeDebt > 0);
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L197)
+
+   331:  assert(_collWithdrawal <= vars.coll); 
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L331)
 
 
+
+##
+
+## [G-7]  USING STORAGE INSTEAD OF MEMORY FOR STRUCTS/ARRAYS SAVES GAS
+
+ When fetching data from a storage location, assigning the data to a memory variable causes all fields of the struct/array to be read from storage, which incurs a Gcoldsload (2100 gas) for each field of the struct/array. If the fields are read from the new memory variable, they incur an additional MLOAD rather than a cheap stack read. Instead of declearing the variable with the memory keyword, declaring the variable with the storage keyword and caching any fields that need to be re-read in stack variables, will be much cheaper, only incuring the Gcoldsload for the fields actually read. The only time it makes sense to read the whole struct/array into a memory variable, is if the full struct/array is being returned by the function, is being passed to a function that requires memory, or if the array/struct is being read from another memory array/struct
+
+
+File :  BorrowerOperations.sol
+
+   175 :  ContractsCache memory contractsCache = ContractsCache(troveManager, activePool, lusdToken);
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L175)
+
+   282 :  ContractsCache memory contractsCache = ContractsCache(troveManager, activePool, lusdToken);
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L283)
+
+   300 :  assert(msg.sender == _borrower || (msg.sender == stabilityPoolAddress && _collTopUp > 0 && _LUSDChange == 0));
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L301)
+
+##
+
+### [G-8]  REQUIRE()/REVERT() STRINGS LONGER THAN 32 BYTES COST EXTRA GAS
+
+Each extra memory word of bytes past the original 32 incurs an MSTORE which costs 3 gas
+
+File: 2023-02-ethos/Ethos-Core/contracts/CollateralConfig.sol
+
+   52 :  require(_collaterals.length != 0, "At least one collateral required");
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/CollateralConfig.sol#L52)
+
+File : 2023-02-ethos/Ethos-Core/contracts/BorrowerOperations.sol
+
+    525:  require(collateralConfig.isCollateralAllowed(_collateral), "BorrowerOps: Invalid collateral address");
+
+    (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L525)
+
+       529:    require(IERC20(_collateral).balanceOf(_user) >= _collAmount, "BorrowerOperations: Insufficient user collateral balance");
+
+       530:    require(IERC20(_collateral).allowance(_user, address(this)) >= _collAmount, "BorrowerOperations: Insufficient collateral allowance");
+
+ (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L529-L530)
+
+      534:    require(_collTopUp == 0 || _collWithdrawal == 0, "BorrowerOperations: Cannot withdraw and add coll");
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L534)
+
+      538:      require(_collTopUp != 0 || _collWithdrawal != 0 || _LUSDChange != 0, "BorrowerOps: There must be either a collateral change or a debt change");
+
+    (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L538)
+
+     543:   require(status == 1, "BorrowerOps: Trove does not exist or is closed");
+
+  (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L543)
+
+      552 :  require(_LUSDChange > 0, "BorrowerOps: Debt increase requires non-zero debtChange");
+
+ (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L552)
+
+       require(
+            !_checkRecoveryMode(_collateral, _price, _CCR, _collateralDecimals),
+            "BorrowerOps: Operation not permitted during Recovery Mode"
+        );
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L561-L564)
+  
+        568 :  require(_collWithdrawal == 0, "BorrowerOps: Collateral withdrawal not permitted Recovery Mode");
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L568)
+
+      617 :  require(_newICR >= _MCR, "BorrowerOps: An operation that would result in ICR < MCR is not permitted");
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L617)
+
+     621:  require(_newICR >= _CCR, "BorrowerOps: Operation must leave trove with ICR >= CCR");
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L621)
+
+     625:   require(_newICR >= _oldICR, "BorrowerOps: Cannot decrease your Trove's ICR in Recovery Mode");
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L625)
+
+     629 :  require(_newTCR >= _CCR, "BorrowerOps: An operation that would result in TCR < CCR is not permitted");
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L629)
+
+    633:  require (_netDebt >= MIN_NET_DEBT, "BorrowerOps: Trove's net debt must be greater than minimum");
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L633)
+
+   637 :   require(_debtRepayment <= _currentDebt.sub(LUSD_GAS_COMPENSATION), "BorrowerOps: Amount repaid must not be larger than the Trove's debt");
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L637)
+       
+     641 :  require(msg.sender == stabilityPoolAddress, "BorrowerOps: Caller is not Stability Pool");
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L641)
+
+    645:   require(_lusdToken.balanceOf(_borrower) >= _debtRepayment, "BorrowerOps: Caller doesnt have enough LUSD to make repayment");
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L645)
+
+       require(_maxFeePercentage <= DECIMAL_PRECISION,
+                "Max fee percentage must less than or equal to 100%");
+
+       require(_maxFeePercentage >= BORROWING_FEE_FLOOR && _maxFeePercentage <= DECIMAL_PRECISION,
+                "Max fee percentage must be between 0.5% and 100%");
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L650-L654)
+
+##
+
+## [G-9]  INTERNAL FUNCTIONS ONLY CALLED ONCE CAN BE INLINED TO SAVE GAS
+
+Not inlining costs 20 to 40 gas because of two extra JUMP instructions and additional stack operations needed for function calls.
+
+File : 2023-02-ethos/Ethos-Core/contracts/BorrowerOperations.sol
+
+        function _getCollChange(
+        uint _collReceived,
+        uint _requestedCollWithdrawal
+        )
+        internal
+        pure
+        returns(uint collChange, bool isCollIncrease)
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L438-L444)
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L476-L488)
+
+       524:  function _requireValidCollateralAddress(address _collateral) internal view {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L524)
+
+       533:  function _requireSingularCollChange(uint _collTopUp, uint _collWithdrawal) internal pure {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L533)
+
+      537:  function _requireNonZeroAdjustment(uint _collTopUp, uint _collWithdrawal, uint _LUSDChange) internal pure {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L537)
+
+     546 :  function _requireTroveisNotActive(ITroveManager _troveManager, address _borrower, address _collateral) internal view {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L546)
+
+      551:  function _requireNonZeroDebtChange(uint _LUSDChange) internal pure {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L551)
+
+   (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L555-L561)
+
+  (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L567)
+
+ (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L571-L581)
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L624)
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L636)
+
+       640 : function _requireCallerIsStabilityPool() internal view {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L661-L673)
+
+##
+
+### [G-10]  Use TERNARY operator instead of IF-ELSE statements 
+
+According to the Solidity documentation, the gas cost of a ternary operator is approximately 10 gas units, while the gas cost of an if-else statement is approximately 100 gas units
+
+File : 2023-02-ethos/Ethos-Core/contracts/BorrowerOperations.sol
+
+        - 490:    if (_isDebtIncrease) {
+        - 491:     _withdrawLUSD(_activePool, _lusdToken, _collateral, _borrower, _LUSDChange, _netDebtChange);
+       - 492:    } else {
+        - 493:   _repayLUSD(_activePool, _lusdToken, _collateral, _borrower, _LUSDChange);
+        - 494:     }
+
+       + _isDebtIncrease ? _withdrawLUSD(_activePool, _lusdToken, _collateral, _borrower, _LUSDChange, _netDebtChange) :_repayLUSD(_activePool, _lusdToken, _collateral, _borrower, _LUSDChange);
+
+##
+
+### [G-11] SPLITTING REQUIRE() STATEMENTS THAT USE && SAVES GAS
+
+See [this issue](https://github.com/code-423n4/2022-01-xdefi-findings/issues/128) which describes the fact that there is a larger deployment gas cost, but with enough runtime calls, the change ends up being cheaper by 3 gas
+
+File : 2023-02-ethos/Ethos-Core/contracts/BorrowerOperations.sol
+
+
+                require(_maxFeePercentage >= BORROWING_FEE_FLOOR && _maxFeePercentage <= DECIMAL_PRECISION,
+                "Max fee percentage must be between 0.5% and 100%");
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L653-L654)
 
        
-
-
-
 
       
 
