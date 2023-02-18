@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "chaduke",
+  "risk": "2",
+  "title": "openTrove() fails to claim rewards for the user. ",
+  "issueId": 47,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/47"
+}
