@@ -164,7 +164,26 @@ Another recommendation is to declare internal functions below external functions
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L724-L751)
 
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L748-L751
 
+##
+
+### [8]  NOT USING THE NAMED RETURN VARIABLES ANYWHERE IN THE FUNCTION IS CONFUSING
+
+File : 2023-02-ethos/Ethos-Core/contracts/BorrowerOperations.sol
+
+
+      function _getCollChange(
+        uint _collReceived,
+        uint _requestedCollWithdrawal
+       )
+        internal
+        pure
+        returns(uint collChange, bool isCollIncrease)
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L438-L444)
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L455-L466)
 
 
 
