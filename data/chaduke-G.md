@@ -31,3 +31,35 @@ function _decPow(uint _base, uint _minutes) public pure returns (uint) {
   }
 }
 ```
+
+G2. We can check where ``index < lastIndex`` to save gas for function ``_removeTroveOwner()``:
+
+[https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L1339-L1357](https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L1339-L1357)
+
+```diff
+function _removeTroveOwner(address _borrower, address _collateral, uint TroveOwnersArrayLength) internal {
+        Status troveStatus = Troves[_borrower][_collateral].status;
+        // It’s set in caller function `_closeTrove`
+        assert(troveStatus != Status.nonExistent && troveStatus != Status.active);
+
+        uint128 index = Troves[_borrower][_collateral].arrayIndex;
+        uint length = TroveOwnersArrayLength;
+        uint idxLast = length.sub(1);
+
+        assert(index <= idxLast);
+
++     if(index < idxLast){
+        address addressToMove = TroveOwners[_collateral][idxLast];
+
+        TroveOwners[_collateral][index] = addressToMove;
+        Troves[addressToMove][_collateral].arrayIndex = index;
+        emit TroveIndexUpdated(addressToMove, _collateral, index);
++      }
+        TroveOwners[_collateral].pop();
+    }
+```
+
+
+```diff
+
+```
