@@ -3,21 +3,53 @@
 
 ##
 
-### [G-1]  ++I/I++ OR --I/I-- SHOULD BE UNCHECKED{++I}/UNCHECKED{I++} OR  UNCHECKED{--I}/UNCHECKED{I--}WHEN IT IS NOT POSSIBLE FOR THEM TO OVERFLOW, AS IS THE CASE WHEN USED IN FOR- AND WHILE-LOOPS
+### [G-1] STATE VARIABLES ONLY SET IN THE CONSTRUCTOR SHOULD BE DECLARED IMMUTABLE
 
+Avoids a Gsset (20000 gas) in the constructor, and replaces the first access in each transaction (Gcoldsload - 2100 gas) and each access thereafter (Gwarmacces - 100 gas) with a PUSH32 (3 gas).
 
-The unchecked keyword is new in solidity version 0.8.0, so this only applies to that version or higher, which these instances are. This saves 30-40 gas per loop
+While strings are not value types, and therefore cannot be immutable/constant if not hard-coded outside of the constructor, the same behavior can be achieved by making the current contract abstract with virtual functions for the string accessors, and having a child contract override the functions with the hard-coded implementation-specific values.
 
-File : CollateralConfig.sol
+File : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
 
+       /// @audit owner (constructor)
 
-          56 :   for(uint256 i = 0; i < _collaterals.length; i++) {
+       227 : owner = msg.sender;
 
-(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/CollateralConfig.sol#L56)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L227)
 
 ##
 
-## [G-2]  USE A MORE RECENT VERSION OF SOLIDITY
+### [G-2] MULTIPLE ADDRESS/ID MAPPINGS CAN BE COMBINED INTO A SINGLE MAPPING OF AN ADDRESS/ID TO A STRUCT, WHERE APPROPRIATE
+
+Saves a storage slot for the mapping. Depending on the circumstances and sizes of types, can avoid a Gsset (20000 gas) per mapping combined. Reads and subsequent writes can also be cheaper when a function requires both values and they both fit in the same storage slot. Finally, if both fields are accessed in the same function, can save ~42 gas per access due to [not having to recalculate the key’s keccak256 hash](https://gist.github.com/IllIllI000/ec23a57daa30a8f8ca8b9681c8ccefb0) (Gkeccak256 - 30 gas) and that calculation’s associated stack operations
+
+File : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
+
+    86 :  mapping (address => mapping (address => Trove)) public Troves;
+
+    88 : mapping (address => uint) public totalStakes;
+
+    91 : mapping (address => uint) public totalStakesSnapshot;
+
+    94:   mapping (address => uint) public totalCollateralSnapshot;
+
+    104:  mapping (address => uint) public L_Collateral;
+    105:  mapping (address => uint) public L_LUSDDebt;
+
+     109 :  mapping (address => mapping (address => RewardSnapshot)) public rewardSnapshots;
+
+     116:  mapping (address => address[]) public TroveOwners;
+
+     119 : mapping (address => uint) public lastCollateralError_Redistribution;
+     120:   mapping (address => uint) public lastLUSDDebtError_Redistribution;
+    
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L86-L109)
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L116-L120)
+
+##
+
+## [G-3]  USE A MORE RECENT VERSION OF SOLIDITY
 
 Using the latest version of a smart contract can help you reduce gas costs because the latest version is usually optimized for efficiency and can use fewer gas fees to execute the same function compared to an older version. In addition, the latest version may include new features that can further optimize gas usage, such as the use of newer algorithms or data structures.
 
@@ -43,7 +75,7 @@ File: 2023-02-ethos/Ethos-Core/contracts/BorrowerOperations.sol
 
 ##
 
-### [G-3] CAN MAKE THE VARIABLE OUTSIDE THE LOOP TO SAVE GAS
+### [G-4] CAN MAKE THE VARIABLE OUTSIDE THE LOOP TO SAVE GAS
 
 In Solidity, declaring a variable inside a loop can result in higher gas costs compared to declaring it outside the loop. This is because every time the loop runs, a new instance of the variable is created, which can lead to unnecessary memory allocation and increased gas costs
 
@@ -98,14 +130,11 @@ File : CollateralConfig.sol
 
             emit CollateralWhitelisted(collateral, decimals, _MCRs[i], _CCRs[i]);
         }
-
-      
-
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/CollateralConfig.sol#L56-L73)
 
 ##
 
-### [G-4]  USE FUNCTION INSTEAD OF MODIFIERS
+### [G-5]  USE FUNCTION INSTEAD OF MODIFIERS
 
 Functions can have local variables. When a modifier is used, all of the variables used in the modifier are stored in memory for the entire duration of the function call, even if they are not used after the modifier. This can result in unnecessary gas costs. With a function, you can declare local variables that are only stored in memory for the duration of the function call, which can save on gas costs
 
@@ -128,7 +157,7 @@ This modifier can be replaced with function like below :
 
 ##
 
-## [G-5]  BYTES CONSTANTS ARE MORE EFFICIENT THAN STRING CONSTANTS
+## [G-6]  BYTES CONSTANTS ARE MORE EFFICIENT THAN STRING CONSTANTS
 
 If data can fit into 32 bytes, then you should use bytes32 datatype rather than bytes or strings as it is cheaper in solidity.
 
@@ -186,7 +215,7 @@ File :  BorrowerOperations.sol
 
 ##
 
-## [G-6]  USE REQUIRE INSTEAD OF ASSERT
+## [G-7]  USE REQUIRE INSTEAD OF ASSERT
 
 When a require statement fails, any gas spent after the failing condition is refunded to the caller. This can help prevent unnecessary gas usage and make the contract more efficient. On the other hand, when an assert statement fails, all remaining gas is consumed and cannot be refunded, which can be wasteful and lead to more expensive transactions
 
@@ -218,7 +247,7 @@ File :  BorrowerOperations.sol
 
 ##
 
-## [G-7]  USING STORAGE INSTEAD OF MEMORY FOR STRUCTS/ARRAYS SAVES GAS
+## [G-8]  USING STORAGE INSTEAD OF MEMORY FOR STRUCTS/ARRAYS SAVES GAS
 
  When fetching data from a storage location, assigning the data to a memory variable causes all fields of the struct/array to be read from storage, which incurs a Gcoldsload (2100 gas) for each field of the struct/array. If the fields are read from the new memory variable, they incur an additional MLOAD rather than a cheap stack read. Instead of declearing the variable with the memory keyword, declaring the variable with the storage keyword and caching any fields that need to be re-read in stack variables, will be much cheaper, only incuring the Gcoldsload for the fields actually read. The only time it makes sense to read the whole struct/array into a memory variable, is if the full struct/array is being returned by the function, is being passed to a function that requires memory, or if the array/struct is being read from another memory array/struct
 
@@ -237,9 +266,15 @@ File :  BorrowerOperations.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L301)
 
+FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
+
+         313 :  address[] memory borrowers = new address[](1);
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L313
+
 ##
 
-### [G-8]  REQUIRE()/REVERT() STRINGS LONGER THAN 32 BYTES COST EXTRA GAS
+### [G-9]  REQUIRE()/REVERT() STRINGS LONGER THAN 32 BYTES COST EXTRA GAS
 
 Each extra memory word of bytes past the original 32 incurs an MSTORE which costs 3 gas
 
@@ -330,7 +365,7 @@ File : 2023-02-ethos/Ethos-Core/contracts/BorrowerOperations.sol
 
 ##
 
-## [G-9]  INTERNAL FUNCTIONS ONLY CALLED ONCE CAN BE INLINED TO SAVE GAS
+## [G-10]  INTERNAL FUNCTIONS ONLY CALLED ONCE CAN BE INLINED TO SAVE GAS
 
 Not inlining costs 20 to 40 gas because of two extra JUMP instructions and additional stack operations needed for function calls.
 
@@ -384,7 +419,7 @@ File : 2023-02-ethos/Ethos-Core/contracts/BorrowerOperations.sol
 
 ##
 
-### [G-10]  Use TERNARY operator instead of IF-ELSE statements 
+### [G-11]  Use TERNARY operator instead of IF-ELSE statements  in possible situations to save gas 
 
 According to the Solidity documentation, the gas cost of a ternary operator is approximately 10 gas units, while the gas cost of an if-else statement is approximately 100 gas units
 
@@ -400,7 +435,7 @@ File : 2023-02-ethos/Ethos-Core/contracts/BorrowerOperations.sol
 
 ##
 
-### [G-11] SPLITTING REQUIRE() STATEMENTS THAT USE && SAVES GAS
+### [G-12] SPLITTING REQUIRE() STATEMENTS THAT USE && SAVES GAS
 
 See [this issue](https://github.com/code-423n4/2022-01-xdefi-findings/issues/128) which describes the fact that there is a larger deployment gas cost, but with enough runtime calls, the change ends up being cheaper by 3 gas
 
@@ -412,6 +447,37 @@ File : 2023-02-ethos/Ethos-Core/contracts/BorrowerOperations.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L653-L654)
 
+##
+
+### [G-13]  ++I/I++ OR --I/I-- SHOULD BE UNCHECKED{++I}/UNCHECKED{I++} OR  UNCHECKED{--I}/UNCHECKED{I--}WHEN IT IS NOT POSSIBLE FOR THEM TO OVERFLOW, AS IS THE CASE WHEN USED IN FOR- AND WHILE-LOOPS
+
+
+The unchecked keyword is new in solidity version 0.8.0, so this only applies to that version or higher, which these instances are. This saves 30-40 gas per loop
+
+File : 2023-02-ethos/Ethos-Core/contracts/CollateralConfig.sol
+
+
+          56 :   for(uint256 i = 0; i < _collaterals.length; i++) {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/CollateralConfig.sol#L56)
+
+## [G-14]  NOT USING THE NAMED RETURN VARIABLES WHEN A FUNCTION RETURNS, WASTES DEPLOYMENT GAS
+
+FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
+
+      function _liquidateNormalMode(
+        IActivePool _activePool,
+        IDefaultPool _defaultPool,
+        address _collateral,
+        address _borrower,
+        uint _LUSDInStabPool
+        )
+        internal
+        returns (LiquidationValues memory singleLiquidation)
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L321-L353)
+
+     
        
 
       
