@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Co0nan",
+  "risk": "2",
+  "title": "Improper implementation of updateCollateralRatios",
+  "issueId": 56,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/56"
+}
