@@ -187,6 +187,37 @@ File : 2023-02-ethos/Ethos-Core/contracts/BorrowerOperations.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L455-L466)
 
+FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
+
+       function _liquidateNormalMode(
+        IActivePool _activePool,
+        IDefaultPool _defaultPool,
+        address _collateral,
+        address _borrower,
+        uint _LUSDInStabPool
+        )
+        internal
+        returns (LiquidationValues memory singleLiquidation)
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L321-L353)
+
+
+function _getOffsetAndRedistributionVals
+    (
+        uint _debt,
+        uint _coll,
+        uint _LUSDInStabPool
+    )
+        internal
+        pure
+        returns (uint debtToOffset, uint collToSendToSP, uint debtToRedistribute, uint collToRedistribute)
+
+( https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L450 )
+
+      488 :   returns (LiquidationValues memory singleLiquidation)
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L488)
+
 ##
 
 ### [9] DECIMALS() NOT PART OF ERC20 STANDARD
@@ -221,7 +252,140 @@ Your current version of @openzeppelin/contracts-upgradeable is ^4.7.3 and latest
 
 ##
 
-### []
+### [13] Repeated codes can be reused instead repeating same line of codes in multiple functions
+
+
+FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
+
+        LocalVariables_InnerSingleLiquidateFunction memory vars;
+
+        (singleLiquidation.entireTroveDebt,
+        singleLiquidation.entireTroveColl,
+        vars.pendingDebtReward,
+        vars.pendingCollReward) = getEntireDebtAndColl(_borrower, _collateral);
+
+        _movePendingTroveRewardsToActivePool(_activePool, _defaultPool, _collateral, vars.pendingDebtReward, vars.pendingCollReward);
+        _removeStake(_borrower, _collateral);
+
+        singleLiquidation.collGasCompensation = _getCollGasCompensation(singleLiquidation.entireTroveColl);
+        singleLiquidation.LUSDGasCompensation = LUSD_GAS_COMPENSATION;
+        uint collToLiquidate = singleLiquidation.entireTroveColl.sub(singleLiquidation.collGasCompensation);
+
+This same codes repeated in_liquidateRecoveryMode() and _liquidateNormalMode() Functions . This line of coded can be reused instead of repeating in both functions 
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L321-L380
+
+##
+
+### [14]  LACK OF CHECKS THE INTEGER RANGES
+
+All methods lack checks on the following integer arguments. 
+
+!=0 conditions not checked . The maximum range condition is not checked. This is not good code practice proceed arguments without checking.
+
+So before calling external calls or doing any mathematical operations the input arguments must be checked .
+
+FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L478-L507)
+
+##
+
+### [15]  USE PUBLIC CONSTANT CONSISTENTLY
+
+Replace CONSTANT PUBLIC with PUBLIC CONSTANT
+
+FILE : 2023-02-ethos/Ethos-Core/contracts/CollateralConfig.sol
+
+       21:  uint256 constant public MIN_ALLOWED_MCR = 1.1 ether; // 110%
+
+       25:   uint256 constant public MIN_ALLOWED_CCR = 1.5 ether; // 150%
+
+   (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/CollateralConfig.sol#L21-L25)
+
+FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
+
+   48:  uint constant public SECONDS_IN_ONE_MINUTE = 60;
+   53:  uint constant public MINUTE_DECAY_FACTOR = 999037758833783000;
+   54:  uint constant public override REDEMPTION_FEE_FLOOR = DECIMAL_PRECISION / 1000 * 5; // 0.5%
+   55:  uint constant public MAX_BORROWING_FEE = DECIMAL_PRECISION / 100 * 5; // 5%
+   61:  uint constant public BETA = 2;
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L48-L61)
+
+FILE : 2023-02-ethos/Ethos-Core/contracts/BorrowerOperations.sol
+
+    21:  string constant public NAME = "BorrowerOperations";
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L21)
+
+##
+
+### [16] INTERCHANGEABLE USAGE OF UINT AND UINT256
+
+Consider using only one approach throughout the codebase, e.g. only uint or only uint256.
+
+ (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L48-L63)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L67-L77)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L616)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L620)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L628)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L663-L669)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L684-L691)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L726-L732)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L130-L137)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L147-L157)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L480-L484)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L673-L679)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L870)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L1236)
+
+##
+
+### [17] _approve() should be replaced with _safeApprove() 
+
+safeApprove() is generally considered to be a safer and more secure way of approving spenders in an ERC20 contract, as it includes additional checks and safeguards to prevent certain types of vulnerabilities that can arise from a poorly implemented approve() function
+
+The approve() function allows an address to spend a certain amount of tokens on behalf of the token owner. One vulnerability that can arise with the approve() function is known as the "double-spending" attack, where an attacker can approve a spender to transfer tokens, then transfer all their tokens to a different address, making the previously approved transfer invalid.
+
+To prevent this type of attack, the safeApprove() function typically includes additional checks to ensure that the current allowance for a spender is zero before setting a new allowance. This prevents an attacker from double-spending an allowance that has already been approved
+
+File: Ethos-Core/contracts/LUSDToken.sol
+
+    231:         _approve(msg.sender, spender, amount);
+
+    238:         _approve(sender, msg.sender, _allowances[sender][msg.sender].sub(amount, "ERC20: transfer amount exceeds allowance"));
+
+    243:         _approve(msg.sender, spender, _allowances[msg.sender][spender].add(addedValue));
+
+   248:         _approve(msg.sender, spender, _allowances[msg.sender][spender].sub(subtractedValue, "ERC20: decreased allowance below zero"));
+
+   289:         _approve(owner, spender, amount);
+
+[LUSDToken.so](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LUSDToken.sol)
+
+##
+
+### [18] _safeMint() should be used rather than _mint() wherever possible
+
+safeMint() is generally considered to be a safer and more secure way of minting new tokens in an ERC20 contract, as it includes additional checks and safeguards to prevent certain types of vulnerabilities that can arise during token minting.
+
+File: Ethos-Core/contracts/LUSDToken.sol
+
+   188:    _mint(_account, _amount);
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L188
+
+      
+
+
+    
+    
+
+   
+
+
+
 
 
 
