@@ -15,9 +15,3 @@ https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/Trove
 
 reference :-
 https://docs.soliditylang.org/en/v0.8.15/natspec-format.html
-
-## 3 .Weird returns :- 
-It used  return -int
-code snippet :-
-https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperVaultV2.sol#L228
-https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperVaultV2.sol#L235
