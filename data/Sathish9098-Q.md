@@ -150,6 +150,8 @@ Consider adding a limit of 120 characters or less to prevent large lines.
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L172)
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L105)
 
+
+
 ##
 
 ### [7] CONTRACT LAYOUT AND ORDER OF FUNCTIONS
@@ -184,6 +186,47 @@ File : 2023-02-ethos/Ethos-Core/contracts/BorrowerOperations.sol
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L438-L444)
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L455-L466)
+
+##
+
+### [9] DECIMALS() NOT PART OF ERC20 STANDARD
+
+decimals() is not part of the official ERC20 standard and might fail for tokens that do not implement it. While in practice it is very unlikely, as usually most of the tokens implement it, this should still be considered as a potential issue.
+
+File : 2023-02-ethos/Ethos-Core/contracts/CollateralConfig.sol
+
+     63 :  uint256 decimals = IERC20(collateral).decimals();
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/CollateralConfig.sol#L63
+
+##
+
+### [10] LARGE MULTIPLES OF TEN SHOULD USE SCIENTIFIC NOTATION
+
+Using scientific notation for large multiples of ten will improve code readability
+
+ (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L53)
+
+##
+
+### [11] USE LATEST OPENZEPPELIN CONTRACTS 
+
+Your current version of @openzeppelin/contracts is ^4.7.3 and latest version is 4.8.1
+
+Your current version of @openzeppelin/contracts-upgradeable is ^4.7.3 and latest version is 4.8.1
+
+##
+
+### [12]  NatSpec comments should be increased in contracts
+
+##
+
+### []
+
+
+
+
+
 
 
 
