@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "seeu",
+  "risk": "3",
+  "title": "Transfer result in the contract is not checked",
+  "issueId": 49,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/49"
+}
