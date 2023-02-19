@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Co0nan",
+  "risk": "3",
+  "title": "Incorrect implementation for transferFrom in LUSDToken.sol",
+  "issueId": 65,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/65"
+}
