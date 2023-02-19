@@ -417,6 +417,11 @@ File : 2023-02-ethos/Ethos-Core/contracts/BorrowerOperations.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L661-L673)
 
+FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L478-L488)
+
+
 ##
 
 ### [G-11]  Use TERNARY operator instead of IF-ELSE statements  in possible situations to save gas 
