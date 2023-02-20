@@ -59,7 +59,3 @@ function _removeTroveOwner(address _borrower, address _collateral, uint TroveOwn
     }
 ```
 
-
-```diff
-
-```
