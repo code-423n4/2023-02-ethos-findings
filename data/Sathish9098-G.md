@@ -132,6 +132,17 @@ File : CollateralConfig.sol
         }
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/CollateralConfig.sol#L56-L73)
 
+FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
+
+        for (vars.i = 0; vars.i < _n && vars.user != firstUser; vars.i++) {
+            // we need to cache it, because current user is likely going to be deleted
+            address nextUser = _sortedTroves.getPrev(_collateral, vars.user);
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L608-L612)
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L819)
+
+
 ##
 
 ### [G-5]  USE FUNCTION INSTEAD OF MODIFIERS
@@ -244,6 +255,15 @@ File :  BorrowerOperations.sol
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L331)
 
 
+FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
+
+    1281 :  assert(closedStatus != Status.nonExistent && closedStatus != Status.active);
+
+ (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L1279)
+
+    1342 :  assert(troveStatus != Status.nonExistent && troveStatus != Status.active);
+
+    1348 :  assert(index <= idxLast);
 
 ##
 
@@ -272,96 +292,15 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
 
 https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L313
 
-##
+## [G-9] PUBLIC FUNCTIONS NOT CALLED BY THE CONTRACT SHOULD BE DECLARED EXTERNAL INSTEAD
 
-### [G-9]  REQUIRE()/REVERT() STRINGS LONGER THAN 32 BYTES COST EXTRA GAS
+Contracts are allowed to override their parents’ functions and change the visibility from external to public and can save gas by doing so
 
-Each extra memory word of bytes past the original 32 incurs an MSTORE which costs 3 gas
+FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
 
-File: 2023-02-ethos/Ethos-Core/contracts/CollateralConfig.sol
+      1045 :  function getNominalICR(address _borrower, address _collateral) public view override returns (uint) {
 
-   52 :  require(_collaterals.length != 0, "At least one collateral required");
-
-(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/CollateralConfig.sol#L52)
-
-File : 2023-02-ethos/Ethos-Core/contracts/BorrowerOperations.sol
-
-    525:  require(collateralConfig.isCollateralAllowed(_collateral), "BorrowerOps: Invalid collateral address");
-
-    (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L525)
-
-       529:    require(IERC20(_collateral).balanceOf(_user) >= _collAmount, "BorrowerOperations: Insufficient user collateral balance");
-
-       530:    require(IERC20(_collateral).allowance(_user, address(this)) >= _collAmount, "BorrowerOperations: Insufficient collateral allowance");
-
- (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L529-L530)
-
-      534:    require(_collTopUp == 0 || _collWithdrawal == 0, "BorrowerOperations: Cannot withdraw and add coll");
-
-(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L534)
-
-      538:      require(_collTopUp != 0 || _collWithdrawal != 0 || _LUSDChange != 0, "BorrowerOps: There must be either a collateral change or a debt change");
-
-    (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L538)
-
-     543:   require(status == 1, "BorrowerOps: Trove does not exist or is closed");
-
-  (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L543)
-
-      552 :  require(_LUSDChange > 0, "BorrowerOps: Debt increase requires non-zero debtChange");
-
- (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L552)
-
-       require(
-            !_checkRecoveryMode(_collateral, _price, _CCR, _collateralDecimals),
-            "BorrowerOps: Operation not permitted during Recovery Mode"
-        );
-
-(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L561-L564)
-  
-        568 :  require(_collWithdrawal == 0, "BorrowerOps: Collateral withdrawal not permitted Recovery Mode");
-
-(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L568)
-
-      617 :  require(_newICR >= _MCR, "BorrowerOps: An operation that would result in ICR < MCR is not permitted");
-
-(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L617)
-
-     621:  require(_newICR >= _CCR, "BorrowerOps: Operation must leave trove with ICR >= CCR");
-
-(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L621)
-
-     625:   require(_newICR >= _oldICR, "BorrowerOps: Cannot decrease your Trove's ICR in Recovery Mode");
-
-(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L625)
-
-     629 :  require(_newTCR >= _CCR, "BorrowerOps: An operation that would result in TCR < CCR is not permitted");
-
-(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L629)
-
-    633:  require (_netDebt >= MIN_NET_DEBT, "BorrowerOps: Trove's net debt must be greater than minimum");
-
-(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L633)
-
-   637 :   require(_debtRepayment <= _currentDebt.sub(LUSD_GAS_COMPENSATION), "BorrowerOps: Amount repaid must not be larger than the Trove's debt");
-
-(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L637)
-       
-     641 :  require(msg.sender == stabilityPoolAddress, "BorrowerOps: Caller is not Stability Pool");
-
-(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L641)
-
-    645:   require(_lusdToken.balanceOf(_borrower) >= _debtRepayment, "BorrowerOps: Caller doesnt have enough LUSD to make repayment");
-
-(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L645)
-
-       require(_maxFeePercentage <= DECIMAL_PRECISION,
-                "Max fee percentage must less than or equal to 100%");
-
-       require(_maxFeePercentage >= BORROWING_FEE_FLOOR && _maxFeePercentage <= DECIMAL_PRECISION,
-                "Max fee percentage must be between 0.5% and 100%");
-
-(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L650-L654)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L1045)
 
 ##
 
@@ -421,6 +360,12 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L478-L488)
 
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L582-L594)
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L671-L682)
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L898-L913)
+
 
 ##
 
@@ -466,6 +411,26 @@ File : 2023-02-ethos/Ethos-Core/contracts/CollateralConfig.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/CollateralConfig.sol#L56)
 
+FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
+
+      608 :   for (vars.i = 0; vars.i < _n && vars.user != firstUser; vars.i++) {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L608)
+
+     690 :  for (vars.i = 0; vars.i < _n; vars.i++) {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L690)
+
+    808 :  for (vars.i = 0; vars.i < _troveArray.length; vars.i++) {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L808)
+
+   882 : for (vars.i = 0; vars.i < _troveArray.length; vars.i++) {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L882)
+    
+
+     
 ## [G-14]  NOT USING THE NAMED RETURN VARIABLES WHEN A FUNCTION RETURNS, WASTES DEPLOYMENT GAS
 
 FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
@@ -481,6 +446,71 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
         returns (LiquidationValues memory singleLiquidation)
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L321-L353)
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L1321-L1333)
+
+     
+
+##
+
+### [G-15] ADD UNCHECKED {} FOR SUBTRACTIONS WHERE THE OPERANDS CANNOT UNDERFLOW BECAUSE OF A PREVIOUS REQUIRE() OR IF-STATEMENT . This saves 30-40 gas
+
+SOLUTION:
+
+ require(a < b); x = b - a => require(a <b); unchecked { x = b - a } 
+
+require(a > b); x = a - b => require(a > b); unchecked { x = a - b } 
+
+FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
+
+
+            493:   if (_collDecimals < LiquityMath.CR_CALCULATION_DECIMALS) {
+            494:   cappedCollPortion = cappedCollPortion.div(10 ** (LiquityMath.CR_CALCULATION_DECIMALS - _collDecimals));
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L493-L494)
+
+           495 :  else if (_collDecimals > LiquityMath.CR_CALCULATION_DECIMALS) {
+            496:  cappedCollPortion = cappedCollPortion.mul(10 ** (_collDecimals - LiquityMath.CR_CALCULATION_DECIMALS));
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L495-L496)
+
+## [G-16]  USAGE OF UINTS/INTS SMALLER THAN 32 BYTES (256 BITS) INCURS OVERHEAD
+
+When using elements that are smaller than 32 bytes, your contract’s gas usage may be higher. This is because the EVM operates on 32 bytes at a time. Therefore, if the element is smaller than that, the EVM must use more operations in order to reduce the size of the element from 32 bytes to the desired size
+
+(https://docs.soliditylang.org/en/v0.8.11/internals/layout_in_storage.html)
+
+Each operation involving a uint128 costs an extra 22-28 gas (depending on whether the other operand is also a variable of type uint8) as compared to ones involving uint256, due to the compiler having to clear the higher bits of the memory word before operating on the uint128, as well as the associated stack operations of doing so. Use a larger size then downcast where needed
+
+FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
+
+    1321 :  function _addTroveOwnerToArray(address _borrower, address _collateral) internal returns (uint128 index) {
+
+    1329 :  index = uint128(TroveOwners[_collateral].length.sub(1));
+
+    1344 :   uint128 index = Troves[_borrower][_collateral].arrayIndex;
+
+    1414 :   assert(newBaseRate > 0);
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L1344)
+
+##
+
+### [17] SUPERFLUOUS EVENT FIELDS
+
+block.timestamp are added to event information by default so adding them manually wastes gas
+
+FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
+
+      1505 :  emit LastFeeOpTimeUpdated(block.timestamp);
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L1505)
+
+
+
+
+
+
 
      
        
