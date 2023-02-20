@@ -125,12 +125,12 @@ QA10. ``maxWithdraw()`` does not consider the balance of the underlying assets f
 
 https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L165-L167
 
-Mitigation: consider the balance for the underlying asset as well. This implementation can also be enhanced if we will consider underlying strategies. 
+Mitigation: consider the balance for the underlying asset and additional allocations (``_freeFunds()``) as well. This implementation can also be enhanced if we will consider underlying strategies. 
 
 ```javascript
 
 function maxWithdraw(address owner) external view override returns (uint256 maxAssets) {
-        uint bal1 = token.balanceOf(address(this));
+        uint bal1 = _freeFunds();
         uint bal2 = convertToAssets(balanceOf(owner));
 
         if(bal1 < bal2) return bal1;
