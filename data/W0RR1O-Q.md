@@ -19,3 +19,22 @@ Recommended Mitigation Steps:
 Use the `recover` function from `https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/cryptography/ECDSA.sol` for signature verification
 
 
+
+
+Vulnerability in `issueOath()` function which can lead to a potential timestamp manipulation
+===========================================================
+Description:
+-------------
+The function `issueOath()` in the contract `CommunityIssuance.sol` has a potential vulnerability due wo its reliance on `block.timestamp` for  time-based calculations. The Ethereum Yellow Paper states that it is not guaranteed that 2 nodes on the network will have the same `block.timestamp` value. The function uses `bock.timestamp` to calculate the time passed since the last issuance of Oath. However, the timestamp can be manipulated by a miner to a certain extent causing them to controll the amount of oath issued.
+
+ The severity of this issue is considered low as it requires a specific sequence of events to occur for it to be exploited. An attacker would need to be able to manipulate the `block.timestamp` and either be a miner or have a miner who is willing to manipulate the timestamp to their advantage. Additionally, the attacker would need to have overridden the `issueOath` function in another contract.
+
+Proof of Concept:
+--------------------
+* https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L84-L95
+
+Recommended Mitigation Steps:
+------------------------------------
+Use a more reliable and accurate source such as an off-chain oracle or consider using `block.number` instead `block.timestamp`
+ 
+
