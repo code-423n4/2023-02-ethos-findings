@@ -84,3 +84,9 @@ QA7. ``updateGovernance()`` and  ``updateGuardian()`` use only one step to chang
 Changing adminS in one step is risky: if the new address is a wrong input by mistake, we will lose all the privileges of the owner. 
 
 Recommendation:  Use OpenZeppelin's Ownable2Step. https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable2Step.sol
+
+QA8. There is no way to revoke a permit of approval. It the approval permit was given to the wrong person or with the wrong amount, a revocation is necessary. 
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L262-L290
+
+Mitigation: One can revoke a permit by increasing the nonce number. 
