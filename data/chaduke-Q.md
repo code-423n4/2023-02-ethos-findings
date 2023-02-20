@@ -71,3 +71,8 @@ Mitigation: always measure the  balance before and after transfer to decide the 
 QA5: ``_computeNominalCR()`` assumes the debt token has a 18 decimals. Need to make this explicit or adjust the debit tokens to 18 decimals as well. 
 
 https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/Dependencies/LiquityMath.sol#L97-L106
+
+QA6. Nothing concrete regarding ``lqtystaking`` is implemented now in ``TroveManager.sol``, so state variable or event can be deleted regarding ``lqtystaking`` or complete the implementation if necessary.
+```javascript
+    address public lqtyStakingAddress;
+```
