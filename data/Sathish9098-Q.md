@@ -46,6 +46,9 @@ We recommend either reimplementing the function to disable it or to clearly spec
 
 ### ALL CONTRACTS USING THE OUTDATED COMPILER VERSIONS  solidity 0.6.11
 
+Context:
+All contracts
+
 The pragma version used are:
 
 pragma solidity 0.6.11;
@@ -84,9 +87,18 @@ File : BorrowerOperations.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L3)
 
+Recommendation:
+
+Old version of Solidity is used , newer version can be used (0.8.17)
+
+
+
 ##
 
 ### [3]  USE NAMED IMPORTS INSTEAD OF PLAIN `IMPORT ‘FILE.SOL’
+
+Context:
+All contracts
 
 Using named imports instead of plain imports can make your Solidity code more readable and reduce the risk of naming conflicts between different contracts and libraries
 
@@ -98,17 +110,7 @@ Recommended Mitigation Steps :
     - 5:  import "./Dependencies/CheckContract.sol";
     +5:  import {CheckContract} from "./Dependencies/CheckContract.sol"; 
 
-### All scope contracts using the plain imports. So modify the all scope contracts to named imports
-
-
-### [4]  USE A MORE RECENT VERSION OF SOLIDITY
-
-Use a solidity version of at least 0.8.12 to get string.concat() to be used instead of abi.encodePacked(<str>,<str>)
-
-File : CollateralConfig.sol
-
-
-     3 :  pragma solidity 0.6.11;
+This was breaking the rule of modularity and modular programming: only import what you need Specific imports with curly braces allow us to apply this rule better
 
 ##
 
@@ -217,6 +219,8 @@ function _getOffsetAndRedistributionVals
       488 :   returns (LiquidationValues memory singleLiquidation)
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L488)
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L1164-L1171)
 
 ##
 
@@ -375,6 +379,17 @@ File: Ethos-Core/contracts/LUSDToken.sol
    188:    _mint(_account, _amount);
 
 https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L188
+
+##
+
+
+
+
+
+
+
+
+
 
       
 
