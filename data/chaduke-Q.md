@@ -76,3 +76,11 @@ QA6. Nothing concrete regarding ``lqtystaking`` is implemented now in ``TroveMan
 ```javascript
     address public lqtyStakingAddress;
 ```
+
+QA7. ``updateGovernance()`` and  ``updateGuardian()`` use only one step to change address. 
+
+[https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L146-L158](https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L146-L158)
+
+Changing adminS in one step is risky: if the new address is a wrong input by mistake, we will lose all the privileges of the owner. 
+
+Recommendation:  Use OpenZeppelin's Ownable2Step. https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable2Step.sol
