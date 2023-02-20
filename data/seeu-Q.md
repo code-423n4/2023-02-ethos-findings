@@ -165,7 +165,7 @@ It is also reccomended to implement the OpenZeppelin soludion [ECDSA.sol](https:
 
 ### Description
 
-Even if it's possible that certain contracts aren't already subclassifiedsub-classed, including the storage variable `__gap[50]` now will prevent forgetting to do so in the future.
+Even if it's possible that certain contracts aren't already sub-classed, including the storage variable `__gap[50]` now will prevent forgetting to do so in the future.
 
 ### Findings
 
