@@ -131,4 +131,4 @@ This will happen when ``_freeFunds() = 0``. Then the following line will have a 
   shares = (_amount * totalSupply()) / freeFunds; // use "freeFunds" instead of "pool"
 ```
 
-Mitigation: keep a minimum reserve so that users cannot withdraw. In this way, we never have ``_freeFunds() = 0`` when ``totalSupply() > 0``. 
+Mitigation: keep a minimum reserve so that users cannot withdraw. In this way, we never have ``_freeFunds() = 0`` when ``totalSupply() > 0``.  Locked profit does not help since it is not part of the ``_freeFunds() = 0``. 
