@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Inspectah",
+  "risk": "2",
+  "title": "Hardcoded slippage value can cause failed withdrawals",
+  "issueId": 79,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/79"
+}
