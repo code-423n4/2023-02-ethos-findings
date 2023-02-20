@@ -121,19 +121,14 @@ However, the following two lines will pass and as  a result, Bob gets the needed
 
 Mitigation: 1) add a check that ``recoveredAddress != 0`` and 2) use Zeppelin's [ECDSA](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/cryptography/ECDSA.sol).  
 
-QA10. ``maxWithdraw()`` does not consider the balance of the underlying assets for the contract. 
+QA10. The ``_deposit()`` might suffer from a divide-by-zero error. 
 
-https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L165-L167
+[https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L334](https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L334)
 
-Mitigation: consider the balance for the underlying asset and additional allocations (``_freeFunds()``) as well. This implementation can also be enhanced if we will consider underlying strategies. 
+This will happen when ``_freeFunds() = 0``. Then the following line will have a divide-by-zero revert, nobody can deposit anymore
 
 ```javascript
-
-function maxWithdraw(address owner) external view override returns (uint256 maxAssets) {
-        uint bal1 = _freeFunds();
-        uint bal2 = convertToAssets(balanceOf(owner));
-
-        if(bal1 < bal2) return bal1;
-        else return bal2;
-}
+  shares = (_amount * totalSupply()) / freeFunds; // use "freeFunds" instead of "pool"
 ```
+
+Mitigation: keep a minimum reserve so that users cannot withdraw. In this way, we never have ``_freeFunds() = 0`` when ``totalSupply() > 0``. 
