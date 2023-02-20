@@ -90,3 +90,33 @@ QA8. There is no way to revoke a permit of approval. It the approval permit was 
 https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L262-L290
 
 Mitigation: One can revoke a permit by increasing the nonce number. 
+
+QA9. ``permit()`` will bypass signature check when ``owner = 0x0``, allowing allowance approval from the zero address and possible other future exploits (such as transfer LUSD from zero address to the attacker's address)
+
+For example, Bob can call ``permit(address(0), Bob, balanceOf(adress(0)), deadline, v, r, s)`` to get an allowance from zero address with the amount of the LUSD balance of the zero address. 
+
+[https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L262-L294](https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L262-L294)
+
+He will pick a value ``s`` such that it will pass the check
+```javascript
+if (uint256(s) > 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5D576E7357A4501DDFE92F46681B20A0) {
+            revert('LUSD: Invalid s value');
+        }
+```
+
+Pick a future deadline so that it will pass
+```javascript
+require(deadline >= now, 'LUSD: expired deadline');
+```
+
+Pick v = 27, and the value of r does not matter. 
+
+Then ``recoveredAddress = 0`` since it will be an invalid signature. 
+
+However, the following two lines will pass and as  a result, Bob gets the needed allowance from the Zero address.
+```javascript
+      require(recoveredAddress == owner, 'LUSD: invalid signature');
+        _approve(owner, spender, amount);
+```
+
+Mitigation: 1) add a check that ``recoveredAddress != 0`` and 2) use Zeppelin's [ECDSA](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/cryptography/ECDSA.sol).  
