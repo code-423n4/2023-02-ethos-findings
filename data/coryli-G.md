@@ -45,7 +45,7 @@ A variable that is not set/initialized is assumed to have the default value (fal
 - https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/CollateralConfig.sol#L18
 - https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L21
 - https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LUSDToken.sol#L37
-# INCREMENTS CAN BE UNCHECKED && USE ++i INSTEAD OF i++
+# INCREMENTS CAN BE UNCHECKED
 ```
 for (uint256 i; i < _collateralsLength;) {  
  // ...  
@@ -165,3 +165,25 @@ Gas can be saved by avoid `ERC20.transfer` function calls when the amount to be 
 
 ## Instances
 - https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/ActivePool.sol#L186
+
+# Array length should be cached to save gas
+
+## Instances: 
+- https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L227-L228
+
+# USING `STORAGE` INSTEAD OF MEMORY FOR STRUCTS SAVES GAS
+When fetching data from a storage location, assigning the data to a memory variable causes all fields of the struct/array to be read from storage, which incurs a `Gcoldsload` (2100 gas) for each field of the struct/array. If the fields are read from the new memory variable, they incur an additional `MLOAD` rather than a cheap stack read. Instead of declearing the variable with the `memory` keyword, declaring the variable with the `storage` keyword and caching any fields that need to be re-read in stack variables, will be much cheaper, only incuring the `Gcoldsload` for the fields actually read. The only time it makes sense to read the whole struct/array into a `memory` variable, is if the full struct/array is being returned by the function, is being passed to a function that requires memory, or if the array/struct is being read from another memory array/struct.
+
+## Instances
+- https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/ActivePool.sol#L240
+- https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/StabilityPool.sol#L663
+- https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/StabilityPool.sol#L687
+- https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/StabilityPool.sol#L687
+
+# NON-STRICT INEQUALITIES ARE CHEAPER THAN STRICT ONES
+Use `<=` and `>=` instead of `<` and `>` when possible.
+## Instances
+- https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/ActivePool.sol#L264
+- https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/ActivePool.sol#L269
+- https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/ActivePool.sol#L278
+- https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L397
