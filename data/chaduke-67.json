@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "chaduke",
+  "risk": "3",
+  "title": "_updateRewardSumAndProduct() fails to reset/scale up offset errors",
+  "issueId": 67,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/67"
+}
