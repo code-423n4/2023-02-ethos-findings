@@ -6,7 +6,7 @@
 | R  | Refactor | Changing the code |
 | O | Ordinary | Often found issues |
 
-| Total Found Issues | 699 |
+| Total Found Issues | 703 |
 |:--:|:--:|
 
 
@@ -26,22 +26,23 @@
 | Count | Explanation | Instances |
 |:--:|:-------|:--:|
 | [R-01] | Use require instead of assert | 18 |
-| [R-02] | Some number values can be refactored with _ | 1 |
+| [R-02] | Some number values can be refactored with _ | 2 |
 | [R-03] | Validate input before storage reads | 1 |
 | [R-04] | Remove unused variables | 2 |
 | [R-05] | Function state mutability can be restricted to pure | 1 |
 
-| Total Refactor Issues | 23 |
+| Total Refactor Issues | 24 |
 |:--:|:--:|
 
 ### Ordinary Issues Template
 | Count | Explanation | Instances |
 |:--:|:-------|:--:|
 | [O-01] | Remove TODOs in code | 2 |
-| [O-02] | Use a more recent pragma version | 15 |
+| [O-02] | Commented out code | 3 |
+| [O-03] | Use a more recent pragma version | 15 |
 
 
-| Total Ordinary Issues | 17 |
+| Total Ordinary Issues | 20 |
 |:--:|:--:|
 
 ### [N-01] Explicitly mark state variables visibility
@@ -127,9 +128,9 @@ Ethos-Core/contracts/LUSDToken.sol
 
 ### [R-02] Some number values can be refactored with _
 
-```solidity
-Ethos-Core/contracts/TroveManager.sol
+#### Ethos-Core/contracts/TroveManager.sol
 
+```solidity
 uint constant public MINUTE_DECAY_FACTOR = 999037758833783000;
 ```
 
@@ -137,6 +138,18 @@ Refactor to:
 
 ```solidity 
 uint constant public MINUTE_DECAY_FACTOR = 999_037_758_833_783_000;
+```
+
+#### Ethos-Vault/contracts/ReaperVaultV2.sol
+
+```solidity
+41:    uint256 public constant PERCENT_DIVISOR = 10000;
+```
+
+Refactor to:
+
+```solidity
+41:    uint256 public constant PERCENT_DIVISOR = 10_000;
 ```
 
 ### [R-03] Validate input before storage reads
@@ -218,7 +231,17 @@ Ethos-Core/contracts/StabilityPool.sol
          */
 ```
 
-### [O-02] Use a more recent pragma version
+### [O-02] Commented out code
+
+```solidity
+Ethos-Core/contracts/TroveManager.sol
+
+18:    contract TroveManager is LiquityBase, /*Ownable,*/ CheckContract, ITroveManager
+19:    // string constant public NAME = "TroveManager";
+1413:    //assert(newBaseRate <= DECIMAL_PRECISION); // This is already enforced in the line above
+```
+
+### [O-03] Use a more recent pragma version
 
 One of the most important best practices for writing secure Solidity code is to always use the latest version of the language. New versions of Solidity may include security updates and bug fixes that can help protect your code from potential vulnerabilities.
 
