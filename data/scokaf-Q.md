@@ -26,3 +26,20 @@ Manual Analysis
 
 Ethereum Smart Contract Best Practices - Lock pragmas to specific compiler versions.
 https://consensys.github.io/smart-contract-best-practices/development-recommendations/solidity-specific/locking-pragmas/
+
+# 2: GENERATE PERFECT CODE HEADERS EVERY TIME
+
+
+## Description:
+
+We recommend using headers for Solidity code layout and readability
+
+For reference, see https://github.com/transmissions11/headers 
+
+## Proof of Concept
+
+/*//////////////////////////////////////////////////////////////
+                           TESTING 123
+//////////////////////////////////////////////////////////////*/
+
+
