@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "I_I_I_I",
+  "risk": "3",
+  "title": "If the user deposited at a scale larger than the current one, which is possible because currentScale is refreshed once the pool is emptied, the tx reverts.",
+  "issueId": 92,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/92"
+}
