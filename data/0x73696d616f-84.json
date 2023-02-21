@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "0x73696d616f",
+  "risk": "3",
+  "title": "In ActivePool.sol, in the setYieldDistributionParams(...) function, the sum of _treasurySplit, _SPSplit and _stakingSplit can overflow and thus the real sum of the three will no longer equal 10_000",
+  "issueId": 84,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/84"
+}
