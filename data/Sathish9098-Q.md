@@ -42,26 +42,16 @@ We recommend either reimplementing the function to disable it or to clearly spec
 
 ##
 
-### [2]  OUTDATED COMPILER
+### [2]  MIXING AND OUTDATED COMPILER
 
-### ALL CONTRACTS USING THE OUTDATED COMPILER VERSIONS  solidity 0.6.11
+All contracts in a smart contract system should ideally use the same version of the Solidity programming language in order to ensure compatibility and prevent unexpected errors.
 
 Context:
 All contracts
 
 The pragma version used are:
 
-pragma solidity 0.6.11;
-
-#### Here are some additional reasons why it's generally a good idea to use the latest version of Solidity instead of older versions
-
-Bug fixes: Each new version of Solidity includes bug fixes that address issues discovered in previous versions. Using the latest version of Solidity can help you avoid these issues and write more reliable smart contracts.
-
-New features: Each new version of Solidity often includes new features that can make it easier to write smart contracts. 
-
-Easier development: Using the latest version of Solidity can make it easier to develop and test your smart contracts. For example, newer versions of Solidity often include improvements to the language's syntax and error handling, which can help you write better code and catch errors more easily.
-
-Community support: The Solidity community is active and growing, and using the latest version of the language can help you take advantage of new resources, such as forums, documentation, and libraries. Additionally, using the latest version of Solidity can make it easier to collaborate with other developers who are also using the latest tools and technologies.
+pragma solidity 0.6.11 and 0.8.0 
 
 The minimum required version must be 0.8.17; otherwise, contracts will be affected by the following important bug fixes
 
@@ -87,11 +77,17 @@ File : BorrowerOperations.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L3)
 
+File: 2023-02-ethos/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol
+
+      3 :  pragma solidity ^0.8.0;
+
+File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultERC4626.sol
+
+     3:  pragma solidity ^0.8.0;
+
 Recommendation:
 
 Old version of Solidity is used , newer version can be used (0.8.17)
-
-
 
 ##
 
@@ -104,13 +100,14 @@ Using named imports instead of plain imports can make your Solidity code more re
 
 When you use a plain import statement in Solidity, you are importing all of the contracts and libraries defined in the imported file. This can make it difficult to determine which contracts or libraries are actually being used in your code, and can lead to naming conflicts if you import multiple files that define contracts or libraries with the same name
 
+This was breaking the rule of modularity and modular programming: only import what you need Specific imports with curly braces allow us to apply this rule better
 
 Recommended Mitigation Steps :
 
     - 5:  import "./Dependencies/CheckContract.sol";
     +5:  import {CheckContract} from "./Dependencies/CheckContract.sol"; 
 
-This was breaking the rule of modularity and modular programming: only import what you need Specific imports with curly braces allow us to apply this rule better
+Implement named imports for all contracts 
 
 ##
 
@@ -242,6 +239,14 @@ Using scientific notation for large multiples of ten will improve code readabili
 
  (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L53)
 
+FILE : 2023-02-ethos/Ethos-Core/contracts/ActivePool.sol
+
+      uint256 public yieldSplitTreasury = 20_00; // amount of yield to direct to treasury in BPS
+      uint256 public yieldSplitSP = 40_00; // amount of yield to direct to stability pool in BPS
+      uint256 public yieldSplitStaking = 40_00; // amount of yield to direct to OATH Stakers in BPS
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L52-L54)
+
 ##
 
 ### [11] USE LATEST OPENZEPPELIN CONTRACTS 
@@ -323,6 +328,12 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/BorrowerOperations.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L21)
 
+FILE : 2023-02-ethos/Ethos-Core/contracts/ActivePool.sol
+
+   30 :  string constant public NAME = "ActivePool";
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L30)
+
 ##
 
 ### [16] INTERCHANGEABLE USAGE OF UINT AND UINT256
@@ -381,6 +392,56 @@ File: Ethos-Core/contracts/LUSDToken.sol
 https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L188
 
 ##
+
+### [19]  CONSTANTS SHOULD BE DEFINED RATHER THAN USING MAGIC NUMBERS
+
+It is bad practice to use numbers directly in code without explanation
+
+FIE : 2023-02-ethos/Ethos-Core/contracts/ActivePool.sol
+
+    127 :  require(_bps <= 10_000, "Invalid BPS value");
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L127)
+
+   133 : require(_driftBps <= 500, "Exceeds max allowed value of 500 BPS");
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L133)
+
+    145 :  require(_treasurySplit + _SPSplit + _stakingSplit == 10_000, "Splits must add up to 10000 BPS");
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L145)
+
+##
+
+### [20]  high _bps are often associated with higher risk strategies that may involve locking up assets for a long time 
+
+As per current protocol implementation usung setYieldingPercentage() function possible to set _bps 100% . A yield of 100% could be an annual percentage yield (APY), which means that a user's investment can double in value over a year.
+
+ require(_bps <= 10_000, "Invalid BPS value")
+
+It's important to note that high yield opportunities in DeFi come with their own set of risks, including smart contract vulnerabilities, liquidity risks, and impermanent loss
+
+FIE : 2023-02-ethos/Ethos-Core/contracts/ActivePool.sol
+
+      127 :  require(_bps <= 10_000, "Invalid BPS value");
+
+Recommended mitigation :
+
+Consider reducing _bps as per other yield farming protocols
+
+##
+
+### [21]  GENERATE PERFECT CODE HEADERS EVERY TIME
+
+Description
+I recommend using header for Solidity code layout and readability
+
+(https://github.com/transmissions11/headers)
+
+
+
+
+
 
 
 
