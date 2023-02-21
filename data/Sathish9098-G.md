@@ -142,6 +142,7 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L819)
 
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L108-L113)
 
 ##
 
@@ -224,6 +225,12 @@ File :  BorrowerOperations.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L21)
 
+FILE : 2023-02-ethos/Ethos-Core/contracts/ActivePool.sol
+
+   30 :  string constant public NAME = "ActivePool";
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L30)
+
 ##
 
 ## [G-7]  USE REQUIRE INSTEAD OF ASSERT
@@ -290,7 +297,9 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
 
          313 :  address[] memory borrowers = new address[](1);
 
-https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L313
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L313)
+
+##
 
 ## [G-9] PUBLIC FUNCTIONS NOT CALLED BY THE CONTRACT SHOULD BE DECLARED EXTERNAL INSTEAD
 
@@ -428,6 +437,12 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
    882 : for (vars.i = 0; vars.i < _troveArray.length; vars.i++) {
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L882)
+
+FIE : 2023-02-ethos/Ethos-Core/contracts/ActivePool.sol
+
+    108 :  for(uint256 i = 0; i < numCollaterals; i++) {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L108)
     
 
      
