@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "SaeedAlipoor01988",
+  "risk": "2",
+  "title": "if user USDC account get black listed by circle, StabilityPool.sol.withdrawFromSP function can DoS",
+  "issueId": 88,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/88"
+}
