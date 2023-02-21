@@ -6,7 +6,7 @@
 | R  | Refactor | Changing the code |
 | O | Ordinary | Often found issues |
 
-| Total Found Issues | 703 |
+| Total Found Issues | 707 |
 |:--:|:--:|
 
 
@@ -40,9 +40,10 @@
 | [O-01] | Remove TODOs in code | 2 |
 | [O-02] | Commented out code | 3 |
 | [O-03] | Use a more recent pragma version | 15 |
+| [O-04] | Locking pragma | 4 |
 
 
-| Total Ordinary Issues | 20 |
+| Total Ordinary Issues | 24 |
 |:--:|:--:|
 
 ### [N-01] Explicitly mark state variables visibility
@@ -334,3 +335,14 @@ Ethos-Core/contracts/TroveManager.sol
 
 3:    pragma solidity 0.6.11;
 ```
+
+### [O-04] Locking pragma
+
+Contracts should be deployed with the same compiler version and flags that they have been tested with thoroughly. Locking the pragma helps to ensure that contracts do not accidentally get deployed using, for example, an outdated compiler version that might introduce bugs that affect the contract system negatively.
+
+#### Instances
+
+- Ethos-Vault/contracts/ReaperVaultV2.sol
+- Ethos-Vault/contracts/ReaperVaultERC4626.sol
+- Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol
+- Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol
