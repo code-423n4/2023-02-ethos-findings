@@ -90,7 +90,193 @@ https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8
 
 Manual Analysis
 
-## Recommended Mitigation Steps
+### Recommended Mitigation Steps
 
 We recommend defining constants for the numbers used throughout the code.
+
+# 4: FOR MODERN AND MORE READABLE CODE; UPDATE IMPORT USAGE
+
+Vulnerability details
+
+## Context: 
+
+Solidity code is also cleaner in another way that might not be noticeable: the struct Point. We were importing it previously with global import but not using it. The Point struct polluted the source code with an unnecessary object we were not using because we did not need it.
+This was breaking the rule of modularity and modular programming: only import what you need Specific imports with curly braces to allow us to apply this rule better.
+
+
+Multiple results - 12 files
+
+src/CollateralConfig.sol
+
+5: import "./Dependencies/CheckContract.sol";
+6: import "./Dependencies/Ownable.sol";
+7: import "./Dependencies/SafeERC20.sol";
+8: import "./Interfaces/ICollateralConfig.sol";
+
+src/BorrowerOperations.sol
+
+5: import "./Interfaces/IBorrowerOperations.sol";
+6: import "./Interfaces/ICollateralConfig.sol";
+7: import "./Interfaces/ITroveManager.sol";
+8: import "./Interfaces/ILUSDToken.sol";
+9: import "./Interfaces/ICollSurplusPool.sol";
+10: import "./Interfaces/ISortedTroves.sol";
+11: import "./Interfaces/ILQTYStaking.sol";
+12: import "./Dependencies/LiquityBase.sol";
+13: import "./Dependencies/Ownable.sol";
+14: import "./Dependencies/CheckContract.sol";
+15: import "./Dependencies/console.sol";
+16: import "./Dependencies/SafeERC20.sol";
+
+src/TroveManager.sol
+
+5: import "./Interfaces/ICollateralConfig.sol";
+6: import "./Interfaces/ITroveManager.sol";
+7: import "./Interfaces/IStabilityPool.sol";
+8: import "./Interfaces/ICollSurplusPool.sol";
+9: import "./Interfaces/ILUSDToken.sol";
+10: import "./Interfaces/ISortedTroves.sol";
+11: import "./Interfaces/ILQTYStaking.sol";
+12: import "./Interfaces/IRedemptionHelper.sol";
+13: import "./Dependencies/LiquityBase.sol";
+14: 
+15: import "./Dependencies/CheckContract.sol";
+16: import "./Dependencies/IERC20.sol";
+
+
+src/ActivePool.sol
+
+5: import './Interfaces/IActivePool.sol';
+6: import "./Interfaces/ICollateralConfig.sol";
+7: import './Interfaces/IDefaultPool.sol';
+8: import "./Interfaces/ICollSurplusPool.sol";
+9: import "./Interfaces/ILQTYStaking.sol";
+10: import "./Interfaces/IStabilityPool.sol";
+11: import "./Interfaces/ITroveManager.sol";
+12: import "./Dependencies/SafeMath.sol";
+13: import "./Dependencies/Ownable.sol";
+14: import "./Dependencies/CheckContract.sol";
+15: import "./Dependencies/console.sol";
+16: import "./Dependencies/SafeERC20.sol";
+17: import "./Dependencies/IERC4626.sol";
+
+
+src/StabilityPool.sol
+
+5: import './Interfaces/IBorrowerOperations.sol';
+6: import "./Interfaces/ICollateralConfig.sol";
+7: import './Interfaces/IStabilityPool.sol';
+8: import './Interfaces/IBorrowerOperations.sol';
+9: import './Interfaces/ITroveManager.sol';
+10: import './Interfaces/ILUSDToken.sol';
+11: import './Interfaces/ISortedTroves.sol';
+12: import "./Interfaces/ICommunityIssuance.sol";
+13: import "./Dependencies/LiquityBase.sol";
+14: import "./Dependencies/SafeMath.sol";
+15: import "./Dependencies/LiquitySafeMath128.sol";
+16: import "./Dependencies/Ownable.sol";
+17: import "./Dependencies/CheckContract.sol";
+18: import "./Dependencies/console.sol";
+19: import "./Dependencies/SafeERC20.sol";
+
+
+src/CommunityIssuance.sol 
+
+5: import "../Dependencies/IERC20.sol";
+6: import "../Interfaces/ICommunityIssuance.sol";
+7: import "../Dependencies/BaseMath.sol";
+8: import "../Dependencies/LiquityMath.sol";
+9: import "../Dependencies/Ownable.sol";
+10: import "../Dependencies/CheckContract.sol";
+11: import "../Dependencies/SafeMath.sol";
+
+
+src/LQTYStaking.sol 
+
+5: import "../Dependencies/BaseMath.sol";
+6: import "../Dependencies/SafeMath.sol";
+7: import "../Dependencies/Ownable.sol";
+8: import "../Dependencies/CheckContract.sol";
+9: import "../Dependencies/console.sol";
+10: import "../Dependencies/IERC20.sol";
+11: import "../Interfaces/ICollateralConfig.sol";
+12: import "../Interfaces/ILQTYStaking.sol";
+13: import "../Interfaces/ITroveManager.sol";
+14: import "../Dependencies/LiquityMath.sol";
+15: import "../Interfaces/ILUSDToken.sol";
+16: import "../Dependencies/SafeERC20.sol";
+
+
+src/LUSDToken.sol
+
+5: import "./Interfaces/ILUSDToken.sol";
+6: import "./Interfaces/ITroveManager.sol";
+7: import "./Dependencies/SafeMath.sol";
+8: import "./Dependencies/CheckContract.sol";
+9: import "./Dependencies/console.sol";
+
+
+src/ReaperVaultV2.sol
+
+5: import "./interfaces/IERC4626Events.sol";
+6: import "./interfaces/IStrategy.sol";
+7: import "./libraries/ReaperMathUtils.sol";
+8: import "./mixins/ReaperAccessControl.sol";
+9: import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
+10: import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+11: import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+12: import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
+13: import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+14: import "@openzeppelin/contracts/utils/math/Math.sol";
+
+
+src/ReaperVaultERC4626.sol
+
+5: import "./ReaperVaultV2.sol";
+6: import "./interfaces/IERC4626Functions.sol";
+
+
+src/ReaperBaseStrategyv4.sol
+
+5: import "../interfaces/IStrategy.sol";
+6: import "../interfaces/IVault.sol";
+7: import "../libraries/ReaperMathUtils.sol";
+8: import "../mixins/ReaperAccessControl.sol";
+9: import "@openzeppelin/contracts-upgradeable/access/AccessControlEnumerableUpgradeable.sol";
+10: import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+11: import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+12: import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
+
+
+src/ReaperStrategyGranarySupplyOnly.sol 
+
+5: import "./abstract/ReaperBaseStrategyv4.sol";
+6: import "./interfaces/IAToken.sol";
+7: import "./interfaces/IAaveProtocolDataProvider.sol";
+8: import "./interfaces/ILendingPool.sol";
+10: import "./interfaces/ILendingPoolAddressesProvider.sol";
+11: import "./interfaces/IRewardsController.sol";
+12: import "./libraries/ReaperMathUtils.sol";
+13: import "./mixins/VeloSolidMixin.sol";
+14: import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
+15: import "@openzeppelin/contracts-upgradeable/utils/math/MathUpgradeable.sol";
+
+## Tools Used
+
+Manual Analysis
+
+## Recommended Mitigation Steps
+
+import {contract1 , contract2} from "filename.sol";
+
+A good example from the ArtGobblers project;
+
+import {Owned} from "solmate/auth/Owned.sol";
+import {ERC721} from "solmate/tokens/ERC721.sol";
+import {LibString} from "solmate/utils/LibString.sol";
+import {MerkleProofLib} from "solmate/utils/MerkleProofLib.sol";
+import {FixedPointMathLib} from "solmate/utils/FixedPointMathLib.sol";
+import {ERC1155, ERC1155TokenReceiver} from "solmate/tokens/ERC1155.sol";
+import {toWadUnsafe, toDaysWadUnsafe} from "solmate/utils/SignedWadMath.sol";
+
 
