@@ -18,7 +18,7 @@
 | 15     |  Avoid compound assignment operator in state variables   | 9     |
 | 16     |   Should use arguments instead of state variable  |  1    |
 | 17     |   Expressions for constant values such as a call to `keccak256()`, should use immutable rather than constant  |  8    |
-| 18     |   `abi.encode()` is less efficient than `abi.encodePacked()`  |    2  |
+| 18     |   `abi.encode()` is less efficient than `abi.encodePacked()`  |    1  |
 | 19     |    Unused imports  |  3    |
 | 20     |   Duplicated `require()`/`revert()` checks should be refactored to a `modifier` or `function`  |   2   |
 | 21     |   The result of external function calls should be cached rather than re-calling the function  |   9   |
@@ -301,9 +301,8 @@ https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/abst
 
 ### [G-18] abi.encode() is less efficient than abi.encodePacked()
 Changing abi.encode function to abi.encodePacked can save gas since the abi.encode function pads extra null bytes at the end of the call data, which is unnecessary. Also, in general, abi.encodePacked is more gas-efficient (see [Solidity-Encode-Gas-Comparison](https://github.com/ConnorBlockchain/Solidity-Encode-Gas-Comparison))
-*There are 2 instances of this issue*
+*There is 1 instances of this issue*
 https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LUSDToken.sol#L284
-https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LUSDToken.sol#L305
 
 ### [G-19] Unused imports
 Importing pointless files costs gas during deployment and is a bad coding practice that is important to ignore.
