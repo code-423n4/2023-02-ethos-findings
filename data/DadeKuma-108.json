@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "DadeKuma",
+  "risk": "2",
+  "title": "OathToken transfer result is not checked and potentially results in depositors missing LQTY gains",
+  "issueId": 108,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/108"
+}
