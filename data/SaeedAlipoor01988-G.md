@@ -4,7 +4,7 @@
 in the ActivePool._rebalance function, in line 240, you create vars struct as memory, then in line 243 you load storage variable yieldingAmount[_collateral] and save it to the memory vars.currentAllocated. but again in line 263, you are using SLOAD to read the value of yieldingAmount[_collateral] from storage.
 
 #### Findings:
-https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L240
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L1119
 
 #### Tools used
 manually
@@ -45,3 +45,18 @@ manually
 
 Sample report approved by C4 judges team.
 https://code4rena.com/reports/2022-11-non-fungible/#g-09-require-or-revert-statements-that-check-input-arguments-should-be-at-the-top-of-the-function
+
+#########  unnecessary check for _requireTroveIsActive ######### 
+
+#### Impact
+_requireTroveIsActive is a function in TroveManager to check that Troves[_borrower][_collateral].status is active or not. in contract BorrowerOperations and functions _adjustTrove, before making calls to applyPendingRewards, we make the call to function BorrowerOperations._requireTroveisActive to check Trove is Active, then in contract TroveManager and function applyPendingRewards, again we check that Trove is Active by TroveManager._requireTroveIsActive function.
+
+we can remove call to BorrowerOperations._requireTroveisActive in functions _adjustTrove, because in anyway we make call to the TroveManager.applyPendingRewards and in TroveManager.applyPendingRewards we check TroveManager._requireTroveIsActive.
+
+#### Findings:
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L298
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L1084
+
+#### Tools used
+manually
