@@ -320,3 +320,28 @@ Manual Analysis
 
 Use NATSPEC comments where necessary
 
+# 6: Vulnerability goes here
+
+Vulnerability details
+
+## Context:
+
+There are occasions where certain numbers have been hardcoded, either in variables or in the code itself. Large numbers can become hard to read.
+
+1 result - 1 file 
+
+src/ReaperVaultV2.sol
+
+41: uint256 public constant PERCENT_DIVISOR = 10000;
+
+## Proof of Concept
+
+ https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L41 
+
+## Tools Used
+
+Manual Analysis
+
+### Recommended Mitigation Steps
+
+Consider using underscores for number literals to improve their readability.
