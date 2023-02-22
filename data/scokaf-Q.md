@@ -280,3 +280,43 @@ import {ERC1155, ERC1155TokenReceiver} from "solmate/tokens/ERC1155.sol";
 import {toWadUnsafe, toDaysWadUnsafe} from "solmate/utils/SignedWadMath.sol";
 
 
+# 5: SHOWING THE ACTUAL VALUES OF NUMBERS IN NATSPEC COMMENTS MAKES CHECKING AND READING CODE EASIER
+
+Vulnerability details
+
+## Context:
+
+File: contracts/abstract/ReaperBaseStrategyv4.sol
+
+\- 25: int256 public constant FUTURE_NEXT_PROPOSAL_TIME = 365 days * 100;
+
+\+ 25: int256 public constant FUTURE_NEXT_PROPOSAL_TIME = 365 days * 100; // 31_536_000 ( 365 * 24 * 60 * 60) * 100
+
+File: contracts/LQTY/CommunityIssuance.sol
+
+\- 58: distributionPeriod = 14 days;
+
+\+ 58: distributionPeriod = 14 days; // 1_209_600 ( 14 * 24 * 60 * 60)
+
+File: contracts/StabilityPool.sol
+
+ \- 197: uint public constant SCALE_FACTOR = 1e9; 
+
+ \+ 197: uint public constant SCALE_FACTOR = 1e9; // 1,000,000,000
+
+## Proof of Concept
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol#L25 
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L58 
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/StabilityPool.sol#L197 
+
+## Tools Used
+
+Manual Analysis
+
+### Recommended Mitigation Steps
+
+Use NATSPEC comments where necessary
+
