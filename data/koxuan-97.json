@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "koxuan",
+  "risk": "2",
+  "title": "chainlink oracle timeout is hardcoded to 4 hours which can cause stale values for some price feed",
+  "issueId": 97,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/97"
+}
