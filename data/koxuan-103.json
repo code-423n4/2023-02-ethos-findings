@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "koxuan",
+  "risk": "3",
+  "title": "staker liquidity staked and their gains will be lost in the event he gets blacklist by collateral token address",
+  "issueId": 103,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/103"
+}
