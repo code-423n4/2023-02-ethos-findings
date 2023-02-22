@@ -10,13 +10,13 @@
 |:--:|:--:|
 
 
-
-### Non-Critical Template
+### Non-Critical Issues Template
 | Count | Explanation | Instances |
 |:--:|:-------|:--:|
 | [N-01] | Explicitly mark state variables visibility | 5 |
 | [N-02] | Explicitly mark uint type size | 557 |
 | [N-03] | Create your own import names instead of using the regular ones | 97 |
+| [N-04] | Insufficient coverage | - |
 
 
 | Total Non-Critical Issues | 659 |
@@ -87,6 +87,12 @@ Example:
 ```solidity
 5: import {IBorrowerOperations} from "./Interfaces/IBorrowerOperations.sol";
 ```
+
+### [N-04] Insufficient code coverage
+
+Best practice is to come as close to 100% as possible for smart contracts.
+
+According to documentation, coverage is 93%.
 
 ### [R-01] Use require instead of assert
 The Solidity assert() function is meant to assert invariants. Properly functioning code should never reach a failing assert statement.
