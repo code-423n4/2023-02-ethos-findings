@@ -144,6 +144,8 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L108-L113)
 
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/StabilityPool.sol#L351-L357)
+
 ##
 
 ### [G-5]  USE FUNCTION INSTEAD OF MODIFIERS
@@ -230,6 +232,12 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/ActivePool.sol
    30 :  string constant public NAME = "ActivePool";
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L30)
+
+FILE :  2023-02-ethos/Ethos-Core/contracts/StabilityPool.sol
+
+   150 :  string constant public NAME = "StabilityPool";
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/StabilityPool.sol#L150)
 
 ##
 
@@ -443,8 +451,12 @@ FIE : 2023-02-ethos/Ethos-Core/contracts/ActivePool.sol
     108 :  for(uint256 i = 0; i < numCollaterals; i++) {
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L108)
-    
 
+FILE : 2023-02-ethos/Ethos-Core/contracts/StabilityPool.sol
+
+         351:  for (uint i = 0; i < numCollaterals; i++) {
+    
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/StabilityPool.sol#L351)
      
 ## [G-14]  NOT USING THE NAMED RETURN VARIABLES WHEN A FUNCTION RETURNS, WASTES DEPLOYMENT GAS
 
@@ -520,6 +532,63 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
       1505 :  emit LastFeeOpTimeUpdated(block.timestamp);
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L1505)
+
+##
+
+### [G-18] STATE VARIABLES ONLY SET IN THE setAddresses() FUNCTION SHOULD BE DECLARED IMMUTABLE. AS PER PROTOCOL THE setAddresses() FUNCTION ACTS LIKE CONSTUCTOR. ITS NOT POSSIBLE TO RECALL setAddresses() FUNCTION ANY WHERE IN THE CONTRACT. 
+
+Avoids a Gsset (20000 gas) in the setAddresses(), and replaces the first access in each transaction (Gcoldsload - 2100 gas) and each access thereafter (Gwarmacces - 100 gas) with a PUSH32 (3 gas)
+
+ File : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
+
+        borrowerOperationsAddress = _borrowerOperationsAddress;
+        collateralConfig = ICollateralConfig(_collateralConfigAddress);
+        activePool = IActivePool(_activePoolAddress);
+        defaultPool = IDefaultPool(_defaultPoolAddress);
+        stabilityPool = IStabilityPool(_stabilityPoolAddress);
+        gasPoolAddress = _gasPoolAddress;
+        collSurplusPool = ICollSurplusPool(_collSurplusPoolAddress);
+        priceFeed = IPriceFeed(_priceFeedAddress);
+        lusdToken = ILUSDToken(_lusdTokenAddress);
+        sortedTroves = ISortedTroves(_sortedTrovesAddress);
+        lqtyToken = IERC20(_lqtyTokenAddress);
+        lqtyStaking = ILQTYStaking(_lqtyStakingAddress);
+        redemptionHelper = IRedemptionHelper(_redemptionHelperAddress);   
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L266-L278)
+
+FILE : 2023-02-ethos/Ethos-Core/contracts/ActivePool.sol
+
+       collateralConfigAddress = _collateralConfigAddress;
+        borrowerOperationsAddress = _borrowerOperationsAddress;
+        troveManagerAddress = _troveManagerAddress;
+        stabilityPoolAddress = _stabilityPoolAddress;
+        defaultPoolAddress = _defaultPoolAddress;
+        collSurplusPoolAddress = _collSurplusPoolAddress;
+        treasuryAddress = _treasuryAddress;
+        lqtyStakingAddress = _lqtyStakingAddress;
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L96-L103)
+
+FILE:  2023-02-ethos/Ethos-Core/contracts/BorrowerOperations.sol
+
+
+        collateralConfig = ICollateralConfig(_collateralConfigAddress);
+        troveManager = ITroveManager(_troveManagerAddress);
+        activePool = IActivePool(_activePoolAddress);
+        defaultPool = IDefaultPool(_defaultPoolAddress);
+        stabilityPoolAddress = _stabilityPoolAddress;
+        gasPoolAddress = _gasPoolAddress;
+        collSurplusPool = ICollSurplusPool(_collSurplusPoolAddress);
+        priceFeed = IPriceFeed(_priceFeedAddress);
+        sortedTroves = ISortedTroves(_sortedTrovesAddress);
+        lusdToken = ILUSDToken(_lusdTokenAddress);
+        lqtyStakingAddress = _lqtyStakingAddress;
+        lqtyStaking = ILQTYStaking(_lqtyStakingAddress);
+
+       (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L142-L153)
+
+     
 
 
 
