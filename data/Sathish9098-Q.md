@@ -334,6 +334,12 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/ActivePool.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L30)
 
+FILE :  2023-02-ethos/Ethos-Core/contracts/StabilityPool.sol
+
+   150 :  string constant public NAME = "StabilityPool";
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/StabilityPool.sol#L150)
+
 ##
 
 ### [16] INTERCHANGEABLE USAGE OF UINT AND UINT256
@@ -437,6 +443,54 @@ Description
 I recommend using header for Solidity code layout and readability
 
 (https://github.com/transmissions11/headers)
+
+##
+
+### [22] State variables do not always start with capital letters
+
+
+FILE :  2023-02-ethos/Ethos-Core/contracts/StabilityPool.sol
+
+         195:  uint public P = DECIMAL_PRECISION;
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/StabilityPool.sol#L195)
+
+##
+
+### [23]  FUNCTIONS, PARAMETERS AND VARIABLES IN SNAKE CASE
+
+Use camel case for all functions, parameters and variables and snake case for constants
+
+Snake case examples
+The following variable names follow the snake case naming convention:
+
+this_is_snake_case
+build_docker_image
+run_javascript_function
+call_python_method
+ruby_loves_snake_case
+
+
+Camel case examples
+The following are examples of variables that use the camel case naming convention:
+
+FileNotFoundException
+toString
+SpringBoot
+TomcatServer
+getJson
+
+FILE :  2023-02-ethos/Ethos-Core/contracts/StabilityPool.sol
+
+      228 :  mapping (address => uint) public lastCollateralError_Offset;
+      229:   uint public lastLUSDLossError_Offset;
+
+Here state variables lastCollateralError_Offset, lastLUSDLossError_Offset using Snake case instead Camel case 
+
+After Mitigation Camel Case :
+
+ lastCollateralErrorOffset, lastLUSDLossErrorOffset 
+
 
 
 
