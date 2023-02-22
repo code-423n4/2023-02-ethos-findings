@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "koxuan",
+  "risk": "3",
+  "title": "MAX_PRICE_DEVIATION_FROM_PREVIOUS_ROUND is 50% which can allow some illegitimate prices to pass without checking with Tellor",
+  "issueId": 99,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/99"
+}
