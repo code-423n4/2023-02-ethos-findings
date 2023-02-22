@@ -93,3 +93,29 @@ https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8
 
 Manual Analysis
 
+
+# 2: ABI.ENCODE() IS LESS EFFICIENT THAN ABI.ENCODEPACKED()
+
+Optimization details
+
+### Context:
+
+Use abi.encodePacked() where possible to save gas
+
+## Proof of Concept
+
+2 Results 1 File:
+
+***src/LUSDToken.sol***
+
+- 284:  domainSeparator(), keccak256(abi.encode(
+
+- 305: return keccak256(abi.encode(typeHash, name, version, _chainID(), address(this)));
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L284 
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L305 
+
+## Tools Used
+
+Manual Analysis
