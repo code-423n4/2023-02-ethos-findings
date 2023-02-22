@@ -239,6 +239,14 @@ FILE :  2023-02-ethos/Ethos-Core/contracts/StabilityPool.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/StabilityPool.sol#L150)
 
+FILE : 2023-02-ethos/Ethos-Core/contracts/LQTY/CommunityIssuance.sol
+
+    19:    string constant public NAME = "CommunityIssuance";
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L19)
+
+   
+
 ##
 
 ## [G-7]  USE REQUIRE INSTEAD OF ASSERT
@@ -535,7 +543,7 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
 
 ##
 
-### [G-18] STATE VARIABLES ONLY SET IN THE setAddresses() FUNCTION SHOULD BE DECLARED IMMUTABLE. AS PER PROTOCOL THE setAddresses() FUNCTION ACTS LIKE CONSTUCTOR. ITS NOT POSSIBLE TO RECALL setAddresses() FUNCTION ANY WHERE IN THE CONTRACT. 
+### [G-18] State variables that are only set within the setAddresses() function should be declared as immutable. According to protocol, the setAddresses() function behaves like a constructor function. Once the setAddresses() function is called, it is not possible to recall it from any other location within the contract. 
 
 Avoids a Gsset (20000 gas) in the setAddresses(), and replaces the first access in each transaction (Gcoldsload - 2100 gas) and each access thereafter (Gwarmacces - 100 gas) with a PUSH32 (3 gas)
 
@@ -587,6 +595,15 @@ FILE:  2023-02-ethos/Ethos-Core/contracts/BorrowerOperations.sol
         lqtyStaking = ILQTYStaking(_lqtyStakingAddress);
 
        (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L142-L153)
+
+
+FILE : 2023-02-ethos/Ethos-Core/contracts/LQTY/CommunityIssuance.sol
+
+        OathToken = IERC20(_oathTokenAddress);
+        stabilityPoolAddress = _stabilityPoolAddress;
+
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L74-L75)
 
      
 
