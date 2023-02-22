@@ -35,6 +35,28 @@ File : BorrowerOperations.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L110-L126)
 
+FILE : 2023-02-ethos/Ethos-Core/contracts/LQTY/CommunityIssuance.sol
+
+       function setAddresses
+    (
+        address _oathTokenAddress, 
+        address _stabilityPoolAddress
+    ) 
+        external 
+        onlyOwner 
+        override 
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L61-L68)
+
+      101 : function fund(uint amount) external onlyOwner {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L101)
+
+      120 :  function updateDistributionPeriod(uint256 _newDistributionPeriod) external onlyOwner {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L120)
+
+
 Recommended Mitigation Steps
 
 We recommend either reimplementing the function to disable it or to clearly specify if it is part of the contract design.
@@ -490,6 +512,32 @@ Here state variables lastCollateralError_Offset, lastLUSDLossError_Offset using 
 After Mitigation Camel Case :
 
  lastCollateralErrorOffset, lastLUSDLossErrorOffset 
+
+##
+
+### [24] IMPORTS CAN BE GROUPED TOGETHER
+
+Consider Dependencies first, then all interfaces, then all utils.
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L5-L11)
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L5-L16)
+
+##
+
+### [25]  Use of Block.timestamp
+
+Block timestamps have historically been used for a variety of applications, such as entropy for random numbers (see the Entropy Illusion for further details), locking funds for periods of time, and various state-changing conditional statements that are time-dependent. Miners have the ability to adjust timestamps slightly, which can prove to be dangerous if block timestamps are used incorrectly in smart contracts.
+
+FILE : 2023-02-ethos/Ethos-Core/contracts/LQTY/CommunityIssuance.sol
+
+     87 : int256 endTimestamp = block.timestamp > lastDistributionTime ? lastDistributionTime : block.timestamp;
+
+    93:   lastIssuanceTimestamp = block.timestamp;
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L87-L93)
+
+
 
 
 
