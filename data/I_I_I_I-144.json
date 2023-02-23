@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "I_I_I_I",
+  "risk": "2",
+  "title": "If freeFunds() is 0, the user gets 0 tokens (if withdrawing) and 0 shares (if depositing)",
+  "issueId": 144,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/144"
+}
