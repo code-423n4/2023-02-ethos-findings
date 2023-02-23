@@ -6,7 +6,7 @@
 | R  | Refactor | Changing the code |
 | O | Ordinary | Often found issues |
 
-| Total Found Issues | 707 |
+| Total Found Issues | 708 |
 |:--:|:--:|
 
 
@@ -30,8 +30,9 @@
 | [R-03] | Validate input before storage reads | 1 |
 | [R-04] | Remove unused variables | 2 |
 | [R-05] | Function state mutability can be restricted to pure | 1 |
+| [R-06] | For functions, follow solidity standard naming conventions | 1 |
 
-| Total Refactor Issues | 24 |
+| Total Refactor Issues | 25 |
 |:--:|:--:|
 
 ### Ordinary Issues Template
@@ -221,6 +222,21 @@ Functions can be declared pure in which case they promise not to read from or mo
 Ethos-Vault/contracts/ReaperVaultV2.sol
 
 659:    function _cascadingAccessRoles() internal view override returns (bytes32[] memory)
+```
+
+### [R-06] For functions, follow solidity standard naming conventions
+
+```solidity 
+Ethos-Core/contracts/BorrowerOperations.sol
+
+546: function _requireTroveisNotActive(...)
+```
+
+The above codes don’t follow Solidity’s standard naming convention, consider the following changes:
+
+```diff
+- function _requireTroveisNotActive(...)
++ function _requireTroveIsNotActive(...)
 ```
 
 ### [O-01] Remove TODOs in code
