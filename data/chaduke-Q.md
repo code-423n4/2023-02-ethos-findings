@@ -132,3 +132,26 @@ This will happen when ``_freeFunds() = 0``. Then the following line will have a 
 ```
 
 Mitigation: keep a minimum reserve so that users cannot withdraw. In this way, we never have ``_freeFunds() = 0`` when ``totalSupply() > 0``.  Locked profit does not help since it is not part of the ``_freeFunds() = 0``. 
+
+QA 11. ``fund()`` should call ``issueOath()`` first in the beginning. Otherwise, it might move past issuance to the future.
+
+```diff
+function fund(uint amount) external onlyOwner {
+        require(amount != 0, "cannot fund 0");
++     issueOath();     
+       OathToken.transferFrom(msg.sender, address(this), amount);
+
+        // roll any unissued OATH into new distribution
+        if (lastIssuanceTimestamp < lastDistributionTime) {
+            uint timeLeft = lastDistributionTime.sub(lastIssuanceTimestamp);
+            uint notIssued = timeLeft.mul(rewardPerSecond);
+            amount = amount.add(notIssued);
+        }
+
+        rewardPerSecond = amount.div(distributionPeriod);
+        lastDistributionTime = block.timestamp.add(distributionPeriod);
+        lastIssuanceTimestamp = block.timestamp;
+
+        emit LogRewardPerSecond(rewardPerSecond);
+    }
+```
