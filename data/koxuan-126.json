@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "koxuan",
+  "risk": "2",
+  "title": "upgradeable contract ReaperStrategyGranarySupplyOnly can have collision of variable during an upgrade",
+  "issueId": 126,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/126"
+}
