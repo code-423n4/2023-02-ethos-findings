@@ -23,8 +23,3 @@ The standard method of handling initialize() functions is by using openzeppelin'
 ### Recommendation:
 Use the standard method of handling initialize() functions which is Openzeppelin's initializer() modifier.
 
-# [L-04] issueOath() in CommunityIssuance.sol is supposed to be called by StabilityPool.sol 
-(i know this because of this comment  ``` // @dev issues a set amount of Oath to the stability pool``` and this require statement here ```          _requireCallerIsStabilityPool(); ``` ) you will see those here https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L83,  https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L85, but ICommunityIssuance.sol's own was used instead.
-
-ICommunityIssuance.sol's issueOath() doesn't check to make sure LQTY issuance is triggered based on time passed since the last issuance.
-Please rectify this, by using CommunityIssuance.sol's issueOath() and doing my recommended mitigation steps in my submitted High report detailing this issue.
