@@ -176,3 +176,15 @@ https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8
 
 Manual Analysis
 
+
+# 4: REQUIRE() OR REVERT() STATEMENTS THAT CHECK INPUT ARGUMENTS SHOULD BE AT THE TOP OF THE FUNCTION
+
+Checks that involve constants should come before checks that involve state variables, function calls, and calculations. By doing these checks first, the function is able to revert before wasting a Gcoldsload (2100 gas*) in a function that may ultimately revert in the unhappy case.
+
+There is 1 instance of this issue:
+
+> ***File: contracts/ActivePool.sol***
+
+/// @audit expensive op on line 126
+127:   require(_bps <= 10_000, "Invalid BPS value");
+
