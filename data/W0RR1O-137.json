@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "W0RR1O",
+  "risk": "2",
+  "title": "Lost of precision in the `_deposit` function could result in incorrect share allocation",
+  "issueId": 137,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/137"
+}
