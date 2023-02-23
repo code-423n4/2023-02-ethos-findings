@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "adeolu",
+  "risk": "3",
+  "title": "return value is not automatically asserted in transfer action ",
+  "issueId": 146,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/146"
+}
