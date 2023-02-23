@@ -119,3 +119,60 @@ https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8
 ## Tools Used
 
 Manual Analysis
+
+# 3: SPLITTING REQUIRE() STATEMENTS THAT USE && SAVES GAS
+
+Optimization details
+
+## Context:
+
+Instead of using the operator && on a single require check. Using double require check can save more gas.
+
+For reference, see https://github.com/code-423n4/2022-01-xdefi-findings/issues/128
+
+## Proof of Concept
+
+There are 5 instances of this issue:
+
+> ***File: contracts/LUSDToken.sol***
+
+347:        require(
+348:            _recipient != address(0) && 
+349:            _recipient != address(this),
+350:            "LUSD: Cannot transfer tokens directly to the LUSD token contract or the zero address"
+351:        );
+
+352:  require(
+353:            !stabilityPools[_recipient] &&
+354:            !troveManagers[_recipient] &&
+355:           !borrowerOperations[_recipient],
+356:            "LUSD: Cannot transfer tokens directly to the StabilityPool, TroveManager or BorrowerOps"
+357:        );
+
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L348 
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L353 
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L354 
+
+
+> ***File: contracts/TroveManager.sol***
+
+1539: require (TroveOwnersArrayLength > 1 && sortedTroves.getSize(_collateral) > 1); 
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L1539 
+
+
+> ***File: contracts/BorrowerOperations.sol***
+
+653:            require(_maxFeePercentage >= BORROWING_FEE_FLOOR && _maxFeePercentage <= DECIMAL_PRECISION,
+654:                "Max fee percentage must be between 0.5% and 100%");
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L653 
+
+
+## Tools Used
+
+Manual Analysis
+
