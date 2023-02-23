@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "0x73696d616f",
+  "risk": "2",
+  "title": "In setAddresses(...) from ActivePool.sol, setting the treasury address should be a 2 step procedure.",
+  "issueId": 120,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/120"
+}
