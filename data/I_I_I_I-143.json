@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "I_I_I_I",
+  "risk": "2",
+  "title": "_freeFunds() can revert if the _calculateLockedProfit() is a larger number than the current balance()",
+  "issueId": 143,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/143"
+}
