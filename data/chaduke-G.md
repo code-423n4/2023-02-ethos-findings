@@ -59,3 +59,22 @@ function _removeTroveOwner(address _borrower, address _collateral, uint TroveOwn
     }
 ```
 
+G3. We can save gas here by not changing ``lastIssuanceTimestamp`` when ``lastIssuanceTimestamp >= lastDistributionTime``, it is not necessary. Also, we should not emit zero issuance event. 
+
+```diff
+function issueOath() external override returns (uint issuance) {
+        _requireCallerIsStabilityPool();
+        if (lastIssuanceTimestamp < lastDistributionTime) {
+            uint256 endTimestamp = block.timestamp > lastDistributionTime ? lastDistributionTime : block.timestamp;
+            uint256 timePassed = endTimestamp.sub(lastIssuanceTimestamp);
+            issuance = timePassed.mul(rewardPerSecond);
+            totalOATHIssued = totalOATHIssued.add(issuance);
++           lastIssuanceTimestamp = block.timestamp;
+        }
+
+-        lastIssuanceTimestamp = block.timestamp;
+-        emit TotalOATHIssuedUpdated(totalOATHIssued);
++       if(totalOATHIssued > 0 ) emit TotalOATHIssuedUpdated(totalOATHIssued);
+
+    }
+```
