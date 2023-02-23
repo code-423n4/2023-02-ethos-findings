@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "DimitarDimitrov",
+  "risk": "2",
+  "title": "Solidity compiler version below 0.8.0",
+  "issueId": 141,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/141"
+}
