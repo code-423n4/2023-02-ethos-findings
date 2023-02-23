@@ -3,22 +3,6 @@
 
 ##
 
-### [G-1] STATE VARIABLES ONLY SET IN THE CONSTRUCTOR SHOULD BE DECLARED IMMUTABLE
-
-Avoids a Gsset (20000 gas) in the constructor, and replaces the first access in each transaction (Gcoldsload - 2100 gas) and each access thereafter (Gwarmacces - 100 gas) with a PUSH32 (3 gas).
-
-While strings are not value types, and therefore cannot be immutable/constant if not hard-coded outside of the constructor, the same behavior can be achieved by making the current contract abstract with virtual functions for the string accessors, and having a child contract override the functions with the hard-coded implementation-specific values.
-
-File : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
-
-       /// @audit owner (constructor)
-
-       227 : owner = msg.sender;
-
-(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L227)
-
-##
-
 ### [G-2] MULTIPLE ADDRESS/ID MAPPINGS CAN BE COMBINED INTO A SINGLE MAPPING OF AN ADDRESS/ID TO A STRUCT, WHERE APPROPRIATE
 
 Saves a storage slot for the mapping. Depending on the circumstances and sizes of types, can avoid a Gsset (20000 gas) per mapping combined. Reads and subsequent writes can also be cheaper when a function requires both values and they both fit in the same storage slot. Finally, if both fields are accessed in the same function, can save ~42 gas per access due to [not having to recalculate the key’s keccak256 hash](https://gist.github.com/IllIllI000/ec23a57daa30a8f8ca8b9681c8ccefb0) (Gkeccak256 - 30 gas) and that calculation’s associated stack operations
@@ -47,9 +31,25 @@ File : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L116-L120)
 
+File :  File :  2023-02-ethos/Ethos-Core/contracts/LUSDToken.sol
+
+     54 :  mapping (address => uint256) private _nonces;
+
+    57:    mapping (address => uint256) private _balances;
+    58:    mapping (address => mapping (address => uint256)) private _allowances;  
+
+    62:    mapping (address => bool) public troveManagers;
+    63:    mapping (address => bool) public stabilityPools;
+    64:   mapping (address => bool) public borrowerOperations;
+
+ (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L54-L64)
+
 ##
 
 ## [G-3]  USE A MORE RECENT VERSION OF SOLIDITY
+
+CONTEXT:
+ALL CONTRACTS
 
 Using the latest version of a smart contract can help you reduce gas costs because the latest version is usually optimized for efficiency and can use fewer gas fees to execute the same function compared to an older version. In addition, the latest version may include new features that can further optimize gas usage, such as the use of newer algorithms or data structures.
 
@@ -81,7 +81,7 @@ In Solidity, declaring a variable inside a loop can result in higher gas costs c
 
 On the other hand, if you declare a variable outside the loop, the variable is only initialized once, and you can reuse the same instance of the variable inside the loop. This approach can save gas and optimize the execution of your code
 
-GAS SAMPLE TEST IN remix ide :
+GAS SAMPLE TEST IN remix ide(Without gas optimizations) :
 
 Before Mitigation :
 
@@ -145,6 +145,12 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L108-L113)
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/StabilityPool.sol#L351-L357)
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L206-L209)
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L228-L231)
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L240-L242)
 
 ##
 
@@ -244,6 +250,20 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/LQTY/CommunityIssuance.sol
     19:    string constant public NAME = "CommunityIssuance";
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L19)
+
+ FILE : 2023-02-ethos/Ethos-Core/contracts/LQTY/LQTYStaking.sol
+
+   23 :  string constant public NAME = "LQTYStaking";
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L23)
+
+FILE : 2023-02-ethos/Ethos-Core/contracts/LUSDToken.sol
+
+    32 : string constant internal _NAME = "LUSD Stablecoin";
+    33:  string constant internal _SYMBOL = "LUSD";
+    34:  string constant internal _VERSION = "1";
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L32-L34)
 
    
 
@@ -391,6 +411,13 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L898-L913)
 
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L269)
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L265)
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L261)
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L251)
 
 ##
 
@@ -465,6 +492,22 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/StabilityPool.sol
          351:  for (uint i = 0; i < numCollaterals; i++) {
     
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/StabilityPool.sol#L351)
+
+File : 2023-02-ethos/Ethos-Core/contracts/LQTY/LQTYStaking.sol
+
+     206 :  for (uint i = 0; i < assets.length; i++) {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L206)
+
+     228 :  for (uint i = 0; i < collaterals.length; i++) {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L228)
+
+    240 :   for (uint i = 0; i < numCollaterals; i++) {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L240)
+
+##
      
 ## [G-14]  NOT USING THE NAMED RETURN VARIABLES WHEN A FUNCTION RETURNS, WASTES DEPLOYMENT GAS
 
