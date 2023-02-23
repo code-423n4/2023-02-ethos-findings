@@ -222,6 +222,7 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L321-L353)
 
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L203)
 
 function _getOffsetAndRedistributionVals
     (
@@ -468,7 +469,7 @@ I recommend using header for Solidity code layout and readability
 
 ##
 
-### [22] State variables do not always start with capital letters
+### [22] State variables in Solidity do not necessarily need to start with capital letters, although it is common practice to begin them with a capital letter. The Solidity style guide suggests using mixedCase for state variables, where the first word is not capitalized but subsequent words are
 
 
 FILE :  2023-02-ethos/Ethos-Core/contracts/StabilityPool.sol
@@ -513,15 +514,34 @@ After Mitigation Camel Case :
 
  lastCollateralErrorOffset, lastLUSDLossErrorOffset 
 
+File:  2023-02-ethos/Ethos-Core/contracts/LQTY/LQTYStaking.sol
+
+F_Collateral_Snapshot,F_LUSD_Snapshot variables using snake case instead of camel case 
+
+       mapping (address => uint) F_Collateral_Snapshot;
+        uint F_LUSD_Snapshot;
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L35-L36
+
+Functions are using snake case instead of camel case :
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L177)
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L187)
+
+
+
 ##
 
 ### [24] IMPORTS CAN BE GROUPED TOGETHER
 
-Consider Dependencies first, then all interfaces, then all utils.
+Consider Dependencies first, then all interfaces
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L5-L11)
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L5-L16)
+
+
 
 ##
 
@@ -536,6 +556,205 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/LQTY/CommunityIssuance.sol
     93:   lastIssuanceTimestamp = block.timestamp;
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L87-L93)
+
+##
+
+### [26]  Ensure that the lengths of the amounts and assets arrays are the same
+
+
+File : 2023-02-ethos/Ethos-Core/contracts/LQTY/LQTYStaking.sol
+
+unction _sendCollGainToUser(address[] memory assets, uint[] memory amounts) internal {
+        uint numCollaterals = assets.length;
+        for (uint i = 0; i < numCollaterals; i++) {
+            if (amounts[i] != 0) {
+                address collateral = assets[i];
+                emit CollateralSent(msg.sender, collateral, amounts[i]);
+                IERC20(collateral).safeTransfer(msg.sender, amounts[i]);
+            }
+        }
+    }
+
+Recommended Mitigation step:
+
+require(amounts.length == assets.length, "Amounts and assets arrays must have the same length");
+
+##
+
+### [27]  The wrong emit function was used. If we want to emit the _lusdTokenAddress, we should use the LUSDTokenAddressSet event. However, in this case, the incorrect LQTYTokenAddressSet event was used.
+
+File : 2023-02-ethos/Ethos-Core/contracts/LQTY/LQTYStaking.sol
+
+      85 :  emit LQTYTokenAddressSet(_lusdTokenAddress);
+
+Recommended Mitigation : 
+
+     -  85 :  emit LQTYTokenAddressSet(_lusdTokenAddress);
+    +  85 :  emit LUSDTokenAddressSet (_lusdTokenAddress);
+
+##
+
+## [28]  Hardcode the address causes no future updates
+
+ In case the addresses change due to reasons such as updating their versions in the future, addresses coded as constants cannot be updated
+
+File :  2023-02-ethos/Ethos-Core/contracts/LUSDToken.sol
+
+    42 :  bytes32 private constant _PERMIT_TYPEHASH = 0x6e71edae12b1b97f4d1f60370fef10105fa2faae0126114a169c64845d6126c9;
+
+    43:   bytes32 private constant _TYPE_HASH = 0x8b73c3c69bb8fe3d512ecc4cf759cc79239f7b179b0ffacaa9a75d522b39400f;
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L42-L44)
+
+Recommended Mitigation Steps :
+
+    so it is recommended to add the update option with the onlyOwner modifier
+
+## [29] Avoid "_ " from state variables 
+
+ it is generally not necessary or recommended to prefix state variables with an underscore
+
+State variables are typically declared at the beginning of a contract's body, outside of any functions, and are given descriptive names that reflect their purpose
+
+File :  2023-02-ethos/Ethos-Core/contracts/LUSDToken.sol
+
+   54 :  mapping (address => uint256) private _nonces;
+
+   57:   mapping (address => uint256) private _balances;
+
+   58:   mapping (address => mapping (address => uint256)) private _allowances; 
+
+##
+
+### [30]  USE INTERNAL CONSTANT CONSISTENTLY
+
+Replace CONSTANT INTERNAL with INTERNAL CONSTANT
+
+File :  2023-02-ethos/Ethos-Core/contracts/LUSDToken.sol
+
+    string constant internal _NAME = "LUSD Stablecoin";
+    string constant internal _SYMBOL = "LUSD";
+    string constant internal _VERSION = "1";
+    uint8 constant internal _DECIMALS = 18;
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L32-L35)
+
+##
+
+### [31]  CRITICAL ADDRESS CHANGES SHOULD USE TWO-STEP PROCEDURE 
+
+The critical procedures should be two step process
+
+See similar findings in previous Code4rena contests for reference: (https://code4rena.com/reports/2022-06-illuminate/#2-critical-changes-should-use-two-step-procedure)
+
+File :  2023-02-ethos/Ethos-Core/contracts/LUSDToken.sol
+
+      function updateGovernance(address _newGovernanceAddress) external {
+        _requireCallerIsGovernance();
+        checkContract(_newGovernanceAddress); // must be a smart contract (multi-sig, timelock, etc.)
+        governanceAddress = _newGovernanceAddress;
+        emit GovernanceAddressChanged(_newGovernanceAddress);
+      }
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L146-L151)
+
+      function updateGuardian(address _newGuardianAddress) external {
+        _requireCallerIsGovernance();
+        checkContract(_newGuardianAddress); // must be a smart contract (multi-sig, timelock, etc.)
+        guardianAddress = _newGuardianAddress;
+        emit GuardianAddressChanged(_newGuardianAddress);
+    }
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L153-L158)
+
+Recommended Mitigation Steps
+
+Lack of two-step procedure for critical operations leaves them error-prone. Consider adding two step procedure on the critical functions.
+
+##
+
+### [31]  NO SAME VALUE INPUT CONTROL
+
+File :  2023-02-ethos/Ethos-Core/contracts/LUSDToken.sol
+
+      function updateGovernance(address _newGovernanceAddress) external {
+        _requireCallerIsGovernance();
+        checkContract(_newGovernanceAddress); // must be a smart contract (multi-sig, timelock, etc.)
+        governanceAddress = _newGovernanceAddress;
+        emit GovernanceAddressChanged(_newGovernanceAddress);
+      }
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L146-L151)
+
+      function updateGuardian(address _newGuardianAddress) external {
+        _requireCallerIsGovernance();
+        checkContract(_newGuardianAddress); // must be a smart contract (multi-sig, timelock, etc.)
+        guardianAddress = _newGuardianAddress;
+        emit GuardianAddressChanged(_newGuardianAddress);
+    }
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L153-L158)
+
+##
+
+### [32] External functions pauseMinting(),unpauseMinting()  are not used anywhere in other contracts 
+
+File :  2023-02-ethos/Ethos-Core/contracts/LUSDToken.sol
+
+    function pauseMinting() external {
+        require(
+            msg.sender == guardianAddress || msg.sender == governanceAddress,
+            "LUSD: Caller is not guardian or governance"
+        );
+        mintingPaused = true;
+    }
+
+    function unpauseMinting() external {
+        _requireCallerIsGovernance();
+        mintingPaused = false;
+    }
+
+Recommended Mitigation Steps :
+
+If the pauseMinting() and unpauseMinting() functions in a contract are not used anywhere else in other contracts and there are no plans to use them in the future, they can be safely removed
+
+
+##
+
+### [33]  OMISSIONS IN EVENTS
+
+Throughout the codebase, events are generally emitted when sensitive changes are made to the contracts. However, some events are missing important parameters
+
+The events should include the new value and old value where possible
+
+In updateGovernance(), updateGuardian() functions only new address is emitted . No events added to emit old address 
+
+File :  2023-02-ethos/Ethos-Core/contracts/LUSDToken.sol
+
+         function updateGovernance(address _newGovernanceAddress) external {
+        _requireCallerIsGovernance();
+        checkContract(_newGovernanceAddress); // must be a smart contract (multi-sig, timelock, etc.)
+        governanceAddress = _newGovernanceAddress;
+        emit GovernanceAddressChanged(_newGovernanceAddress);
+        }
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L146-L151)
+
+      function updateGuardian(address _newGuardianAddress) external {
+        _requireCallerIsGovernance();
+        checkContract(_newGuardianAddress); // must be a smart contract (multi-sig, timelock, etc.)
+        guardianAddress = _newGuardianAddress;
+        emit GuardianAddressChanged(_newGuardianAddress);
+    }
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L153-L158) 
+
+
+
+   
+
+
+
 
 
 
