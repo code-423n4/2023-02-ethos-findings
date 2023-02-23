@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Bobface",
+  "risk": "2",
+  "title": "ERC777 tokens can circumvent the vault TVL limit",
+  "issueId": 138,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/138"
+}
