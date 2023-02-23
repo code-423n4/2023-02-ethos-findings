@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Bauer",
+  "risk": "2",
+  "title": "If the TVL cap updated by admin is less than balance(), the deposit function will not work",
+  "issueId": 130,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/130"
+}
