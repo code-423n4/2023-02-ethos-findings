@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "dontonka",
+  "risk": "2",
+  "title": "SortedTroves being an unbounded sorted list internally",
+  "issueId": 122,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/122"
+}
