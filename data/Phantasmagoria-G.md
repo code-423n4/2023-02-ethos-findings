@@ -2,7 +2,7 @@
 |       | Issue | Instances     |
 | :---              |    :----             |         :----:  |
 | 1     | `require()`/`revert()` strings longer than 32 bytes cost extra gas     | 14      |
-| 2     |   Use custom errors rather than `revert()`/`require()` strings to save gas   | 1    |
+| 2     |   Use custom errors rather than `revert()`/`require()` strings to save gas   | 14    |
 | 3     |   Splitting `require()` statements that use `&&` saves gas  |  4   |
 | 4     |   Event fields are redundant  |   1   |
 | 5     |   Use a more recent version of solidity  |    8  |
@@ -42,7 +42,20 @@ https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/abst
 
 ### [G-02] Use custom errors rather than revert()/require() strings to save gas
 Custom errors are available from solidity version 0.8.4. Custom errors save ~50 gas each time they’re hit by avoiding having to allocate and store the revert string. Not defining the strings also save deployment gas.
-*There is 1 instances of this issue*
+*There are 14 instances of this issue*
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L561
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L633
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L650
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L653
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/ActivePool.sol#L321
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/ActivePool.sol#L329
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/ActivePool.sol#L338
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L257
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LUSDToken.sol#L136
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LUSDToken.sol#L350
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LUSDToken.sol#L356
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LUSDToken.sol#L371
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LUSDToken.sol#L386
 https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol#L193
 
 ### [G-03] Splitting require() statements that use && saves gas
