@@ -6,7 +6,7 @@
 | R  | Refactor | Changing the code |
 | O | Ordinary | Often found issues |
 
-| Total Found Issues | 811 |
+| Total Found Issues | 812 |
 |:--:|:--:|
 
 
@@ -31,8 +31,9 @@
 | [R-04] | Remove unused variables | 2 |
 | [R-05] | Function state mutability can be restricted to pure | 1 |
 | [R-06] | For functions, follow solidity standard naming conventions | 1 |
+| [R-07] | Enum values should start with capital letter by convention | 1 |
 
-| Total Refactor Issues | 25 |
+| Total Refactor Issues | 26 |
 |:--:|:--:|
 
 ### Ordinary Issues Template
@@ -238,6 +239,14 @@ The above codes don’t follow Solidity’s standard naming convention, consider
 ```diff
 - function _requireTroveisNotActive(...)
 + function _requireTroveIsNotActive(...)
+```
+
+### [R-07] Enum values should start with capital letter by convention
+
+```solidity 
+Ethos-Core/contracts/PriceFeed.sol
+
+73: enum Status {...}
 ```
 
 ### [O-01] Remove TODOs in code
