@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Praise",
+  "risk": "2",
+  "title": "Lack of event emission in updateDistributionPeriod() function found in CommunityIssuance.sol",
+  "issueId": 148,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/148"
+}
