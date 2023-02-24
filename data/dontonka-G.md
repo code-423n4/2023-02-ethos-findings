@@ -1,3 +1,5 @@
+Some reported issues here are just added as a comment, but most have been applied the suggested corrections already, you can see all the final diffs. Take note that the code compile and all test pass with those too.
+
 ```diff
 diff --git a/Ethos-Core/contracts/ActivePool.sol b/Ethos-Core/contracts/ActivePool.sol
 index 753fcd0..771da52 100644
