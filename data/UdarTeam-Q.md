@@ -6,7 +6,7 @@
 | R  | Refactor | Changing the code |
 | O | Ordinary | Often found issues |
 
-| Total Found Issues | 812 |
+| Total Found Issues | 16 |
 |:--:|:--:|
 
 
@@ -19,7 +19,7 @@
 | [N-04] | Insufficient coverage | - |
 
 
-| Total Non-Critical Issues | 659 |
+| Total Non-Critical Issues | 4 |
 |:--:|:--:|
 
 ### Refactor Issues Template
@@ -33,7 +33,7 @@
 | [R-06] | For functions, follow solidity standard naming conventions | 1 |
 | [R-07] | Enum values should start with capital letter by convention | 1 |
 
-| Total Refactor Issues | 26 |
+| Total Refactor Issues | 7 |
 |:--:|:--:|
 
 ### Ordinary Issues Template
@@ -46,7 +46,7 @@
 | [O-05] | Increase NatSpec comments | 103 |
 
 
-| Total Ordinary Issues | 127 |
+| Total Ordinary Issues | 5 |
 |:--:|:--:|
 
 ### [N-01] Explicitly mark state variables visibility
