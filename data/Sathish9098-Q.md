@@ -46,6 +46,8 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/LQTY/CommunityIssuance.sol
         onlyOwner 
         override 
 
+File : 2023-02-ethos/Ethos-Core/contracts/LQTY/CommunityIssuance.sol
+
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L61-L68)
 
       101 : function fund(uint amount) external onlyOwner {
@@ -242,6 +244,10 @@ function _getOffsetAndRedistributionVals
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L1164-L1171)
 
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol#L86-L89)
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol#L114)
+
 ##
 
 ### [9] DECIMALS() NOT PART OF ERC20 STANDARD
@@ -321,6 +327,14 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L478-L507)
 
+File : File : 2023-02-ethos/Ethos-Core/contracts/LUSDToken.sol
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L328-L334)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L336-L342)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L320-L326)
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L311-L318)
+
+
 ##
 
 ### [15]  USE PUBLIC CONSTANT CONSISTENTLY
@@ -345,6 +359,7 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L48-L61)
 
+
 FILE : 2023-02-ethos/Ethos-Core/contracts/BorrowerOperations.sol
 
     21:  string constant public NAME = "BorrowerOperations";
@@ -362,6 +377,8 @@ FILE :  2023-02-ethos/Ethos-Core/contracts/StabilityPool.sol
    150 :  string constant public NAME = "StabilityPool";
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/StabilityPool.sol#L150)
+
+
 
 ##
 
@@ -439,6 +456,12 @@ FIE : 2023-02-ethos/Ethos-Core/contracts/ActivePool.sol
     145 :  require(_treasurySplit + _SPSplit + _stakingSplit == 10_000, "Splits must add up to 10000 BPS");
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L145)
+
+File : 2023-02-ethos/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol
+
+   uint256 public constant PERCENT_DIVISOR = 10_000;
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol#L23)
 
 ##
 
@@ -581,7 +604,9 @@ require(amounts.length == assets.length, "Amounts and assets arrays must have th
 
 ##
 
-### [27]  The wrong emit function was used. If we want to emit the _lusdTokenAddress, we should use the LUSDTokenAddressSet event. However, in this case, the incorrect LQTYTokenAddressSet event was used.
+### [27]  The wrong emit function was used
+
+If we want to emit the _lusdTokenAddress, we should use the LUSDTokenAddressSet event. However, in this case, the incorrect LQTYTokenAddressSet event was used.
 
 File : 2023-02-ethos/Ethos-Core/contracts/LQTY/LQTYStaking.sol
 
@@ -591,6 +616,18 @@ Recommended Mitigation :
 
      -  85 :  emit LQTYTokenAddressSet(_lusdTokenAddress);
     +  85 :  emit LUSDTokenAddressSet (_lusdTokenAddress);
+
+File: File : 2023-02-ethos/Ethos-Core/contracts/LUSDToken.sol
+
+Transfer event is used instead Burn event 
+
+       function _burn(address account, uint256 amount) internal {
+        assert(account != address(0));
+        
+        _balances[account] = _balances[account].sub(amount, "ERC20: burn amount exceeds balance");
+        _totalSupply = _totalSupply.sub(amount);
+        emit Transfer(account, address(0), amount);  /// @Audit emit Burn event instead of Transfer Event 
+      }
 
 ##
 
@@ -605,6 +642,19 @@ File :  2023-02-ethos/Ethos-Core/contracts/LUSDToken.sol
     43:   bytes32 private constant _TYPE_HASH = 0x8b73c3c69bb8fe3d512ecc4cf759cc79239f7b179b0ffacaa9a75d522b39400f;
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L42-L44)
+
+File: 2023-02-ethos/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol
+
+     24:  address public constant VELO_ROUTER = 0xa132DAB612dB5cB9fC9Ac426A0Cc215A3423F9c9;
+
+     25:   ILendingPoolAddressesProvider public constant ADDRESSES_PROVIDER =
+             ILendingPoolAddressesProvider(0xdDE5dC81e40799750B92079723Da2acAF9e1C6D6);
+
+    27:   IAaveProtocolDataProvider public constant DATA_PROVIDER =
+            IAaveProtocolDataProvider(0x9546F673eF71Ff666ae66d01Fd6E7C6Dae5a9995);
+
+   29:   IRewardsController public constant REWARDER = IRewardsController(0x6A0406B8103Ec68EE9A713A073C7bD587c5e04aD);
+  
 
 Recommended Mitigation Steps :
 
@@ -748,6 +798,60 @@ File :  2023-02-ethos/Ethos-Core/contracts/LUSDToken.sol
     }
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L153-L158) 
+
+File : 2023-02-ethos/Ethos-Core/contracts/LQTY/CommunityIssuance.sol
+
+      function updateDistributionPeriod(uint256 _newDistributionPeriod) external onlyOwner {
+        distributionPeriod = _newDistributionPeriod;
+     }
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L120-L122)
+
+##
+
+### [34]  INITIALIZE() FUNCTION CAN BE CALLED BY ANYBODY
+
+initialize() function can be called anybody when the contract is not initialized
+
+File: 2023-02-ethos/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol
+
+       function initialize(
+        address _vault,
+        address[] memory _strategists,
+        address[] memory _multisigRoles,
+        IAToken _gWant
+        ) public initializer {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol#L62-L67)
+
+Recommended Mitigation Steps
+
+Add a control that makes initialize() only call the Deployer Contract;
+
+if (msg.sender != DEPLOYER_ADDRESS) {
+						revert NotDeployer();
+				}
+
+
+##
+
+### [35] EXPRESSIONS FOR CONSTANT VALUES SUCH AS A CALL TO KECCAK256(), SHOULD USE IMMUTABLE RATHER THAN CONSTANT
+
+While it doesn’t save any gas because the compiler knows that developers often make this mistake, it’s still best to use the right tool for the task at hand. There is a difference between constant variables and immutable variables, and they should each be used in their appropriate contexts. constants should be used for literal values written into the code, and immutable variables should be used for expressions, or values calculated in, or passed into the constructor
+
+File: 2023-02-ethos/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol
+
+       49:  bytes32 public constant KEEPER = keccak256("KEEPER");
+       50:  bytes32 public constant STRATEGIST = keccak256("STRATEGIST");
+       51:  bytes32 public constant GUARDIAN = keccak256("GUARDIAN");
+       52:  bytes32 public constant ADMIN = keccak256("ADMIN");
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol#L49-L52)
+
+      
+
+
+
 
 
 
