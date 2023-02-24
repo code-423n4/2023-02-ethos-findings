@@ -3,6 +3,55 @@
 
 ##
 
+### [G-1] State variables can be packed into fewer storage slots
+
+If variables occupying the same slot are both written the same function or by the constructor, avoids a separate Gsset (20000 gas). Reads of the variables can also be cheaper
+
+File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
+
+    35:  mapping(address => StrategyParams) public strategies; // (32)
+
+    42: uint256 public tvlCap; // (32)
+
+    44: uint256 public totalAllocBPS;  // (32)
+    45: uint256 public totalAllocated;  // (32)
+    46: uint256 public lastReport;  //(32)
+
+    49:  bool public emergencyShutdown;  //(1)
+
+    55:  uint256 public withdrawMaxLoss = 1;  // (32)
+    56:  uint256 public lockedProfitDegradation; // (32)
+    57:  uint256 public lockedProfit;   // (32)
+
+    78:  address public treasury;  // (20)
+
+Variables ordering with 10 slots. 
+
+Variable withdrawMaxLoss  is stored the value is 1. Not store any high value any where in the contract . So We can change this withdrawMaxLoss  type to uint64
+
+      /// @Audit Variable ordering with 8 slots instead of the current 10 slots:
+
+        address[] public withdrawalQueue; 
+        mapping(address => StrategyParams) public strategies; // (32)
+        uint256 public tvlCap; // (32)
+        uint256 public totalAllocBPS;  // (32)
+        uint256 public totalAllocated;  // (32)
+        uint256 public lastReport;  //(32)
+        uint256 public lockedProfitDegradation; // (32)
+        uint256 public lockedProfit;   // (32)
+        uint64 public withdrawMaxLoss = 1;  // (8)
+        bool public emergencyShutdown;  // (1)
+        address public treasury;  // (20)
+
+
+> So saves 2 Gsset (40000 gas)
+
+#### If still sponsor feels withdrawMaxLoss  should be declared with uint256 then we ordering variables with 9 slots with this same order 
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L38-L78)
+
+##        
+
 ### [G-1] Optimize names to save gas
 
 public/external function names and public member variable names can be optimized to save gas. See this [link](https://gist.github.com/IllIllI000/a5d8b486a8259f9f77891a919febd1a9) for an example of how it works. Below are the interfaces/abstract contracts that can be optimized so that the most frequently-called functions use the least amount of gas possible during method lookup. Method IDs that have two leading zero bytes can save 128 gas each during deployment, and renaming functions to have lower method IDs will save 22 gas per call, per [sorted position shifted](https://medium.com/joyso/solidity-how-does-function-name-affect-gas-consumption-in-smart-contract-47d270d8ac92)
@@ -257,6 +306,14 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol#L117-L121)
 
+File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
+
+           for (uint256 i = 0; i < queueLength; i = i.uncheckedInc()) {
+            address strategy = _withdrawalQueue[i];
+            StrategyParams storage params = strategies[strategy];
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L264-L266)
+
 ##
 
 ### [G-5]  USE FUNCTION INSTEAD OF MODIFIERS
@@ -466,7 +523,33 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol#L166)
 
-   
+File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
+
+    660 : bytes32[] memory cascadingAccessRoles = new bytes32[](5);
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L660)
+
+ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol
+
+    166:  address[2] memory step = _newSteps[i];
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol#L166)
+
+File : 2023-02-ethos/Ethos-Core/contracts/StabilityPool.sol
+
+    687:  Snapshots memory snapshots = depositSnapshots[_depositor];
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/StabilityPool.sol#L687) 
+
+    722:  Snapshots memory snapshots = depositSnapshots[_depositor];
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/StabilityPool.sol#L722)
+
+       address[] memory collaterals = collateralConfig.getAllowedCollaterals();
+        uint[] memory amounts = new uint[](collaterals.length);
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/StabilityPool.sol#L806-L807)
+
 
 ##
 
@@ -733,7 +816,59 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol#L104-L107)
 
+File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultERC4626.sol
+
+    function asset() external view override returns (address assetTokenAddress) {
+        return address(token);
+    }
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L29-L31)
+  
+
+    function totalAssets() external view override returns (uint256 totalManagedAssets) {
+        return balance();
+    }
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L37-L39)
+
+    function convertToShares(uint256 assets) public view override returns (uint256 shares) {
+        if (totalSupply() == 0 || _freeFunds() == 0) return assets;
+        return (assets * totalSupply()) / _freeFunds();
+    }
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L51-L54)
+
+   66 :     function convertToAssets(uint256 shares) public view override returns (uint256 assets) {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L66-L69)
+
+    79 :     function maxDeposit(address) external view override returns (uint256 maxAssets) {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L79)
+
+    function previewDeposit(uint256 assets) external view override returns (uint256 shares) {
+        return convertToShares(assets);
+    }
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L96-L98)
+
+    122 :     function maxMint(address) external view override returns (uint256 maxShares) {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L122)
+
+  165 :     function maxWithdraw(address owner) external view override returns (uint256 maxAssets) {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L165)
+
+   220 :     function maxRedeem(address owner) external view override returns (uint256 maxShares) {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L220)
      
+   240 :     function previewRedeem(uint256 shares) external view override returns (uint256 assets) {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L240)
+
+
 
 ##
 
@@ -795,9 +930,18 @@ File : 2023-02-ethos/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol#L120-L123)
 
+File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
 
+             234: if (stratCurrentAllocation > stratMaxAllocation) {
+             235:  return -int256(stratCurrentAllocation - stratMaxAllocation);
 
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L234-L235)
 
+             330 : _amount = balAfter - balBefore;
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L334)
+
+##
 
 ## [G-16]  USAGE OF UINTS/INTS SMALLER THAN 32 BYTES (256 BITS) INCURS OVERHEAD
 
@@ -815,9 +959,11 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
 
     1344 :   uint128 index = Troves[_borrower][_collateral].arrayIndex;
 
-    1414 :   assert(newBaseRate > 0);
+File : File : 2023-02-ethos/Ethos-Core/contracts/StabilityPool.sol
 
-(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L1344)
+    745:  uint128 scaleDiff = currentScale.sub(scaleSnapshot);
+
+
 
 ##
 
@@ -895,9 +1041,75 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/LQTY/CommunityIssuance.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L74-L75)
 
+## 
+
+### [G-19] <x> += <y> OR <x>-=<y> costs more gas than <x> = <x> + <y> OR  <x> = <x> - <y>   for state variables
+
+Using the addition operator instead of plus-equals saves 113 gas
+
+File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
+
+    168 : totalAllocBPS += _allocBPS;
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L168)
+ 
+   194:  totalAllocBPS -= strategies[_strategy].allocBPS;
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L194)
+
+   195: totalAllocBPS += _allocBPS;
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L196)
+
+   214:  totalAllocBPS -= strategies[_strategy].allocBPS;
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L214)
+
+    395:   strategies[stratAddr].allocated -= actualWithdrawn;
+    396:   totalAllocated -= actualWithdrawn;
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L395-L396)
+
+   444:  stratParams.allocBPS -= bpsChange;
+   445:  totalAllocBPS -= bpsChange;
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L444-L445)
+
+        450 : stratParams.losses += loss;
+        451:  stratParams.allocated -= loss;
+        452:  totalAllocated -= loss;
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L450-L452)
+
+      505 : strategy.gains += vars.gain;
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L505)
+
+    514:  strategy.allocated -= vars.debtPayment;
+    515:  totalAllocated -= vars.debtPayment;
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L514-L515)
+
+
+
+// YENTHA FUNCTIONS NA MULTIPLE TIMES CALL PANNI IRUKKA NU CHECK PANNAUM 
+
+The result of function calls should be cached rather than re-calling the function
+
+// ANOTHER TIME CHECK ALL STATE VARIBALES AND STRUNCTS IS THER ANY POSSIBILITY TO REDUCE GASS
+
+// YELLA MAPPINGS UM ADD PANNUM 
+
+// RESEARCH ABOUT CONTRACT EXISTANCE CHECKS GAS FINDINGS 
+
+Don't compare boolean expressions to boolean literals
+
+require() or revert() statements that check input arguments should be at the top of the function
+
+Don't use _msgSender() if not supporting EIP-2771
      
 
-
+State variables only set in the constructor should be declared immutable - ITHA RESEARCH PANNUM SETADDRESS IRUKKA ADDRESS ONCE ASSIGNE PANNA APRAM CHANGE AAVUTHA NU 
 
 
 
