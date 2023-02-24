@@ -248,6 +248,58 @@ function _getOffsetAndRedistributionVals
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol#L114)
 
+File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultERC4626.sol
+
+    function asset() external view override returns (address assetTokenAddress) {
+        return address(token);
+    }
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L29-L31)
+  
+
+    function totalAssets() external view override returns (uint256 totalManagedAssets) {
+        return balance();
+    }
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L37-L39)
+
+    function convertToShares(uint256 assets) public view override returns (uint256 shares) {
+        if (totalSupply() == 0 || _freeFunds() == 0) return assets;
+        return (assets * totalSupply()) / _freeFunds();
+    }
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L51-L54)
+
+   66 :     function convertToAssets(uint256 shares) public view override returns (uint256 assets) {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L66-L69)
+
+    79 :     function maxDeposit(address) external view override returns (uint256 maxAssets) {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L79)
+
+    function previewDeposit(uint256 assets) external view override returns (uint256 shares) {
+        return convertToShares(assets);
+    }
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L96-L98)
+
+    122 :     function maxMint(address) external view override returns (uint256 maxShares) {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L122)
+
+  165 :     function maxWithdraw(address owner) external view override returns (uint256 maxAssets) {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L165)
+
+   220 :     function maxRedeem(address owner) external view override returns (uint256 maxShares) {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L220)
+     
+   240 :     function previewRedeem(uint256 shares) external view override returns (uint256 assets) {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L240)
+
 ##
 
 ### [9] DECIMALS() NOT PART OF ERC20 STANDARD
@@ -383,6 +435,9 @@ FILE :  2023-02-ethos/Ethos-Core/contracts/StabilityPool.sol
 ##
 
 ### [16] INTERCHANGEABLE USAGE OF UINT AND UINT256
+
+Context:
+ALL CONTRACTS
 
 Consider using only one approach throughout the codebase, e.g. only uint or only uint256.
 
@@ -576,9 +631,16 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/LQTY/CommunityIssuance.sol
 
      87 : int256 endTimestamp = block.timestamp > lastDistributionTime ? lastDistributionTime : block.timestamp;
 
-    93:   lastIssuanceTimestamp = block.timestamp;
+    93:   lastIssuanceTimestamp = block.timestamp
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L87-L93)
+
+File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
+
+   540:  strategy.lastReport = block.timestamp;
+   541:  lastReport = block.timestamp;
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L540-L541)
 
 ##
 
@@ -717,6 +779,17 @@ File :  2023-02-ethos/Ethos-Core/contracts/LUSDToken.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L153-L158)
 
+File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
+
+   function updateTreasury(address newTreasury) external {
+        _atLeastRole(DEFAULT_ADMIN_ROLE);
+        require(newTreasury != address(0), "Invalid address");
+        treasury = newTreasury;
+    }
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L627-L631)
+
+
 Recommended Mitigation Steps
 
 Lack of two-step procedure for critical operations leaves them error-prone. Consider adding two step procedure on the critical functions.
@@ -744,6 +817,16 @@ File :  2023-02-ethos/Ethos-Core/contracts/LUSDToken.sol
     }
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L153-L158)
+
+File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
+
+   function updateTreasury(address newTreasury) external {
+        _atLeastRole(DEFAULT_ADMIN_ROLE);
+        require(newTreasury != address(0), "Invalid address");
+        treasury = newTreasury;
+    }
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L627-L631)
 
 ##
 
@@ -848,13 +931,87 @@ File: 2023-02-ethos/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol#L49-L52)
 
+File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
+
+    73:   bytes32 public constant DEPOSITOR = keccak256("DEPOSITOR");
+    74:   bytes32 public constant STRATEGIST = keccak256("STRATEGIST");
+    75:   bytes32 public constant GUARDIAN = keccak256("GUARDIAN");
+    76:   bytes32 public constant ADMIN = keccak256("ADMIN");
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L73-L76)
+
+##
+
+### [37] MARK VISIBILITY OF INITIALIZE() FUNCTION AS EXTERNAL
+
+File : 2023-02-ethos/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol
+
+        function initialize(
+        address _vault,
+        address[] memory _strategists,
+        address[] memory _multisigRoles,
+        IAToken _gWant
+        ) public initializer {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol#L62-L67)
+
+##
+
+### [38] LOSS OF PRECISION DUE TO ROUNDING
+
+File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
+
+    231:  uint256 stratMaxAllocation = (strategies[stratAddr].allocBPS * balance()) / PERCENT_DIVISOR;
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L231)
+
+    237:  uint256 vaultMaxAllocation = (totalAllocBPS * balance()) / PERCENT_DIVISOR;
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L237)
+
+   296:  return totalSupply() == 0 ? 10**decimals() : (_freeFunds() * 10**decimals()) / totalSupply();
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L296)
+
+   334:  shares = (_amount * totalSupply()) / freeFunds; 
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L334)
+
+   365:  value = (_freeFunds() * _shares) / totalSupply();
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L365)
       
+     421 : return lockedProfit - ((lockedFundsRatio * lockedProfit) / DEGRADATION_COEFFICIENT);
 
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L421)
 
+    440 :  uint256 bpsChange = Math.min((loss * totalAllocBPS) / totalAllocated, stratParams.allocBPS);
 
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L440)
 
+   463: uint256 performanceFee = (gain * strategies[strategy].feeBPS) / PERCENT_DIVISOR;
 
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L463)
 
+File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultERC4626.sol
+ 
+     53 : return (assets * totalSupply()) / _freeFunds();
+
+     68 : return (shares * _freeFunds()) / totalSupply();
+
+##
+
+### [39] FOR FUNCTIONS, FOLLOW SOLIDITY STANDARD NAMING CONVENTIONS
+
+internal and private functions : the mixedCase format starting with an underscore (_mixedCase starting with an underscore)
+
+roundUpDiv() internal function should be starting with underscore => _roundUpDiv()
+
+File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultERC4626.sol
+
+     269 : function roundUpDiv(uint256 x, uint256 y) internal pure returns (uint256) {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L269)
    
 
 
