@@ -1,3 +1,5 @@
+Some reported issues here are just added as a comment, but most have been applied the suggested corrections already, you can see all the final diffs. Take note that the code compile and all test pass with those too.
+
 ```diff
 diff --git a/Ethos-Core/contracts/ActivePool.sol b/Ethos-Core/contracts/ActivePool.sol
 index 771da52..4e58ef4 100644
@@ -118,7 +120,7 @@ index c79adfe..39f7ac8 100644
  
  pragma solidity 0.6.11;
  
--import "../Dependencies/IERC20.sol";
+ import "../Dependencies/IERC20.sol";
  import "../Interfaces/ICommunityIssuance.sol";
  import "../Dependencies/BaseMath.sol";
  import "../Dependencies/LiquityMath.sol";
@@ -180,24 +182,18 @@ index c79adfe..39f7ac8 100644
 
 ```diff
 diff --git a/Ethos-Core/contracts/LQTY/LQTYStaking.sol b/Ethos-Core/contracts/LQTY/LQTYStaking.sol
-index e7e76d5..6206361 100644
+index 6206361..5f20a9b 100644
 --- a/Ethos-Core/contracts/LQTY/LQTYStaking.sol
 +++ b/Ethos-Core/contracts/LQTY/LQTYStaking.sol
-@@ -7,13 +7,13 @@ import "../Dependencies/SafeMath.sol";
- import "../Dependencies/Ownable.sol";
- import "../Dependencies/CheckContract.sol";
- import "../Dependencies/console.sol";
--import "../Dependencies/IERC20.sol";
- import "../Interfaces/ICollateralConfig.sol";
- import "../Interfaces/ILQTYStaking.sol";
- import "../Interfaces/ITroveManager.sol";
- import "../Dependencies/LiquityMath.sol";
- import "../Interfaces/ILUSDToken.sol";
- import "../Dependencies/SafeERC20.sol";
-+//@audit (QA) removed the IERC20 import which seems redundant as using SafeERC20
- 
- contract LQTYStaking is ILQTYStaking, Ownable, CheckContract, BaseMath {
-     using SafeERC20 for IERC20;
+@@ -91,7 +91,7 @@ contract LQTYStaking is ILQTYStaking, Ownable, CheckContract, BaseMath {
+         collateralConfig = ICollateralConfig(_collateralConfigAddress);
+
+         emit LQTYTokenAddressSet(_lqtyTokenAddress);
+-        emit LQTYTokenAddressSet(_lusdTokenAddress);
++        emit LUSDTokenAddressSet(_lusdTokenAddress); //@audit (QA) sending the proper emit
+         emit TroveManagerAddressSet(_troveManagerAddress);
+         emit BorrowerOperationsAddressSet(_borrowerOperationsAddress);
+         emit ActivePoolAddressSet(_activePoolAddress);
 ```
 
 ```diff
@@ -383,26 +379,19 @@ index b5f2a58..2be0b81 100644
 ```
 
 ```diff
-diff --git a/Ethos-Core/contracts/Dependencies/SafeMath.sol b/Ethos-Core/contracts/Dependencies/SafeMath.sol
-index 45506ed..74e0ed0 100644
---- a/Ethos-Core/contracts/Dependencies/SafeMath.sol
-+++ b/Ethos-Core/contracts/Dependencies/SafeMath.sol
-@@ -60,7 +60,7 @@ library SafeMath {
-      * _Available since v2.4.0._
-      */
-     function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
--        require(b <= a, errorMessage);
-+        require(b <= a, errorMessage); //@audit (QA) why is this not b < a? if a == b, a - b == 0, which is not an overflow. I understand this is used everywhere and standard, but was just surprise and curious about why its like this.
-         uint256 c = a - b;
- 
-         return c;
-```
-
-```diff
 diff --git a/Ethos-Core/contracts/StabilityPool.sol b/Ethos-Core/contracts/StabilityPool.sol
-index db163b7..a33d8c3 100644
+index 5f8fac6..34dba94 100644
 --- a/Ethos-Core/contracts/StabilityPool.sol
 +++ b/Ethos-Core/contracts/StabilityPool.sol
+@@ -157,7 +157,7 @@ contract StabilityPool is LiquityBase, Ownable, CheckContract, IStabilityPool {
+
+     ILUSDToken public lusdToken;
+
+-    address public lqtyTokenAddress;
++    address public lqtyTokenAddress; //@audit (QA) unused, to be removed
+
+     // Needed to check if there are pending liquidations
+     ISortedTroves public sortedTroves;
 @@ -172,7 +172,7 @@ contract StabilityPool is LiquityBase, Ownable, CheckContract, IStabilityPool {
     // --- Data structures ---
  
