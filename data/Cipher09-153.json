@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Cipher09",
+  "risk": "2",
+  "title": "No Adddress Validation for CommunityIssuance.sol in sendOath function",
+  "issueId": 153,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/153"
+}
