@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "peakbolt",
+  "risk": "2",
+  "title": "Vault is vulnerable to sandwich attack during harvest due to zero slippage for swap transactions on Velo ",
+  "issueId": 155,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/155"
+}
