@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "koxuan",
+  "risk": "3",
+  "title": "lockedProfitDegration is initialized with the wrong value which can lead to incorrect locked profit calculation",
+  "issueId": 147,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/147"
+}
