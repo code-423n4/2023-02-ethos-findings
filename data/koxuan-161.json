@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "koxuan",
+  "risk": "2",
+  "title": "ReaperVaultERC4626.maxWithdraw returns asset amount that is too big for ReaperVaultERC4626.withdraw",
+  "issueId": 161,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/161"
+}
