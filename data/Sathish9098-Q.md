@@ -944,6 +944,8 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
 
 ### [37] MARK VISIBILITY OF INITIALIZE() FUNCTION AS EXTERNAL
 
+The initialize() function is often declared as external instead of public or internal because it is intended to be called only once, when the contract is being deployed.
+
 File : 2023-02-ethos/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol
 
         function initialize(
