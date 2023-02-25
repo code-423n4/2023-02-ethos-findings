@@ -412,3 +412,31 @@ https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8
 
 Manual Analysis
 
+
+# 8: USE .CALL INSTEAD OF .TRANSFER TO SEND ETHER
+
+Vulnerability details
+
+## Impact:
+
+.transfer will relay 2300 gas and .call will relay all the gas.
+
+## Proof of Concept
+
+> ***File: contracts/LQTY/LQTYStaking.sol***  
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L171 
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L135 
+
+> ***File: contracts/LQTY/CommunityIssuance.sol*** 
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L103 
+
+## Tools Used
+
+Manual Analysis
+
+### Recommended Mitigation Steps
+
+Replace .transfer with .call. Note that the result of .call needs to be checked.
