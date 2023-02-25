@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "georgits",
+  "risk": "2",
+  "title": "Use safeTransfer/safeTransferFrom instead of transfer/transferFrom",
+  "issueId": 171,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/171"
+}
