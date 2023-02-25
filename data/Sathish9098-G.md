@@ -1047,6 +1047,21 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L514-L515)
 
+##
+
+### [G19]  initialize() function as external can also help to reduce gas costs, since external functions are generally cheaper to call than public or internal functions
+
+File : 2023-02-ethos/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol
+
+        function initialize(
+        address _vault,
+        address[] memory _strategists,
+        address[] memory _multisigRoles,
+        IAToken _gWant
+        ) public initializer {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol#L62-L67)
+
 
 
 
