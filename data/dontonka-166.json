@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "dontonka",
+  "risk": "2",
+  "title": "PriceFeed updateTellorCaller could disable the Tellor fallback as a whole.",
+  "issueId": 166,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/166"
+}
