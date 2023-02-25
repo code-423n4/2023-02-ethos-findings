@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "contagiante",
+  "risk": "3",
+  "title": "Unbounded loop in `_withdraw()` Can Lead To DoS",
+  "issueId": 173,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/173"
+}
