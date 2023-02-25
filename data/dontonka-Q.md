@@ -217,16 +217,6 @@ diff --git a/Ethos-Core/contracts/PriceFeed.sol b/Ethos-Core/contracts/PriceFeed
 index c6810a8..18d6c4e 100644
 --- a/Ethos-Core/contracts/PriceFeed.sol
 +++ b/Ethos-Core/contracts/PriceFeed.sol
-@@ -169,6 +169,9 @@ contract PriceFeed is Ownable, CheckContract, BaseMath, IPriceFeed {
-     ) external onlyOwner {
-         checkContract(_tellorCallerAddress);
-         tellorCaller = ITellorCaller(_tellorCallerAddress);
-+
-+        //@audit (QA) if the contract _tellorCallerAddress is a valid contract, BUT doesn't implement ITellorCaller interface, the call here will still succeed. In such case, it would let the Admin to think the tellor is good, while it is not.
-+        //Recommendation: should try it out like in fetchPrice at least with _getCurrentTellorResponse etc., similar as you do above for chainlink, the interface is tested out fetching the price.
-     }
- 
-     // --- Functions ---
 @@ -507,8 +510,8 @@ contract PriceFeed is Ownable, CheckContract, BaseMath, IPriceFeed {
          * future changes.
          *
