@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "I_I_I_I",
+  "risk": "2",
+  "title": "If the strategy is going to report losses more than 1 time, it will revert.",
+  "issueId": 167,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/167"
+}
