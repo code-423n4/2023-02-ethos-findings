@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "paspe",
+  "risk": "2",
+  "title": "Use a safe transfer helper library for ERC20 transfers",
+  "issueId": 169,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/169"
+}
