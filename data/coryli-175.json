@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "coryli",
+  "risk": "2",
+  "title": "USE SAFETRANSFER/SAFETRANSFERFROM CONSISTENTLY INSTEAD OF TRANSFER/TRANSFERFROM",
+  "issueId": 175,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/175"
+}
