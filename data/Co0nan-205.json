@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Co0nan",
+  "risk": "3",
+  "title": "Fees collected by LQTYStaking contract before users stake their OATH token will be lost.",
+  "issueId": 205,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/205"
+}
