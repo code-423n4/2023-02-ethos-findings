@@ -36,5 +36,23 @@ Proof of Concept:
 Recommended Mitigation Steps:
 ------------------------------------
 Use a more reliable and accurate source such as an off-chain oracle or consider using `block.number` instead `block.timestamp`
- 
+
+
+Avoid floating pragmas for non-library contracts
+===============================
+Description:
+-------------
+While allowing floating point pragmas makes sense for library contracts which allow them to be included with multiple different versions of applications. However, including floating point pragmas in non-library contracts might be a security risk as some solidity versions contains vulnerabilities. If you read through the release notes of any version of solidity ranging from 0.8.X to the current version we can see that all sorts of fixed issues
+
+Proof of Concept:
+-------------------
+* https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol#L3
+* https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L3
+* https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperVaultV2.sol#L3
+* https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol#L3
+
+Recommended Mitigation Steps:
+-----------------------------------
+It is recommended to not use a floating pragma value for non-library contracts and only use a single and new solidity version. 
+
 
