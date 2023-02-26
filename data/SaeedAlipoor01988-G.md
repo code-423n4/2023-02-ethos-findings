@@ -92,7 +92,7 @@ _requireTroveIsActive is a function in TroveManager to check that Troves[_borrow
 
 we can remove the call to BorrowerOperations._requireTroveisActive in functions _adjustTrove, because in any way we make the call to the TroveManager.applyPendingRewards, and in TroveManager.applyPendingRewards we check TroveManager._requireTroveIsActive.
 
-another Unnecessary duplicate check is _requireValidCollateralAddress in ActivePool.sendCollateral and DefaultPool.pullCollateralFromActivePool. in one transaction, we call _requireValidCollateralAddress twic.
+another Unnecessary duplicate check is _requireValidCollateralAddress in ActivePool.sendCollateral and DefaultPool.pullCollateralFromActivePool. in one transaction, we call _requireValidCollateralAddress twice.
 
 #### Findings:
 https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L298
