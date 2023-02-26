@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "0xRobocop",
+  "risk": "2",
+  "title": "Total Collateralization Ratio of the protocol will get incorrectly calculated due to yield farming losses.",
+  "issueId": 204,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/204"
+}
