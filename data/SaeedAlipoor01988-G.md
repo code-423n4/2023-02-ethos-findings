@@ -12,17 +12,37 @@ manually
 ######### Multiple address/ID mappings can be combined into a single mapping of an address/ID to a struct, where appropriate ######### 
 
 #### Impact
-Saves a storage slot for mapping. Depending on the circumstances and sizes of types, can avoid a Gsset (20000 gas) per mapping combined. Reads and subsequent writes can also be cheaper when a function requires both values and they both fit in the same storage slot. Finally, if both fields are accessed in the same function, can save ~42 gas per access due to not having to recalculate the key’s keccak256 hash (Gkeccak256 - 30 gas) and that calculation’s associated stack operations. 
+Saves a storage slot for mapping. Depending on the circumstances and sizes of types, can avoid a Gsset (20000 gas) per mapping combined. Reads and subsequent writes can also be cheaper when a function requires both values and they both fit in the same storage slot. Finally, if both fields are accessed in the same function, can save ~42 gas per access due to not having to recalculate the key’s keccak256 hash (Gkeccak256 - 30 gas) and that calculation’s associated stack operations.
 
-yieldingPercentage and yieldingAmount and yieldGenerator and yieldClaimThreshold are used together in the _rebalance function once and can be placed in a single slot.
+about mappings, another case is in the DefaultPool contract and LUSDToken, if we create a struct and remove mappings, this can save on gas deployment.
 
-another case is in the DefaultPool contract, at lines 30 and 31, if we create a struct and remove these 2 mappings, this can save on gas deployment!
+//200661 gas with mappings
+//197017 gas with structs
 
-    // struct collateral{
-    //     uint collAmount;
-    //     uint LUSDDebt;
-    // }
-    // mapping(address => collateral) internal collateralTracker;
+contract MyToken {
+
+    struct AddressStruct{
+        uint256 _nonces;
+        uint256 _balances;
+        uint256 _allowances;
+        bool troveManagers;
+        bool stabilityPools;
+        bool borrowerOperations;
+    }
+
+    mapping (address => AddressStruct) public AddressStructs;
+
+    // mapping (address => uint256) private _nonces;
+    //     // User data for LUSD token
+    // mapping (address => uint256) private _balances;
+    // mapping (address => mapping (address => uint256)) private _allowances;  
+    //     // --- Addresses ---
+    // // mappings store addresses of old versions so they can still burn (close troves)
+    // mapping (address => bool) public troveManagers;
+    // mapping (address => bool) public stabilityPools;
+    // mapping (address => bool) public borrowerOperations;
+
+}
 
 
 #### Findings:
@@ -30,6 +50,16 @@ https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8
 https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L45
 https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L46
 https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L47
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/DefaultPool.sol#L30
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/DefaultPool.sol#L31
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L54
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L57
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L58
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L62
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L63
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L64
 
 #### Tools used
 manually
