@@ -85,7 +85,7 @@ manually
 Sample report approved by C4 judges team.
 https://code4rena.com/reports/2022-11-non-fungible/#g-09-require-or-revert-statements-that-check-input-arguments-should-be-at-the-top-of-the-function
 
-#########  unnecessary check for _requireTroveIsActive ######### 
+#########  Unnecessary duplicate check ######### 
 
 #### Impact
 _requireTroveIsActive is a function in TroveManager to check that Troves[_borrower][_collateral].status is active or not. in contract BorrowerOperations and functions _adjustTrove, before making calls to applyPendingRewards, we make the call to function BorrowerOperations._requireTroveisActive to check Trove is Active, then in contract TroveManager and function applyPendingRewards, again we check that Trove is Active by TroveManager._requireTroveIsActive function.
