@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "koxuan",
+  "risk": "2",
+  "title": "some tokens do not allow approve when allowance is not 0",
+  "issueId": 179,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/179"
+}
