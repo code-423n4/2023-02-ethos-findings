@@ -1,5 +1,5 @@
 # Using bitwise-not `~` instead of `-(i+1)` saves gas
-Calculating `-(i+1)` instead of `~` costs **9 more gas**, because of extra instructions that achieve the same results.
+Calculating `-(i+1)` instead of `~` costs **9 more gas**, because of the extra `ADD` , `SUB` and `PUSH`s that can be replaced by `NOT` to achieve the same result.
 
 `startIdx = uint(-(_startIdx + 1));` => `startIdx = uint(~_startIdx);`
 
