@@ -440,3 +440,28 @@ Manual Analysis
 ### Recommended Mitigation Steps
 
 Replace .transfer with .call. Note that the result of .call needs to be checked.
+
+# 9: LACK OF CHECKS-EFFECTS-INTERACTIONS
+
+Vulnerability details
+
+## Context:
+
+It’s recommended to execute external calls after state changes, to prevent reentrancy bugs.
+
+Consider moving the external calls after the state changes in the following instances:
+
+
+## Proof of Concept
+
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L328-L335
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L210-L22 
+
+
+### Tools Used
+
+Manual Analysis
+
+
