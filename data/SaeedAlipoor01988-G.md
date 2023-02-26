@@ -90,12 +90,17 @@ https://code4rena.com/reports/2022-11-non-fungible/#g-09-require-or-revert-state
 #### Impact
 _requireTroveIsActive is a function in TroveManager to check that Troves[_borrower][_collateral].status is active or not. in contract BorrowerOperations and functions _adjustTrove, before making calls to applyPendingRewards, we make the call to function BorrowerOperations._requireTroveisActive to check Trove is Active, then in contract TroveManager and function applyPendingRewards, again we check that Trove is Active by TroveManager._requireTroveIsActive function.
 
-we can remove call to BorrowerOperations._requireTroveisActive in functions _adjustTrove, because in anyway we make call to the TroveManager.applyPendingRewards and in TroveManager.applyPendingRewards we check TroveManager._requireTroveIsActive.
+we can remove the call to BorrowerOperations._requireTroveisActive in functions _adjustTrove, because in any way we make the call to the TroveManager.applyPendingRewards, and in TroveManager.applyPendingRewards we check TroveManager._requireTroveIsActive.
+
+another Unnecessary duplicate check is _requireValidCollateralAddress in ActivePool.sendCollateral and DefaultPool.pullCollateralFromActivePool. in one transaction, we call _requireValidCollateralAddress twic.
 
 #### Findings:
 https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L298
-
 https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L1084
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L172
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L181
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/DefaultPool.sol#L109
 
 #### Tools used
 manually
