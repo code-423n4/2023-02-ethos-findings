@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "I_I_I_I",
+  "risk": "2",
+  "title": "Attacker can grief the strategies and completely disable their ability to submit reports",
+  "issueId": 187,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/187"
+}
