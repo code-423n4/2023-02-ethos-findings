@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Viktor_Cortess",
+  "risk": "2",
+  "title": "_swapVelo function has no slippage protection ",
+  "issueId": 231,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/231"
+}
