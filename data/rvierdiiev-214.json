@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "rvierdiiev",
+  "risk": "2",
+  "title": "CommunityIssuance.updateDistributionPeriod should update variables, or should be allowed to called only when previous distribution period has ended",
+  "issueId": 214,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/214"
+}
