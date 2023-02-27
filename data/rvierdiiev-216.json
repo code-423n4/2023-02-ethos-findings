@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "rvierdiiev",
+  "risk": "2",
+  "title": "CommunityIssuance distributes oath tokens incorrectly in case if funding when issueOath was not called for previous distribution",
+  "issueId": 216,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/216"
+}
