@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Krace",
+  "risk": "3",
+  "title": "Reentrancy in withdrawFromSP",
+  "issueId": 221,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/221"
+}
