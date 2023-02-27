@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "DadeKuma",
+  "risk": "2",
+  "title": "Liquidation enables users to target high `ICR` troves, thus compromising the overall system health and resulting in a loss for other users",
+  "issueId": 230,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/230"
+}
