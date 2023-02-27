@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "koxuan",
+  "risk": "3",
+  "title": "liquidateTroves can be frontrunned by sharks to dilute and steal the earnings of other stakers ",
+  "issueId": 217,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/217"
+}
