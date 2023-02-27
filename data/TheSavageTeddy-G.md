@@ -43,3 +43,17 @@ https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/Reap
 totalAllocated += vars.credit;
 ```
 https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperVaultV2.sol#L521
+
+# Check `Require()` / `Revert()` statements that use less gas first
+Checks that cost less gas, such as checking function parameters, should be placed before more expensive checks such as ones that invoke `msg.sender`, because the function will be able to revert before checking more expensive statements. In this case, `require(msg.sender == vault, "Only vault can withdraw");` should be placed after the other `require()` statements which use less gas. This saves roughly **24680 gas**.
+
+```
+    function withdraw(uint256 _amount) external override returns (uint256 loss) {
+        require(msg.sender == vault, "Only vault can withdraw");
+        require(_amount != 0, "Amount cannot be zero");
+        require(_amount <= balanceOf(), "Ammount must be less than balance");
+```
+
+# Use a more recent version of Solidity
+Using `^0.8.0` as opposed to `0.6.11` saves gas as several operations are optimized in the newer versions of Solidity.
+
