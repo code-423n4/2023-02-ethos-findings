@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "I_I_I_I",
+  "risk": "2",
+  "title": "When withdrawing, the tx will fail if the strategy's allocation is less than shares + fees",
+  "issueId": 222,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/222"
+}
