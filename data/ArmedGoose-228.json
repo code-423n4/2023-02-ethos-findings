@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "ArmedGoose",
+  "risk": "2",
+  "title": "Missing access control on initialization",
+  "issueId": 228,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/228"
+}
