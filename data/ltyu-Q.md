@@ -1,0 +1,1 @@
+- Unused address parameter in `ReaperVaultERC4626.maxDeposit()` and `ReaperVaultERC4626.maxMint()`.
