@@ -60,5 +60,41 @@ https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LUSDT
         emit GuardianAddressChanged(_newGuardianAddress);
     }
 
+# LQTY issued can not be obtained by later depositors and needs to be fixed by calling `fund`  
+
+`issueOath` can return 0 witch will lead to [`_triggerLQTYIssuance`](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/StabilityPool.sol#L416) and [`_updateG`](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/StabilityPool.sol#L421) not working.
+
+As they say in the Ethos contract, they already expect that in [Ethos-Core/contracts/StabilityPool.sol/L421](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/StabilityPool.sol#L421)
+
+        * When total deposits is 0, G is not updated. In this case, the LQTY issued can not be obtained by later
+        * depositors - it is missed out on, and remains in the balanceof the CommunityIssuance contract.
+
+But the issue here is that will remain in this stuck state until someone calls `fund` in [CommunityIssuance/L101](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L101). The only one that can call this is the **owner**. 
+In the function bellow [CommunityIssuance/L84](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L84-L95), if `lastIssuanceTimestamp` > `lastDistributionTime` (this can be done if the [fund](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L101) is not called for more than 14 days) then the function will only emit an event and set the new `lastIssuanceTimestamp` to `block.timestamp` witch again will be larger than 14 days. In this case it will also not return any issuance since the `if` is preventing from `issuance` to be calculated.
+
+    function issueOath() external override returns (uint issuance) {
+        _requireCallerIsStabilityPool();
+        if (lastIssuanceTimestamp < lastDistributionTime) {
+            uint256 endTimestamp = block.timestamp > lastDistributionTime ? lastDistributionTime : block.timestamp;
+            uint256 timePassed = endTimestamp.sub(lastIssuanceTimestamp);
+            issuance = timePassed.mul(rewardPerSecond);
+            totalOATHIssued = totalOATHIssued.add(issuance);
+        }
+
+        lastIssuanceTimestamp = block.timestamp;
+        emit TotalOATHIssuedUpdated(totalOATHIssued);
+    }
+
+The only was for this to be fixed is the owner to call [`fund`](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L101) witch will update `lastDistributionTime` and it will make it larger than `lastIssuanceTimestamp`.
+
+        rewardPerSecond = amount.div(distributionPeriod);
+        lastDistributionTime = block.timestamp.add(distributionPeriod);
+        lastIssuanceTimestamp = block.timestamp;
+
+My suggestion is to is to also update the `lastDistributionTime` in `issueOath` and in this way the function will remain working or at least reduce the likelihood of this happening.
+
+
+
+
 
 
