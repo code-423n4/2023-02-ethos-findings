@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "koxuan",
+  "risk": "2",
+  "title": "collateral in troves will be stuck if borrower is blacklisted by collateral asset contract ",
+  "issueId": 244,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/244"
+}
