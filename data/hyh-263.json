@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "hyh",
+  "risk": "3",
+  "title": "LQTYStaking's staking/unstaking and StabilityPool's provide/withdraw can be blocked if user be blacklisted by any collateral",
+  "issueId": 263,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/263"
+}
