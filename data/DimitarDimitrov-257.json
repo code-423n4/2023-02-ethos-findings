@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "DimitarDimitrov",
+  "risk": "2",
+  "title": "Event emit should be at the bottom on method",
+  "issueId": 257,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/257"
+}
