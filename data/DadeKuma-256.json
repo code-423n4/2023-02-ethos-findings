@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "DadeKuma",
+  "risk": "3",
+  "title": "Deposits to ReaperVaultV2 result in a loss of funds when there is a high `totalAllocated` amount",
+  "issueId": 256,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/256"
+}
