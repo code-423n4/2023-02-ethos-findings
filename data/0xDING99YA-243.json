@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "0xDING99YA",
+  "risk": "2",
+  "title": "_sendCollateralGainToDepositor in StabilityPool can cause provideToSP(uint _amount) and withdrawFromSP(uint _amount) revert when one of the collateral token transfer fails",
+  "issueId": 243,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/243"
+}
