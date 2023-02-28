@@ -1244,16 +1244,3 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
 
 
 
-NC-1	Missing checks for address(0) when assigning values to address state variables	26
-NC-2	require() / revert() statements should have descriptive reason strings	10
-NC-3	Return values of approve() not checked	5
-NC-4	TODO Left in the code	2
-NC-5	Event is missing indexed fields	93
-NC-6	Functions not used internally could be marked external	2
-NC-7	Typos	32
-
-L-1	abi.encodePacked() should not be used with dynamic types when passing the result to a hash function such as keccak256()	1
-L-2	Do not use deprecated library functions	1
-L-3	Empty Function Body - Consider commenting why	2
-L-4	Initializers could be front-run	8
-L-5	Unsafe ERC20 operation(s)	4
