@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "DadeKuma",
+  "risk": "3",
+  "title": "ReaperVaultERC4626 is not EIP-4626 compliant and integrations can result in loss of funds",
+  "issueId": 247,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/247"
+}
