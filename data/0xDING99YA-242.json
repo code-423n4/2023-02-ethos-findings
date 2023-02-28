@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "0xDING99YA",
+  "risk": "2",
+  "title": "_sendCollGainToUser in LQTYStaking can get stuck when transfer for one of the collaterals fails",
+  "issueId": 242,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/242"
+}
