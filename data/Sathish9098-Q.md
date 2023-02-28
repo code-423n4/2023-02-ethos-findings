@@ -1176,6 +1176,58 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L627-L631)
 
+##
+
+### [41] The updateCollateralRatios() function contains incorrect condition checks
+
+TYPE : LOW FINDING
+
+According to the protocol descriptions, the updateCollateralRatios() function is designed to decrease the _MCR and _CCR values for a specific asset that has proven itself during tough times
+
+> To prevent the same values from being set for variables, the condition check _MCR <= config.MCR and _CCR <= config.CCR should be modified to _MCR < config.MCR and _CCR < config.CCR. If the values are the same, it is unnecessary to set them again, and this process can be skipped
+
+File : 2023-02-ethos/Ethos-Core/contracts/CollateralConfig.sol
+
+    function updateCollateralRatios(
+        address _collateral,
+        uint256 _MCR,
+        uint256 _CCR
+    ) external onlyOwner checkCollateral(_collateral) {
+        Config storage config = collateralConfig[_collateral];
+        require(_MCR <= config.MCR, "Can only walk down the MCR");  // @audit Wrong condition check
+        require(_CCR <= config.CCR, "Can only walk down the CCR");   // @audit   Wrong condition check
+
+        require(_MCR >= MIN_ALLOWED_MCR, "MCR below allowed minimum");
+        config.MCR = _MCR;
+
+        require(_CCR >= MIN_ALLOWED_CCR, "CCR below allowed minimum");
+        config.CCR = _CCR;
+        emit CollateralRatiosUpdated(_collateral, _MCR, _CCR);
+    }
+
+Recommended Mitigation :
+
+Use < instead of <= when check _MCR and _CCR 
+
+          require(_MCR < config.MCR, "Can only walk down the MCR"); 
+          require(_CCR < config.CCR, "Can only walk down the CCR");  
+
+##
+
+### [42] Avoid shadowing the state variable names with the same contract name
+
+TYPE : NON CRITICAL (NC)
+
+Shadowing state variable names with the same contract name can lead to unexpected behavior and make the code harder to read and maintain.
+
+File : 2023-02-ethos/Ethos-Core/contracts/CollateralConfig.sol
+
+    35:  mapping (address => Config) public collateralConfig;
+
+Here the contract name is CollateralConfig and the state variable name also collateralConfig. This is not good code practice.
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/CollateralConfig.sol#L35) 
+
  
    
 
