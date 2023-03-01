@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "hyh",
+  "risk": "3",
+  "title": "Shares issuance is inflated when balance barely exceeds locked profit, depositing and reporting becomes frozen, some ERC4626 logic breaks up when they are equal",
+  "issueId": 265,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/265"
+}
