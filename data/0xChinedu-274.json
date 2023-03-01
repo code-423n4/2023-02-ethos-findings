@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "0xChinedu",
+  "risk": "3",
+  "title": "ReaperVaultERC4626.sol is not EIP-4626 compliant",
+  "issueId": 274,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/274"
+}
