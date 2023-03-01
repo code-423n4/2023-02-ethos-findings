@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "DeFiHackLabs",
+  "risk": "3",
+  "title": " Do not follow check-effect-interaction in StabilityPool",
+  "issueId": 277,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/277"
+}
