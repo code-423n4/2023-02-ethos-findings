@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "hyh",
+  "risk": "3",
+  "title": "User can lose up to whole stake on vault withdrawal when there are funds locked in the strategy",
+  "issueId": 288,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/288"
+}
