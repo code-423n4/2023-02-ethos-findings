@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "hyh",
+  "risk": "2",
+  "title": "On withdrawal a user will experience loss according to Vault's withdrawMaxLoss, not its own preferences",
+  "issueId": 287,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/287"
+}
