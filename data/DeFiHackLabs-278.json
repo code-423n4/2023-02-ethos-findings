@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "DeFiHackLabs",
+  "risk": "3",
+  "title": "Missing Access Control Check in Strategy Initialization",
+  "issueId": 278,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/278"
+}
