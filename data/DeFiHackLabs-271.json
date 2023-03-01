@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "DeFiHackLabs",
+  "risk": "2",
+  "title": "Centralization risks - DEFAULT_ADMIN_ROLE privileged risk",
+  "issueId": 271,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/271"
+}
