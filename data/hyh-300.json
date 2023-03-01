@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "hyh",
+  "risk": "2",
+  "title": "StabilityPool depositor will not be able to withdraw until there is enough OATH on CommunityIssuance balance",
+  "issueId": 300,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/300"
+}
