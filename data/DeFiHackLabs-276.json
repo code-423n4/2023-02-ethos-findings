@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "DeFiHackLabs",
+  "risk": "2",
+  "title": "Denial of service in _troveArray",
+  "issueId": 276,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/276"
+}
