@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Sathish9098",
+  "risk": "3",
+  "title": "Incorrect usage of safeTransferFrom traps _LQTYamount in LQTYStaking Contract",
+  "issueId": 291,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/291"
+}
