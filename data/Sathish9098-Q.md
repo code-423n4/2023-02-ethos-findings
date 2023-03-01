@@ -10,9 +10,7 @@ Description :
 
 Typically, the contract’s owner is the account that deploys the contract. As a result, the owner is able to perform certain privileged activities.
 
-The non-fungible Ownable used in this project contract implements renounceOwnership . This can represent a certain risk if the ownership is renounced for any other reason than by design. Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.
-
- which sets the contract owner to the zero address. Once ownership has been renounced, the contract owner will no longer be able to perform any actions that require ownership, and ownership of the contract will effectively be transferred to no one
+Which sets the contract owner to the zero address. Once ownership has been renounced, the contract owner will no longer be able to perform any actions that require ownership, and ownership of the contract will effectively be transferred to no one
 
 > onlyOwner Functions : 
 
@@ -1228,7 +1226,35 @@ Here the contract name is CollateralConfig and the state variable name also coll
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/CollateralConfig.sol#L35) 
 
- 
+##
+
+### [43] Unwanted check of currentStake != 0
+
+TYPE : LOW FINDING
+
+This (currentStake != 0) already checked when calculating collGainAssets, collGainAmounts, LUSDGain  values.
+
+currentStake varibale value is not changed anywhere inside the stake() function. 
+
+File : 2023-02-ethos/Ethos-Core/contracts/LQTY/LQTYStaking.sol
+
+            134:     if (currentStake != 0) { //@audit Unnecessary condition check
+            135:     lusdToken.transfer(msg.sender, LUSDGain);
+            136:    _sendCollGainToUser(collGainAssets, collGainAmounts);
+            137:     }
+
+
+
+Recommended Mitigation :
+
+Remove Line 134,137. Unnecessary condition check
+
+           -134:     if (currentStake != 0) {  
+            135:     lusdToken.transfer(msg.sender, LUSDGain);
+            136:    _sendCollGainToUser(collGainAssets, collGainAmounts);
+           -137:     }
+
+
    
 
 
