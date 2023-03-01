@@ -308,6 +308,24 @@ The easiest mitigation would be to pass this variable as immutable
 address[] public immutable rewardClaimingTokens;
 ```
 
+## [L11] Missing visibility setting
+The default function visibility level in contracts is public, in interfaces - external. Explicitly define function visibility to prevent confusion.
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L28-L32
+
+```solidity
+    address stabilityPoolAddress;
+    address gasPoolAddress;
+    ICollSurplusPool collSurplusPool;
+```
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L31
+```solidity
+    address gasPoolAddress;
+```
+
+### Recommendation
+It is recommended to make a conscious decision on which visibility type is appropriate for a function. This can dramatically reduce the attack surface of a contract system.
+
+
 ---
 
 ## [N1] Lock pragmas to Specific Compiler Version 
