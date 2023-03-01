@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "hyh",
+  "risk": "2",
+  "title": "KEEPER can run strategy's harvest() to increase vault balance during depositing",
+  "issueId": 266,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/266"
+}
