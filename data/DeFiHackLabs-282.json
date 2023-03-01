@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "DeFiHackLabs",
+  "risk": "2",
+  "title": "Without zero balance check in _rebalance, might cause revert",
+  "issueId": 282,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/282"
+}
