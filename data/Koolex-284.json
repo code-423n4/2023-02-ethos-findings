@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Koolex",
+  "risk": "3",
+  "title": "LUSDtoken's permit function will always revert if at least one approval's signature was expired before utilizing it",
+  "issueId": 284,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/284"
+}
