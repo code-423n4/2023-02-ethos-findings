@@ -79,3 +79,38 @@ should be:
     strategy.gains = strategy.gains + vars.gain;
 
 
+# Use named returns  
+
+[Ethos-Core/contracts/LQTY/LQTYStaking.sol/L217](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L217)
+
+     function _getPendingLUSDGain(address _user) internal view returns (uint ) {
+        uint F_LUSD_Snapshot = snapshots[_user].F_LUSD_Snapshot;
+        uint LUSDGain = stakes[_user].mul(F_LUSD.sub(F_LUSD_Snapshot)).div(DECIMAL_PRECISION);
+        return LUSDGain;
+      }
+
+Fix:
+
+     function _getPendingLUSDGain(address _user) internal view returns (uint LUSDGain) {
+        uint F_LUSD_Snapshot = snapshots[_user].F_LUSD_Snapshot;
+        uint LUSDGain = stakes[_user].mul(F_LUSD.sub(F_LUSD_Snapshot)).div(DECIMAL_PRECISION);
+      }
+
+  [Ethos-Vault/contracts/ReaperVaultV2.sol/L462](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperVaultV2.sol#L462)
+
+[Ethos-Core/contracts/TroveManager.sol/L1066](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L1066)
+[Ethos-Core/contracts/TroveManager.sol/L1201](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L1201)
+[Ethos-Core/contracts/TroveManager.sol/L1045](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L1045)
+
+ [Ethos-Core/contracts/BorrowerOperations.sol/L661](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L661)
+ [Ethos-Core/contracts/BorrowerOperations.sol/L682](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L682)
+[Ethos-Core/contracts/BorrowerOperations.sol/L703](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L703)
+[Ethos-Core/contracts/BorrowerOperations.sol/L724](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L724)
+
+
+
+
+
+
+
+
