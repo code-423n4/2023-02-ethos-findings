@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "koxuan",
+  "risk": "3",
+  "title": "divide before multiplication causes unnecessary loss of precision when marginalLQTYGain is calculated in _updateG",
+  "issueId": 268,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/268"
+}
