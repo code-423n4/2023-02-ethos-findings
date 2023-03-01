@@ -670,8 +670,6 @@ Contracts are allowed to override their parents’ functions and change the visi
 
 > Instances (1) :
 
-
-
 FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
 
       1045 :  function getNominalICR(address _borrower, address _collateral) public view override returns (uint) {
@@ -801,31 +799,14 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol#L206)
 
-##
-
-### [G-13]  Use TERNARY operator instead of IF-ELSE statements  in possible situations to save gas 
-
-According to the Solidity documentation, the gas cost of a ternary operator is approximately 10 gas units, while the gas cost of an if-else statement is approximately 100 gas units
-
-File : 2023-02-ethos/Ethos-Core/contracts/BorrowerOperations.sol
-
-        - 490:    if (_isDebtIncrease) {
-        - 491:     _withdrawLUSD(_activePool, _lusdToken, _collateral, _borrower, _LUSDChange, _netDebtChange);
-       - 492:    } else {
-        - 493:   _repayLUSD(_activePool, _lusdToken, _collateral, _borrower, _LUSDChange);
-        - 494:     }
-
-       + _isDebtIncrease ? _withdrawLUSD(_activePool, _lusdToken, _collateral, _borrower, _LUSDChange, _netDebtChange) :_repayLUSD(_activePool, _lusdToken, _collateral, _borrower, _LUSDChange);
-
-##
 
 ### [G-14] SPLITTING REQUIRE() STATEMENTS THAT USE && SAVES GAS
 
-See [this issue](https://github.com/code-423n4/2022-01-xdefi-findings/issues/128) which describes the fact that there is a larger deployment gas cost, but with enough runtime calls, the change ends up being cheaper by 3 gas
+Instead of using the && operator in a single require statement to check multiple conditions, using multiple require statements with 1 condition per require statement will save 8 GAS per &&
 
 > Instances (4)
 
-Approximate Saved Gas : 12 gas
+Approximate Saved Gas : 32 gas
 
 File : 2023-02-ethos/Ethos-Core/contracts/BorrowerOperations.sol
 
@@ -939,9 +920,9 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultERC4626.sol
 
 ### [G-16] ADD UNCHECKED {} FOR SUBTRACTIONS WHERE THE OPERANDS CANNOT UNDERFLOW BECAUSE OF A PREVIOUS REQUIRE() OR IF-STATEMENT . This saves 30-40 gas
 
-> Instances (10) :
+> Instances (8) :
 
-> Approximate Saved Gas :  400 gas 
+> Approximate Saved Gas :  320 gas 
 
 SOLUTION:
 
@@ -949,18 +930,6 @@ SOLUTION:
 
 require(a > b); x = a - b => require(a > b); unchecked { x = a - b } 
 
-FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
-
-
-            493:   if (_collDecimals < LiquityMath.CR_CALCULATION_DECIMALS) {
-            494:   cappedCollPortion = cappedCollPortion.div(10 ** (LiquityMath.CR_CALCULATION_DECIMALS - _collDecimals));
-
-(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L493-L494)
-
-            495 :  else if (_collDecimals > LiquityMath.CR_CALCULATION_DECIMALS) {
-            496:  cappedCollPortion = cappedCollPortion.mul(10 ** (_collDecimals - LiquityMath.CR_CALCULATION_DECIMALS));
-
-(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L495-L496)
 
 File : 2023-02-ethos/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol
 
@@ -1227,6 +1196,122 @@ _collChange is not checked for nonzero values before calling safeTransferFrom()
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L497)
 
+##
+
+### [G-24] CACHING GLOBAL VARIABLES IS MORE EXPENSIVE THAN USING THE ACTUAL VARIABLE(USE MSG.SENDER INSTEAD OF CACHING IT)
+
+It’s cheaper to use msg.sender as compared to caching
+
+File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
+
+> USE msg.sender INSTEAD OF CACHING WITH stratAddr  VARIABLE 
+
+        function availableCapital() public view returns (int256) {
+        address stratAddr = msg.sender; // @Audit msg.sender
+        if (totalAllocBPS == 0 || emergencyShutdown) {
+            return -int256(strategies[stratAddr].allocated);  //@AUDIT USE msg.sender 
+         }
+
+         uint256 stratMaxAllocation = (strategies[stratAddr].allocBPS * balance()) / PERCENT_DIVISOR;   //@AUDIT USE msg.sender 
+         uint256 stratCurrentAllocation = strategies[stratAddr].allocated;   //@AUDIT USE msg.sender 
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L225-L232)
+
+> USE msg.sender INSTEAD OF CACHING WITH vars.stratAddr  VARIABLE 
+
+
+        495 :   vars.stratAddr = msg.sender;
+
+        496:   StrategyParams storage strategy = strategies[vars.stratAddr];
+   
+        501 :  _reportLoss(vars.stratAddr, vars.loss);
+ 
+        504 :  vars.fees = _chargeFees(vars.stratAddr, vars.gain);
+
+        526 :  token.safeTransfer(vars.stratAddr, vars.credit - vars.freeWantInStrat);
+
+        528 :  token.safeTransferFrom(vars.stratAddr, address(this), vars.freeWantInStrat - vars.credit);
+
+        544:     vars.stratAddr,
+
+        556:  return IStrategy(vars.stratAddr).balanceOf();
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L493-L560)
+
+##
+
+### [G-25]  REORDER THE REQUIRE STATEMENTS TO HAVE THE LESS GAS CONSUMING BEFORE THE EXPENSIVE ONE
+
+
+File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
+
+          150: require(!emergencyShutdown, "Cannot add strategy during emergency shutdown");
+          151: require(_strategy != address(0), "Invalid strategy address");
+          152: require(strategies[_strategy].activation == 0, "Strategy already added");
+          153: require(address(this) == IStrategy(_strategy).vault(), "Strategy's vault does not match");
+          154: require(address(token) == IStrategy(_strategy).want(), "Strategy's want does not match");
+          155: require(_feeBPS <= PERCENT_DIVISOR / 5, "Fee cannot be higher than 20 BPS");
+          156: require(_allocBPS + totalAllocBPS <= PERCENT_DIVISOR, "Invalid allocBPS value");
+
+
+Its cheaper to check for _strategy != address(0), _feeBPS <= PERCENT_DIVISOR / 5,_allocBPS + totalAllocBPS <= PERCENT_DIVISOR  as compared to  !emergencyShutdown,strategies[_strategy].activation == 0,address(this) == IStrategy(_strategy).vault(),address(token) == IStrategy(_strategy).want() as this involves reading the storage variable. Therefore if the require(_strategy != address(0), "Invalid strategy address");  fails it would be cheaper to fail before evaluating the !emergencyShutdown
+
+First check local variable condition checks then move to state variable condition checks .
+
+          +151: require(_strategy != address(0), "Invalid strategy address");
+          +155: require(_feeBPS <= PERCENT_DIVISOR / 5, "Fee cannot be higher than 20 BPS");
+          +156: require(_allocBPS + totalAllocBPS <= PERCENT_DIVISOR, "Invalid allocBPS value"); 
+          150: require(!emergencyShutdown, "Cannot add strategy during emergency shutdown");
+          -151: require(_strategy != address(0), "Invalid strategy address");
+          152: require(strategies[_strategy].activation == 0, "Strategy already added");
+          153: require(address(this) == IStrategy(_strategy).vault(), "Strategy's vault does not match");
+          154: require(address(token) == IStrategy(_strategy).want(), "Strategy's want does not match");
+          -155: require(_feeBPS <= PERCENT_DIVISOR / 5, "Fee cannot be higher than 20 BPS");
+          -156: require(_allocBPS + totalAllocBPS <= PERCENT_DIVISOR, "Invalid allocBPS value"); 
+
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L150-L156)
+
+> CHECK _feeBPS <= PERCENT_DIVISOR / 5 CONDITION FIRST THEN strategies[_strategy].activation != 0
+
+                 180:  require(strategies[_strategy].activation != 0, "Invalid strategy address");
+                 181:  require(_feeBPS <= PERCENT_DIVISOR / 5, "Fee cannot be higher than 20 BPS");
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L180-L181)
+
+##
+
+### [G-26]  DUPLICATED REQUIRE()/REVERT() CHECKS SHOULD BE REFACTORED TO A MODIFIER OR FUNCTION
+
+This saves deployment gas
+
+
+File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
+
+!emergencyShutdown, _strategy].activation != 0, _feeBPS <= PERCENT_DIVISOR / 5, strategies[_strategy].activation != 0 can be REFACTORED TO A MODIFIER OR FUNCTION
+
+      150: require(!emergencyShutdown, "Cannot add strategy during emergency shutdown");
+      321: require(!emergencyShutdown, "Cannot deposit during emergency shutdown");
+
+  
+      180: require(strategies[_strategy].activation != 0, "Invalid strategy address");
+      193: require(strategies[_strategy].activation != 0, "Invalid strategy address");
+  
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L152)       
+
+        155:  require(_feeBPS <= PERCENT_DIVISOR / 5, "Fee cannot be higher than 20 BPS");
+        181: require(_feeBPS <= PERCENT_DIVISOR / 5, "Fee cannot be higher than 20 BPS");
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L155)
+
+
+
+    
+
+    
+
+    
 
    
 
