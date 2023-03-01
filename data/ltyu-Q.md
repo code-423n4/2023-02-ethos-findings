@@ -1,1 +1,2 @@
 - Unused address parameter in `ReaperVaultERC4626.maxDeposit()` and `ReaperVaultERC4626.maxMint()`.
+- `_requireValidCollateralAddress(_collateral)` is not needed in BorrowerOperations because `priceFeed.fetchPrice(_collateral)` already contains the check
