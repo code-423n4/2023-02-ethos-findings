@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "hyh",
+  "risk": "2",
+  "title": "BorrowerOperations borrow/repay will not work if collateral doesn't allow zero amount transfers",
+  "issueId": 301,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/301"
+}
