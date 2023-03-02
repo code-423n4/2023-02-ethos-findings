@@ -800,7 +800,7 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol#L206)
 
 
-### [G-14] SPLITTING REQUIRE() STATEMENTS THAT USE && SAVES GAS
+### [G-13] SPLITTING REQUIRE() STATEMENTS THAT USE && SAVES GAS
 
 Instead of using the && operator in a single require statement to check multiple conditions, using multiple require statements with 1 condition per require statement will save 8 GAS per &&
 
@@ -835,7 +835,7 @@ File : File : 2023-02-ethos/Ethos-Core/contracts/LUSDToken.sol
 
 ##
      
-### [G-15]  NOT USING THE NAMED RETURN VARIABLES WHEN A FUNCTION RETURNS, WASTES DEPLOYMENT GAS
+### [G-14]  NOT USING THE NAMED RETURN VARIABLES WHEN A FUNCTION RETURNS, WASTES DEPLOYMENT GAS
 
 > Instances (13) :
 
@@ -918,7 +918,7 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultERC4626.sol
 
 ##
 
-### [G-16] ADD UNCHECKED {} FOR SUBTRACTIONS WHERE THE OPERANDS CANNOT UNDERFLOW BECAUSE OF A PREVIOUS REQUIRE() OR IF-STATEMENT . This saves 30-40 gas
+### [G-15] ADD UNCHECKED {} FOR SUBTRACTIONS WHERE THE OPERANDS CANNOT UNDERFLOW BECAUSE OF A PREVIOUS REQUIRE() OR IF-STATEMENT . This saves 30-40 gas
 
 > Instances (8) :
 
@@ -980,7 +980,7 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
 
 ##
 
-### [G-17]  USAGE OF UINTS/INTS SMALLER THAN 32 BYTES (256 BITS) INCURS OVERHEAD
+### [G-16]  USAGE OF UINTS/INTS SMALLER THAN 32 BYTES (256 BITS) INCURS OVERHEAD
 
 When using elements that are smaller than 32 bytes, your contract’s gas usage may be higher. This is because the EVM operates on 32 bytes at a time. Therefore, if the element is smaller than that, the EVM must use more operations in order to reduce the size of the element from 32 bytes to the desired size
 
@@ -1004,7 +1004,7 @@ File : File : 2023-02-ethos/Ethos-Core/contracts/StabilityPool.sol
 
 ##
 
-### [G-18] SUPERFLUOUS EVENT FIELDS
+### [G-17] SUPERFLUOUS EVENT FIELDS
 
 block.timestamp are added to event information by default so adding them manually wastes gas
 
@@ -1018,7 +1018,7 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
 
 ##
 
-### [G-19] <x> += <y> OR <x>-=<y> costs more gas than <x> = <x> + <y> OR  <x> = <x> - <y>   for state variables
+### [G-18] <x> += <y> OR <x>-=<y> costs more gas than <x> = <x> + <y> OR  <x> = <x> - <y>   for state variables
 
 Using the addition operator instead of plus-equals saves 113 gas
 
@@ -1071,7 +1071,7 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
 
 ##
 
-### [G-20]  initialize() function as external can also help to reduce gas costs, since external functions are generally cheaper to call than public or internal functions
+### [G-19]  initialize() function as external can also help to reduce gas costs, since external functions are generally cheaper to call than public or internal functions
 
 File : 2023-02-ethos/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol
 
@@ -1086,7 +1086,7 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol
 
 ##
 
-### [G-21] MULTIPLE ACCESSES OF A MAPPING/ARRAY SHOULD USE A LOCAL VARIABLE CACHE
+### [G-20] MULTIPLE ACCESSES OF A MAPPING/ARRAY SHOULD USE A LOCAL VARIABLE CACHE
 
 The instances below point to the second+ access of a value inside a mapping/array, within a function. Caching a mapping’s value in a local storage or calldata variable when the value is accessed multiple times, saves ~42 gas per access due to not having to recalculate the key’s keccak256 hash (Gkeccak256 - 30 gas) and that calculation’s associated stack operations. Caching an array’s struct avoids recalculating the array offsets into memory/calldata
 
@@ -1106,7 +1106,7 @@ strategies[_strategy].allocBPS use local variable cache instead calling multiple
 
 ## 
 
-### [G-22] SETTING THE CONSTRUCTOR TO PAYABLE
+### [G-21] SETTING THE CONSTRUCTOR TO PAYABLE
 
 Saves ~13 gas per instance
 
@@ -1152,7 +1152,7 @@ File : 2023-02-ethos/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol
 
 ##
 
-### [G-23] BEFORE SOME FUNCTIONS, WE SHOULD CHECK SOME VARIABLES FOR POSSIBLE GAS SAVE
+### [G-22] BEFORE SOME FUNCTIONS, WE SHOULD CHECK SOME VARIABLES FOR POSSIBLE GAS SAVE
 
 Before transfer, we should check for amount being 0 so the function doesn't run when its not gonna do anything
 
@@ -1198,7 +1198,7 @@ _collChange is not checked for nonzero values before calling safeTransferFrom()
 
 ##
 
-### [G-24] CACHING GLOBAL VARIABLES IS MORE EXPENSIVE THAN USING THE ACTUAL VARIABLE(USE MSG.SENDER INSTEAD OF CACHING IT)
+### [G-23] CACHING GLOBAL VARIABLES IS MORE EXPENSIVE THAN USING THE ACTUAL VARIABLE(USE MSG.SENDER INSTEAD OF CACHING IT)
 
 It’s cheaper to use msg.sender as compared to caching
 
@@ -1240,7 +1240,7 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
 
 ##
 
-### [G-25]  REORDER THE REQUIRE STATEMENTS TO HAVE THE LESS GAS CONSUMING BEFORE THE EXPENSIVE ONE
+### [G-24]  REORDER THE REQUIRE STATEMENTS TO HAVE THE LESS GAS CONSUMING BEFORE THE EXPENSIVE ONE
 
 
 File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
@@ -1281,7 +1281,7 @@ First check local variable condition checks then move to state variable conditio
 
 ##
 
-### [G-26]  DUPLICATED REQUIRE()/REVERT() CHECKS SHOULD BE REFACTORED TO A MODIFIER OR FUNCTION
+### [G-25]  DUPLICATED REQUIRE()/REVERT() CHECKS SHOULD BE REFACTORED TO A MODIFIER OR FUNCTION
 
 This saves deployment gas
 
@@ -1304,6 +1304,37 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
         181: require(_feeBPS <= PERCENT_DIVISOR / 5, "Fee cannot be higher than 20 BPS");
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L155)
+
+##
+
+### [26]  EXPRESSIONS FOR CONSTANT VALUES SUCH AS A CALL TO KECCAK256(), SHOULD USE IMMUTABLE RATHER THAN CONSTANT
+
+Instances (8) :
+
+Using immutable variables instead of constant variables for expressions that evaluate to constant values, such as a call to keccak256(), can potentially save gas in smart contracts
+
+The reason for this is that immutable variables are evaluated at compile time and the resulting values are hardcoded into the bytecode of the contract. This means that the gas cost of evaluating the expression is incurred only once, during contract compilation, and not at runtime
+
+In contrast, constant variables are evaluated at runtime, which can result in additional gas costs. Specifically, when a constant variable is accessed, the EVM must perform a lookup to retrieve the value of the variable from storage, which can add to the gas cost of executing the contract
+
+
+File: 2023-02-ethos/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol
+
+        49:  bytes32 public constant KEEPER = keccak256("KEEPER");
+        50:  bytes32 public constant STRATEGIST = keccak256("STRATEGIST");
+        51:  bytes32 public constant GUARDIAN = keccak256("GUARDIAN");
+        52:  bytes32 public constant ADMIN = keccak256("ADMIN");
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol#L49-L52)
+
+File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
+
+       73:   bytes32 public constant DEPOSITOR = keccak256("DEPOSITOR");
+       74:   bytes32 public constant STRATEGIST = keccak256("STRATEGIST");
+       75:   bytes32 public constant GUARDIAN = keccak256("GUARDIAN");
+       76:   bytes32 public constant ADMIN = keccak256("ADMIN");
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L73-L76)
 
 
 
