@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "orion",
+  "risk": "3",
+  "title": "Attacker can prevent depositors from depositing",
+  "issueId": 309,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/309"
+}
