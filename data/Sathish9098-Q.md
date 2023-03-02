@@ -128,8 +128,10 @@ Old version of Solidity is used , newer version can be used (0.8.17)
 
 TYPE : NON CRITICAL (NC)
 
+> The named imports only supports only from solidity version 0.8.0. So, Its possible to update this in Ethos-Vault contracts 
+
 Context:
-All contracts
+ReaperVaultERC4626.sol,ReaperBaseStrategyv4.sol,ReaperStrategyGranarySupplyOnly.sol,ReaperVaultV2.sol
 
 Using named imports instead of plain imports can make your Solidity code more readable and reduce the risk of naming conflicts between different contracts and libraries
 
@@ -137,18 +139,18 @@ When you use a plain import statement in Solidity, you are importing all of the 
 
 This was breaking the rule of modularity and modular programming: only import what you need Specific imports with curly braces allow us to apply this rule better
 
-Recommended Mitigation Steps :
+SOLUTIONS :
 
-    -   import "./Dependencies/CheckContract.sol";
+    -  import "./Dependencies/CheckContract.sol";
     +  import {CheckContract} from "./Dependencies/CheckContract.sol"; 
 
 Recommended Mitigation : 
 
-   USE NAMED IMPORTS FOR ALL CONTRACT SCOPES 
+   USE NAMED IMPORTS FOR ALL POSSIBLE CONTRACT 
 
 ##
 
-### [5]  CONSTANT REDEFINED ELSEWHERE
+### [4]  CONSTANT REDEFINED ELSEWHERE
 
 TYPE : NON CRITICAL (NC)
 
@@ -176,7 +178,7 @@ A cheap way to store constants in a single location is to create an internal con
 
 ##
 
-### [6] ADD A LIMIT FOR THE MAXIMUM NUMBER OF CHARACTERS PER LINE
+### [5] ADD A LIMIT FOR THE MAXIMUM NUMBER OF CHARACTERS PER LINE
 
 TYPE : NON CRITICAL (NC)
 
@@ -208,7 +210,7 @@ Consider adding a limit of 120 characters or less to prevent large lines.
 
 ##
 
-### [7] CONTRACT LAYOUT AND ORDER OF FUNCTIONS
+### [6] CONTRACT LAYOUT AND ORDER OF FUNCTIONS
 
 TYPE : NON CRITICAL (NC)
 
@@ -226,7 +228,7 @@ https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8
 
 ##
 
-### [8]  NOT USING THE NAMED RETURN VARIABLES ANYWHERE IN THE FUNCTION IS CONFUSING
+### [7]  NOT USING THE NAMED RETURN VARIABLES ANYWHERE IN THE FUNCTION IS CONFUSING
 
 TYPE : NON CRITICAL (NC)
 
@@ -336,7 +338,7 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultERC4626.sol
 
 ##
 
-### [9] DECIMALS() NOT PART OF ERC20 STANDARD
+### [8] DECIMALS() NOT PART OF ERC20 STANDARD
 
 TYPE : LOW FINDING
 
@@ -354,7 +356,7 @@ Recommended mitigations:
 
 ##
 
-### [10] LARGE MULTIPLES OF TEN SHOULD USE SCIENTIFIC NOTATION
+### [9] LARGE MULTIPLES OF TEN SHOULD USE SCIENTIFIC NOTATION
 
 TYPE : NON CRITICAL (NC)
 
@@ -372,7 +374,7 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/ActivePool.sol
 
 ##
 
-### [11] USE LATEST OPENZEPPELIN CONTRACTS 
+### [10] USE LATEST OPENZEPPELIN CONTRACTS 
 
 TYPE : LOW FINDING
 
@@ -384,17 +386,15 @@ Recommended Mitigation :
 
  Use latest versions of openzeppelin  instead of vulnerable versions
 
-
-
 ##
 
-### [12]  NatSpec comments should be increased in contracts
+### [11]  NatSpec comments should be increased in contracts
 
 TYPE : NON CRITICAL (NC)
 
 ##
 
-### [13] Repeated codes can be reused instead repeating same line of codes in multiple functions
+### [12] Repeated codes can be reused instead repeating same line of codes in multiple functions
 
 TYPE : NON CRITICAL (NC)
 
@@ -420,7 +420,7 @@ https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8
 
 ##
 
-### [14]  LACK OF CHECKS THE INTEGER RANGES
+### [13]  LACK OF CHECKS THE INTEGER RANGES
 
 TYPE : LOW FINDING
 
@@ -453,7 +453,7 @@ Perform all necessary input validations
 
 ##
 
-### [15]  USE PUBLIC CONSTANT CONSISTENTLY
+### [14]  USE PUBLIC CONSTANT CONSISTENTLY
 
 TYPE : NON CRITICAL (NC)
 
@@ -500,7 +500,7 @@ FILE :  2023-02-ethos/Ethos-Core/contracts/StabilityPool.sol
 
 ##
 
-### [16] INTERCHANGEABLE USAGE OF UINT AND UINT256
+### [15] INTERCHANGEABLE USAGE OF UINT AND UINT256
 
 Consider using only one approach throughout the codebase, e.g. only uint or only uint256.
 
@@ -526,7 +526,7 @@ ALL CONTRACTS
 
 ##
 
-### [17] _approve() should be replaced with _safeApprove() 
+### [16] _approve() should be replaced with _safeApprove() 
 
 TYPE : LOW FINDING
 
@@ -556,7 +556,7 @@ Consider safeApprove() function instead of normal approve()
 
 ##
 
-### [18] _safeMint() should be used rather than _mint() wherever possible
+### [17] _safeMint() should be used rather than _mint() wherever possible
 
 TYPE : LOW FINDING
 
@@ -574,7 +574,7 @@ Consider safeMint() function instead of normal mint()
 
 ##
 
-### [19]  CONSTANTS SHOULD BE DEFINED RATHER THAN USING MAGIC NUMBERS
+### [18]  CONSTANTS SHOULD BE DEFINED RATHER THAN USING MAGIC NUMBERS
 
 TYPE : NON CRITICAL (NC)
 
@@ -602,7 +602,7 @@ File : 2023-02-ethos/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol
 
 ##
 
-### [20]  high _bps are often associated with higher risk strategies that may involve locking up assets for a long time 
+### [19]  high _bps are often associated with higher risk strategies that may involve locking up assets for a long time 
 
 TYPE : LOW FINDING
 
@@ -622,7 +622,7 @@ Consider reducing _bps as per other yield farming protocols
 
 ##
 
-### [21]  GENERATE PERFECT CODE HEADERS EVERY TIME
+### [20]  GENERATE PERFECT CODE HEADERS EVERY TIME
 
 TYPE : NON CRITICAL (NC)
 
@@ -633,7 +633,7 @@ I recommend using header for Solidity code layout and readability
 
 ##
 
-### [22] State variables in Solidity do not necessarily need to start with capital letters, although it is common practice to begin them with a capital letter. The Solidity style guide suggests using mixedCase for state variables, where the first word is not capitalized but subsequent words are
+### [21] State variables in Solidity do not necessarily need to start with capital letters, although it is common practice to begin them with a capital letter. The Solidity style guide suggests using mixedCase for state variables, where the first word is not capitalized but subsequent words are
 
 TYPE : NON CRITICAL (NC)
 
@@ -645,7 +645,7 @@ FILE :  2023-02-ethos/Ethos-Core/contracts/StabilityPool.sol
 
 ##
 
-### [23]  FUNCTIONS, PARAMETERS AND VARIABLES IN SNAKE CASE
+### [22]  FUNCTIONS, PARAMETERS AND VARIABLES IN SNAKE CASE
 
 TYPE : NON CRITICAL (NC)
 
@@ -699,7 +699,7 @@ Functions are using snake case instead of camel case :
 
 ##
 
-### [24] IMPORTS CAN BE GROUPED TOGETHER
+### [23] IMPORTS CAN BE GROUPED TOGETHER
 
 TYPE : NON CRITICAL (NC)
 
@@ -709,11 +709,9 @@ Consider Dependencies first, then all interfaces
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L5-L16)
 
-
-
 ##
 
-### [25]  Use of Block.timestamp
+### [24]  Use of Block.timestamp
 
 TYPE : LOW FINDING
 
@@ -736,7 +734,7 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
 
 ##
 
-### [26]  Ensure that the lengths of the amounts and assets arrays are the same
+### [25]  Ensure that the lengths of the amounts and assets arrays are the same
 
 TYPE : LOW FINDING
 
@@ -765,7 +763,7 @@ require(amounts.length == assets.length, "Amounts and assets arrays must have th
 
 ##
 
-### [27]  The wrong emit function was used
+### [26]  The wrong emit function was used
 
 TYPE : LOW FINDING
 
@@ -780,7 +778,7 @@ File : 2023-02-ethos/Ethos-Core/contracts/LQTY/LQTYStaking.sol
 Recommended Mitigation : 
 
         -  85 :  emit LQTYTokenAddressSet(_lusdTokenAddress);
-       +  85 :  emit LUSDTokenAddressSet (_lusdTokenAddress);
+        +  85 :  emit LUSDTokenAddressSet (_lusdTokenAddress);
 
 File: File : 2023-02-ethos/Ethos-Core/contracts/LUSDToken.sol
 
@@ -798,7 +796,7 @@ Transfer event was used instead burn event
 
 ##
 
-## [28]  Hardcode the address causes no future updates
+## [27]  Hardcode the address causes no future updates
 
 TYPE : LOW FINDING
 
@@ -831,7 +829,7 @@ Recommended Mitigation Steps :
 
 ##
 
-## [29] Avoid using an underscore "_" as the first character in the name of a state variable
+## [28] Avoid using an underscore "_" as the first character in the name of a state variable
 
 TYPE : NON CRITICAL (NC)
 
@@ -849,7 +847,7 @@ File :  2023-02-ethos/Ethos-Core/contracts/LUSDToken.sol
 
 ##
 
-### [30]  USE INTERNAL CONSTANT CONSISTENTLY
+### [29]  USE INTERNAL CONSTANT CONSISTENTLY
 
 TYPE : NON CRITICAL (NC)
 
@@ -866,7 +864,7 @@ File :  2023-02-ethos/Ethos-Core/contracts/LUSDToken.sol
 
 ##
 
-### [31]  CRITICAL ADDRESS CHANGES SHOULD USE TWO-STEP PROCEDURE 
+### [30]  CRITICAL ADDRESS CHANGES SHOULD USE TWO-STEP PROCEDURE 
 
 TYPE : LOW FINDING
 
@@ -1075,7 +1073,7 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
 
 ##
 
-### [37] MARK VISIBILITY OF INITIALIZE() FUNCTION AS EXTERNAL
+### [36] MARK VISIBILITY OF INITIALIZE() FUNCTION AS EXTERNAL
 
 TYPE : NON CRITICAL (NC)
 
@@ -1094,7 +1092,7 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol
 
 ##
 
-### [38] LOSS OF PRECISION DUE TO ROUNDING
+### [37] LOSS OF PRECISION DUE TO ROUNDING
 
 TYPE : LOW FINDING
 
@@ -1140,7 +1138,7 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultERC4626.sol
 
 ##
 
-### [39] FOR FUNCTIONS, FOLLOW SOLIDITY STANDARD NAMING CONVENTIONS
+### [38] FOR FUNCTIONS, FOLLOW SOLIDITY STANDARD NAMING CONVENTIONS
 
 TYPE : NON CRITICAL (NC)
 
@@ -1156,7 +1154,7 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultERC4626.sol
 
 ##
 
-### [40] To add an underscore to the newTreasury function parameter
+### [39] To add an underscore to the newTreasury function parameter
 
 TYPE : NON CRITICAL (NC)
 
@@ -1176,7 +1174,7 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
 
 ##
 
-### [41] The updateCollateralRatios() function contains incorrect condition checks
+### [40] The updateCollateralRatios() function contains incorrect condition checks
 
 TYPE : LOW FINDING
 
@@ -1212,7 +1210,7 @@ Use < instead of <= when check _MCR and _CCR
 
 ##
 
-### [42] Avoid shadowing the state variable names with the same contract name
+### [41] Avoid shadowing the state variable names with the same contract name
 
 TYPE : NON CRITICAL (NC)
 
@@ -1228,7 +1226,7 @@ Here the contract name is CollateralConfig and the state variable name also coll
 
 ##
 
-### [43] Unwanted check of currentStake != 0
+### [42] Unwanted check of currentStake != 0
 
 TYPE : LOW FINDING
 
@@ -1254,6 +1252,44 @@ Remove Line 134,137. Unnecessary condition check
             136:    _sendCollGainToUser(collGainAssets, collGainAmounts);
            -137:     }
 
+##
+
+### [43] Events called without using emit keyword
+
+TYPE : LOW FINDING
+
+If you don't use the emit keyword to trigger an event in Solidity, the event will not be emitted, and no event logs will be created on the blockchain
+
+So if you forget to emit an event in your Solidity contract, it won't have any direct impact on the contract's behavior or state. However, if you intended for the event to be triggered and relied on its emission to perform some action outside of the contract, then your code may not work as expected
+
+File : 2023-02-ethos/Ethos-Core/contracts/ActivePool.sol
+
+        function decreaseLUSDDebt(address _collateral, uint _amount) external override {
+        _requireValidCollateralAddress(_collateral);
+        _requireCallerIsBOorTroveMorSP();
+        LUSDDebt[_collateral] = LUSDDebt[_collateral].sub(_amount);
+        ActivePoolLUSDDebtUpdated(_collateral, LUSDDebt[_collateral]); /// @audit ActivePoolLUSDDebtUpdated  Event 
+       called without emit 
+        keyword
+        }
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L197-L202)
+
+        function increaseLUSDDebt(address _collateral, uint _amount) external override {
+        _requireValidCollateralAddress(_collateral);
+        _requireCallerIsBOorTroveM();
+        LUSDDebt[_collateral] = LUSDDebt[_collateral].add(_amount);
+        ActivePoolLUSDDebtUpdated(_collateral, LUSDDebt[_collateral]); /// @audit ActivePoolLUSDDebtUpdated Event 
+        called without emit keyword
+        }
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L190-L195)
+
+Recommended Mitigation :
+
+Call ActivePoolLUSDDebtUpdated event using emit keyword
+
+       emit ActivePoolLUSDDebtUpdated(_collateral, LUSDDebt[_collateral]); 
+  
 
    
 
