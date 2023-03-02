@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "P-384",
+  "risk": "2",
+  "title": "Usage of ecrecover allows malleable SECP256K1 signatures.",
+  "issueId": 311,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/311"
+}
