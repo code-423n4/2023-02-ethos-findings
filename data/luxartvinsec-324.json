@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "luxartvinsec",
+  "risk": "2",
+  "title": "Should check return data from Chainlink aggregators",
+  "issueId": 324,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/324"
+}
