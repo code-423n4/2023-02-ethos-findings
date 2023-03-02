@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "0xbepresent",
+  "risk": "2",
+  "title": "The ```withdrawalQueue``` array can be modified and the withdrawals might not use all the available Strategies leading to a possible lack of funds",
+  "issueId": 314,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/314"
+}
