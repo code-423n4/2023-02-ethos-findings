@@ -211,3 +211,170 @@ https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/Reap
 
 # Use a more recent version of Solidity
 Using `^0.8.0` as opposed to `0.6.11`, which is used in many contracts, saves gas as several operations are optimized in the newer versions of Solidity. For example, accessing data in `calldata`, reduced gas cost when emitting event data and the introduction of `immutable` state variables save gas.
+
+*There are 33 instances of this issue:*
+
+```solidity
+File: ActivePool.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: BorrowerOperations.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: CollateralConfig.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: CollSurplusPool.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: DefaultPool.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: GasPool.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: HintHelpers.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: LUSDToken.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: Migrations.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: MultiTroveGetter.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: PriceFeed.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: RedemptionHelper.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: SortedTroves.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: StabilityPool.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: TroveManager.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: LQTYStaking.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: CommunityIssuance.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: IActivePool.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: IBorrowerOperations.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: ICollateralConfig.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: ICollSurplusPool.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: ICommunityIssuance.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: IDefaultPool.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: ILiquityBase.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: ILQTYStaking.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: ILUSDToken.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: IPool.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: IPriceFeed.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: IRedemptionHelper.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: ISortedTroves.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: IStabilityPool.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: ITellorCaller.sol
+3: pragma solidity 0.6.11;
+```
+
+```solidity
+File: ITroveManager.sol
+3: pragma solidity 0.6.11;
+```
