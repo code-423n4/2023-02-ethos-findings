@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "codeislight",
+  "risk": "2",
+  "title": "when a strategy is revoked by \"GUARDIAN\" it can still be reset again by \"STRATEGIST\" using updateStrategyAllocBPS which would violate the cascading roles in that instance.",
+  "issueId": 332,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/332"
+}
