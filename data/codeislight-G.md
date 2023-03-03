@@ -1,6 +1,49 @@
-- setAddresses function for the variables that won't change, they need to be set in the constructor as immutable variables to reduce their gas consumption. (e.g: LUSD address...)
+- in ReaperVaultV2, reconstruct mapping struct to the needed storage space to save on Gsset which would save on 3 storage slots:
 
-contract instances: ActivePool, BorrowerOperations, CollSurplusPool, DefaultPool, HintHelpers, PriceFeed, RedemptionHelper, StabilityPool, TroveManager
+```
+    struct StrategyParams {
+        uint64 activation; // Activation block.timestamp // it's a timestamp <=> uint64
+        uint64 lastReport; // block.timestamp of the last time a report occured // it's a timestamp <=> uint64
+        uint64 feeBPS; // Performance fee taken from profit, in BPS // max value is 2000 therefore uint16
+        uint64 allocBPS; // Allocation in BPS of vault's total assets // max value is 10000 therefore uint16
+        uint256 allocated; // Amount of capital allocated to this strategy
+        uint256 gains; // Total returns that Strategy has realized for Vault
+        uint256 losses; // Total losses that Strategy has realized for Vault
+    }
+
+    mapping(address => StrategyParams) public strategies;
+```
+- in PriceFeed, combine priceAggregator and status mappings to save on extra Gsset. on the following 4 mappings in total to improve on the readability:
+```
+    struct PriceFeedParams {
+        bytes32 tellorQueryId; // 256 bits
+        uint256 lastGoodPrice; // 256 bits
+        address aggregator; // 160 bits
+        Status status; // 8 bits
+    }
+    mapping (address => PriceFeedParams) public priceFeed;
+```
+- in CollateralConfig, we can save on 3 Gsset for collateralConfig mapping:
+```
+    struct Config {
+        uint96 MCR;
+        uint96 CCR;
+        uint8 decimals;
+        bool allowed;
+    }
+```
+- in LUSDToken, we can save on 2 Gsset for 3 mappings:
+```
+    struct Roles {
+        bool isTroveManager;
+        bool isStabilityPool;
+        bool isBorrowerOperation;
+    }
+    mapping (address => Roles) public addresses;
+```
+- setAddresses function for the variables that won't change, they can be set in the constructor as immutable variables to reduce their gas consumption. (e.g: LUSD address...)
+
+contract instances: ActivePool, BorrowerOperations, CollSurplusPool, DefaultPool, HintHelpers, PriceFeed, RedemptionHelper, StabilityPool, TroveManager.
 
 - LUSDToken can be further optimized, inspired by solmate ERC20 implementation, there are savings that can be used while not compromising on security:
 
