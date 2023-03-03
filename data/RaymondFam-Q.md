@@ -33,5 +33,15 @@ Consider equipping all contracts with complete set of NatSpec to better facilita
 
 Functions with named returns should not have a return statement to avoid unnecessary confusion.
 
-For instance, the following `_balanceAt()` may be refactored as:
- 
+For instance, the following `_getTCR()` may be refactored as follows:
+
+```diff
+    function _getTCR(address _collateral, uint _price, uint256 _collateralDecimals) internal view returns (uint TCR) {
+        uint entireSystemColl = getEntireSystemColl(_collateral);
+        uint entireSystemDebt = getEntireSystemDebt(_collateral);
+
+        TCR = LiquityMath._computeCR(entireSystemColl, entireSystemDebt, _price, _collateralDecimals);
+
+-        return TCR;
+    }
+``` 
