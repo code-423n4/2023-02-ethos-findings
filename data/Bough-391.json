@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Bough",
+  "risk": "3",
+  "title": "The arithmetic operator can overflow.",
+  "issueId": 391,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/391"
+}
