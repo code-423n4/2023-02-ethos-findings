@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Tendency",
+  "risk": "3",
+  "title": "LUSDToken of Unstake function is vulnerable to a possible reentrancy attack",
+  "issueId": 390,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/390"
+}
