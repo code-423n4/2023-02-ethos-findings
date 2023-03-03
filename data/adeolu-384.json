@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "adeolu",
+  "risk": "3",
+  "title": "Attacker could be incentivised to block stuff/gas limit DOS on provideToSP() and withdrawFromSP()",
+  "issueId": 384,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/384"
+}
