@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "kaden",
+  "risk": "2",
+  "title": "Malicious price feed owner can arbitrarily manipulate collateral prices",
+  "issueId": 374,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/374"
+}
