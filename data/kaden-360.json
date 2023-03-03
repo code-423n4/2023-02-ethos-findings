@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "kaden",
+  "risk": "3",
+  "title": "Initial vault deposits can be frontrun allowing attacker to steal entire deposit",
+  "issueId": 360,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/360"
+}
