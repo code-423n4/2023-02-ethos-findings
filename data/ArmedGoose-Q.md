@@ -13,4 +13,17 @@ Currently, the application is protected from this issue because this routine is 
 ### Recommendation: 
 For accuracy, add an emergency mode check and if its active, return 0. 
 
+## 3. Multiple unchecked transfers
+### Issue: 
+The protocol uses multiple unchecked transfers to transfer tokens. Usually, this is a dangerous practice because if done on unknown tokens, then they can e.g. return false instead of revert, which would not be caught by the protocol. HOWEVER, here it is used only on tokens which are known, they are LUSD and OATH so their behavior should be predictable, thus this is in QA report, because right now it has no impact. But potential impact may happen if these tokens are changed in the future, or protocol wants to migrate to other tokens and this will remain unchanged. These transfers occur in:
+
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L171
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L135
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L103
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L127
+
+###Recommendation:
+For sake of future compatibility, it is worth considering to use safeTransfer/safeTransferFrom.
+
+
 
