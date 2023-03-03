@@ -1,0 +1,3 @@
+# Use require instead of assert in _adjustTrove
+
+In Ethos-Core/contracts/BorrowerOperations.sol, `assert` is used in L331 to check if `_collWithdrawal <= vars.coll`. However, `_collWithdrawal` can be directly provided by the user, for example, when calling `withdrawColl`. Since assert consumes all gas, if the user maintains their collateral amount independently but miscalculates the amount due to other reasons, calling `withdrawColl` will fail and consume all gas, resulting in a poor user experience.
