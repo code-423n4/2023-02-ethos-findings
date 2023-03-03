@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "kaden",
+  "risk": "3",
+  "title": "Harvest swaps can be sandwiched with unbounded slippage",
+  "issueId": 363,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/363"
+}
