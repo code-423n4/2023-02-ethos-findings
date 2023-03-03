@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "0xbepresent",
+  "risk": "3",
+  "title": "The Vault deposits to the Strategy contract even when the Strategy contract is in ```emergencyExit``` mode.",
+  "issueId": 367,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/367"
+}
