@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "kaden",
+  "risk": "2",
+  "title": "Loss of precision in `CommunityIssuance.fund()` can result in tokens being locked in the contract",
+  "issueId": 375,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/375"
+}
