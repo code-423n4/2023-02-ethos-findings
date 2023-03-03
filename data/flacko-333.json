@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "flacko",
+  "risk": "3",
+  "title": "LUSDToken `transferFrom` does not check allowance or permit",
+  "issueId": 333,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/333"
+}
