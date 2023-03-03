@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "0xAgro",
+  "risk": "2",
+  "title": "Consider 2 step collateralRatioUpdate With Timelock",
+  "issueId": 368,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/368"
+}
