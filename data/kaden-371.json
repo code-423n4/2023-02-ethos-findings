@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "kaden",
+  "risk": "2",
+  "title": "Profit distributed to StabilityPool from ActivePool may be unaccounted and permanently locked in the contract",
+  "issueId": 371,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/371"
+}
