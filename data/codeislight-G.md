@@ -1,7 +1,3 @@
-- in LQTYStaking.stake() and LQTYStaking.unstake(), the use of safeTransferFrom and safeTransfer is unnecessary, LQTY is compliant with ERC20, so it's safe to use transferFrom and transfer, which would always behave as expected and return a valid boolean on each operation.
-
-- you may use in LQTYStaking.stake() sendToLQTYStaking instead of transferFrom, since it can only be accessed by staking contract and it would save on extra gas to set the approval amount and emitting approval event.
-
 - in ReaperVaultV2, reconstruct mapping struct to the needed storage space to save on Gsset which would save on 3 storage slots:
 
 ```
@@ -172,6 +168,7 @@ BorrowerOperations._getNewTCRFromTroveChange()
 StabilityPool._computeLQTYPerUnitStaked()
 StabilityPool._getSingularCollateralGain()
 StabilityPool._getLQTYGainFromSnapshots()
+ReaperVaultV2._cascadingAccessRoles()
 ... many instances to mention :)
 
 - assigning final constant values, in LiquityMath.decMul(), DECIMAL_PRECISION / 2 will always be equal to 5e+17, so it's best to assign the final value, instead of being each time unnecessarily computed.
