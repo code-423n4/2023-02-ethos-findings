@@ -477,8 +477,8 @@ contract StorageTest {
 
 Remix Reports : 
 
-gas                      :  152195 gas
-transaction cost  :  132343 gas 
+gas                :  152195 gas
+transaction cost   :  132343 gas 
 execution cost	   :   73523 gas 
 
 
@@ -493,14 +493,14 @@ bytes32 constant public NAME = bytes32("BorrowerOperations");
 }
 
            gas	               : 113157 gas
-           transaction cost   : 98397 gas 
-           execution cost	: 41893 gas
+           transaction cost    : 98397 gas 
+           execution cost      : 41893 gas
 
 GAS SAVED :
 
-       gas :                        39038
-       transaction cost      33946
-       execution cost	       31630
+       gas                  : 39038
+       transaction cost     : 33946
+       execution cost	    : 31630
 
 File :  BorrowerOperations.sol
 
@@ -540,8 +540,6 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/LUSDToken.sol
       34:  string constant internal _VERSION = "1";
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L32-L34)
-
-   
 
 ##
 
@@ -668,9 +666,14 @@ File : 2023-02-ethos/Ethos-Core/contracts/StabilityPool.sol
 
 ### [G-11] PUBLIC FUNCTIONS NOT CALLED BY THE CONTRACT SHOULD BE DECLARED EXTERNAL INSTEAD
 
-Contracts are allowed to override their parents’ functions and change the visibility from external to public and can save gas by doing so
+External functions do not require a context switch to the EVM, while public functions do. 
+
+Its possible to save 10-15 gas using external instead public for every function call 
+
 
 > Instances (1) :
+
+Approximate Saved Gas : 10-15 gas 
 
 FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
 
@@ -813,8 +816,8 @@ Approximate Saved Gas : 32 gas
 File : 2023-02-ethos/Ethos-Core/contracts/BorrowerOperations.sol
 
 
-                require(_maxFeePercentage >= BORROWING_FEE_FLOOR && _maxFeePercentage <= DECIMAL_PRECISION,
-                "Max fee percentage must be between 0.5% and 100%");
+        require(_maxFeePercentage >= BORROWING_FEE_FLOOR && _maxFeePercentage <= DECIMAL_PRECISION,
+        "Max fee percentage must be between 0.5% and 100%");
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L653-L654)
 
@@ -837,7 +840,7 @@ File : File : 2023-02-ethos/Ethos-Core/contracts/LUSDToken.sol
 
 ##
      
-### [G-14]  NOT USING THE NAMED RETURN VARIABLES WHEN A FUNCTION RETURNS, WASTES DEPLOYMENT GAS
+### [G-14] NOT USING THE NAMED RETURN VARIABLES WHEN A FUNCTION RETURNS, WASTES DEPLOYMENT GAS
 
 > Instances (13) :
 
@@ -921,6 +924,8 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultERC4626.sol
 ##
 
 ### [G-15] ADD UNCHECKED {} FOR SUBTRACTIONS WHERE THE OPERANDS CANNOT UNDERFLOW BECAUSE OF A PREVIOUS REQUIRE() OR IF-STATEMENT . This saves 30-40 gas
+
+The unchecked keyword was introduced in Solidity version 0.8.0. Prior to that version. 
 
 > Instances (8) :
 
@@ -1022,7 +1027,7 @@ FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
 
 ### [G-18] <x> += <y> OR <x>-=<y> costs more gas than <x> = <x> + <y> OR  <x> = <x> - <y>   for state variables
 
-Using the addition operator instead of plus-equals saves 113 gas
+Using the addition/Subtraction operator instead of plus-equals/minus-equals saves 113 gas
 
 > Instances (14)
 
