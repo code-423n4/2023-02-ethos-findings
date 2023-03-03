@@ -100,19 +100,21 @@ File : 2023-02-ethos/Ethos-Core/contracts/CollateralConfig.sol
 
 DeFi tokens typically use up to 18 decimal places, which is the standard for Ethereum-based tokens such as ERC20 and ERC777. This is because using more decimal places can lead to precision issues and make calculations more complicated.
 
-The variable decimals can be safely declared as uint128 instead of uint256 since uint128 is enough to store up to 18 decimal places. Therefore, using uint128 for decimals would be more efficient and save gas costs
+The variable decimals can be safely declared as uint128 instead of uint256 since uint128 is enough to store up to 18 decimal places. Therefore, using uint128 for decimals would be more efficient and save gas costs . The maximum value stored in uint128 is 340,282,366,920,938,463,463,374,607,431,768,211,455. This value is more than enough for decimals . 
 
         
         /// @audit Variable ordering with 3 slots instead of the current 4:
-        ///    uint256(32): MCR, uint256(32) : CCR, uint128(16) : decimals, bool(1) : allowed
+        ///  uint256(32): MCR, uint256(32) : CCR, uint128(16) : decimals, bool(1) : allowed
          27:  struct Config {
-        28:  bool allowed; 
-        29:  uint256 decimals;
-        30:  uint256 MCR;
-        31:  uint256 CCR;
-       32:   }
+         28:  bool allowed; 
+         29:  uint256 decimals;
+         30:  uint256 MCR;
+         31:  uint256 CCR;
+         32:   }
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/CollateralConfig.sol#L27-L32)
+
+
 
 ##        
 
