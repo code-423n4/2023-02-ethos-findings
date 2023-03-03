@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "kaden",
+  "risk": "2",
+  "title": "Deposits to vault with unrealized losses take an immediate loss",
+  "issueId": 366,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/366"
+}
