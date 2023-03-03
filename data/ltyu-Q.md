@@ -1,5 +1,6 @@
-- Unused address parameter in `ReaperVaultERC4626.maxDeposit()` and `ReaperVaultERC4626.maxMint()`.
-- `_requireValidCollateralAddress(_collateral)` is not needed in BorrowerOperations because `priceFeed.fetchPrice(_collateral)` already contains the check
-- `TroveManager._checkPotentialRecoveryMode()` contains incorrect [comment](https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L1372). It should instead say: Collateral:USD" and not "ETH:USD"
-- This [line](https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L420) is not needed since it was fetched and stored in the parent function, `liquidateTroves()`.
-- Unused `lqtyTokenAddress` variable in this [line](https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/StabilityPool.sol#L160)
+1. Unused address parameter in `ReaperVaultERC4626.maxDeposit()` and `ReaperVaultERC4626.maxMint()`.
+2. `_requireValidCollateralAddress(_collateral)` is not needed in BorrowerOperations because `priceFeed.fetchPrice(_collateral)` already contains the check
+3. `TroveManager._checkPotentialRecoveryMode()` contains incorrect [comment](https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L1372). It should instead say: Collateral:USD" and not "ETH:USD"
+4. This [line](https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L420) is not needed since it was fetched and stored in the parent function, `liquidateTroves()`.
+5. Unused `lqtyTokenAddress` variable in this [line](https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/StabilityPool.sol#L160)
+6. SortedTrove.insert() is never called in manager so an access control check is not needed. Consider removing this [check](https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/SortedTroves.sol#L103-L105)
