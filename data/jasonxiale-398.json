@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "jasonxiale",
+  "risk": "2",
+  "title": "First ERC4626 deposit can break share calculation",
+  "issueId": 398,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/398"
+}
