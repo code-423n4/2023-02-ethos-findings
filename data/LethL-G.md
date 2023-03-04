@@ -7,12 +7,12 @@
 | Gas-3 | Using a ternary operator instead of an "if-else" statement | 5 |
 | Gas-4 | Expressions for constant values such as a call to `keccak256()`, should use immutable rather than constant | 8 |
 | Gas-5 | Pre-calculate the hardcoded hash with `keccak256()` before and only use the result to save gas | 10 |
-| Gas-6 | Before some functions, we should check some variables for possible gas save | 1 |
+| Gas-6 | Before some functions, we should check some variables for possible gas save | 7 |
+| Gas-7 | Using require instead of assert | 20 |
 
 ### [Gas-1] `<x> += <y>` costs more gas than `<x> = <x> + <y>` for state variables
 
 Using `x = x+y` instead of `x += y` can help to save gas.
-
 Similarly, using `<x> -= <y>` costs more gas than  `<x> = <x> - <y>`.
 
 Instances(9):
@@ -201,7 +201,7 @@ Instances(8):
 ```
 File: Ethos-Vault/contracts/ReaperVaultV2.sol
 
-73:    bytes32 public constant DEPOSITOR = keccak256("DEPOSITOR");
+73:    bytes32 public constant DEPOSITOR = keccak256("DEPOSITOR");
 74:    bytes32 public constant STRATEGIST = keccak256("STRATEGIST");
 75:    bytes32 public constant GUARDIAN = keccak256("GUARDIAN");
 76:    bytes32 public constant ADMIN = keccak256("ADMIN");
@@ -228,6 +228,10 @@ File: Ethos-Core/contracts/LUSDToken.sol
 
 123:        _HASHED_NAME = 0xabccaf2943f70764a048255e50e07d10e3c94973a6c6ba8b8ea62b1155209b01; // keccak256(bytes(_NAME));
 124:        _HASHED_VERSION = 0xc89efdaa54c0f20c7adf612882df0950f5a951637e0307cdcb4c672f298b8bc6; // keccak256(bytes(_VERSION));
+
+126:        _CACHED_DOMAIN_SEPARATOR = _buildDomainSeparator(_TYPE_HASH,
+127:            0xabccaf2943f70764a048255e50e07d10e3c94973a6c6ba8b8ea62b1155209b01, // keccak256(bytes(_NAME));
+128:            0xc89efdaa54c0f20c7adf612882df0950f5a951637e0307cdcb4c672f298b8bc6); // keccak256(bytes(_VERSION));
 ```
 [Link to Code](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LUSDToken.sol#L123-L124)
 
@@ -243,7 +247,7 @@ File: Ethos-Core/contracts/LUSDToken.sol
 ```
 File: Ethos-Vault/contracts/ReaperVaultV2.sol
 
-73:    bytes32 public constant DEPOSITOR = keccak256("DEPOSITOR");
+73:    bytes32 public constant DEPOSITOR = keccak256("DEPOSITOR");
 74:    bytes32 public constant STRATEGIST = keccak256("STRATEGIST");
 75:    bytes32 public constant GUARDIAN = keccak256("GUARDIAN");
 76:    bytes32 public constant ADMIN = keccak256("ADMIN");
@@ -264,7 +268,7 @@ File: Ethos-Vault/contracts/abstract/ReaperBaseStrategyV4.sol
 
 Before making a transfer, it is advisable to check if the amount is 0 to prevent the function from running and incurring gas costs unnecessarily when no transfer will occur.
 
-Instances(1):
+Instances(7):
 ```
 
 File: Ethos-Core/contracts/LQTY/CommunityIssuance.sol
@@ -272,3 +276,86 @@ File: Ethos-Core/contracts/LQTY/CommunityIssuance.sol
 127:        OathToken.transfer(_account, _OathAmount);
 ```
 [Link to Code](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/CommunityIssuance.sol)
+```
+
+File: Ethos-Core/contracts/LUSDToken.sol
+
+185:    function mint(address _account, uint256 _amount) external override {
+
+191:    function burn(address _account, uint256 _amount) external override {
+
+196:    function sendToPool(address _sender,  address _poolAddress, uint256 _amount) external override {
+
+201:    function returnFromPool(address _poolAddress, address _receiver, uint256 _amount) external override {
+
+220:    function transfer(address recipient, uint256 amount) external override returns (bool) {
+
+235:    function transferFrom(address sender, address recipient, uint256 amount) external override returns (bool) {
+```
+[Link to Code](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LUSDToken.sol)
+
+### [Gas-7] Using require instead of assert
+When the condition is false, `assert` tends to consume all remaining gas and undo all changes made.
+But `require` refunds all remaining gas fees we offered to pay above and beyond, reverting all changes.
+
+Instances(20):
+```
+
+File: Ethos-Core/contracts/BorrowerOperations.sol
+
+128:        assert(MIN_NET_DEBT > 0);
+
+197:        assert(vars.compositeDebt > 0);
+
+301:        assert(msg.sender == _borrower || (msg.sender == stabilityPoolAddress && _collTopUp > 0 && _LUSDChange == 0));
+
+331:        assert(_collWithdrawal <= vars.coll); 
+```
+[Link to Code](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol)
+```
+
+File: Ethos-Core/contracts/TroveManager.sol
+
+417:            assert(_LUSDInStabPool != 0);
+
+1224:            assert(totalStakesSnapshot[_collateral] > 0);
+
+1279:        assert(closedStatus != Status.nonExistent && closedStatus != Status.active);
+
+1342:        assert(troveStatus != Status.nonExistent && troveStatus != Status.active);
+
+1348:        assert(index <= idxLast);
+
+1414:        assert(newBaseRate > 0); // Base rate is always non-zero after redemption
+
+1489:        assert(decayedBaseRate <= DECIMAL_PRECISION);  // The baseRate can decay to 0
+```
+[Link to Code](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol)
+```
+
+File: Ethos-Core/contracts/StabilityPool.sol
+
+526:        assert(_debtToOffset <= _totalLUSDDeposits);
+
+551:        assert(_LUSDLossPerUnitStaked <= DECIMAL_PRECISION);
+
+591:        assert(newP > 0);
+```
+[Link to Code](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/StabilityPool.sol)
+```
+
+File: Ethos-Core/contracts/LUSDToken.sol
+
+312:        assert(sender != address(0));
+
+313:        assert(recipient != address(0));
+
+321:        assert(account != address(0));
+
+329:        assert(account != address(0));
+
+337:        assert(owner != address(0));
+
+338:        assert(spender != address(0));
+```
+[Link to Code](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LUSDToken.sol)
