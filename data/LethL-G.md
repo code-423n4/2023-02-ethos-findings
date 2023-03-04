@@ -1,14 +1,13 @@
 ## Findings Summary
 
-|  | Issue | Instances |
+|  | Issue | Instances |
 |---|---|---|
 | Gas-1 | `<x> += <y>` costs more gas than `<x> = <x> + <y>` for state variables | 9 |
 | Gas-2 | Use of Named Returns for Local Variables Saves Gas | 35 |
 | Gas-3 | Using a ternary operator instead of an "if-else" statement | 5 |
 | Gas-4 | Expressions for constant values such as a call to `keccak256()`, should use immutable rather than constant | 8 |
 | Gas-5 | Pre-calculate the hardcoded hash with `keccak256()` before and only use the result to save gas | 10 |
-| Gas-6 | Before some functions, we should check some variables for possible gas save | 7 |
-| Gas-7 | Using require instead of assert | 20 |
+| Gas-6 | Using require instead of assert | 20 |
 
 ### [Gas-1] `<x> += <y>` costs more gas than `<x> = <x> + <y>` for state variables
 
@@ -264,37 +263,7 @@ File: Ethos-Vault/contracts/abstract/ReaperBaseStrategyV4.sol
 ```
 [Link to Code](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol)
 
-### [Gas-6] Before some functions, we should check some variables for possible gas save
-
-Before making a transfer, it is advisable to check if the amount is 0 to prevent the function from running and incurring gas costs unnecessarily when no transfer will occur.
-
-Instances(7):
-```
-
-File: Ethos-Core/contracts/LQTY/CommunityIssuance.sol
-
-127:        OathToken.transfer(_account, _OathAmount);
-```
-[Link to Code](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/CommunityIssuance.sol)
-```
-
-File: Ethos-Core/contracts/LUSDToken.sol
-
-185:    function mint(address _account, uint256 _amount) external override {
-
-191:    function burn(address _account, uint256 _amount) external override {
-
-196:    function sendToPool(address _sender,  address _poolAddress, uint256 _amount) external override {
-
-201:    function returnFromPool(address _poolAddress, address _receiver, uint256 _amount) external override {
-
-220:    function transfer(address recipient, uint256 amount) external override returns (bool) {
-
-235:    function transferFrom(address sender, address recipient, uint256 amount) external override returns (bool) {
-```
-[Link to Code](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LUSDToken.sol)
-
-### [Gas-7] Using require instead of assert
+### [Gas-6] Using require instead of assert
 When the condition is false, `assert` tends to consume all remaining gas and undo all changes made.
 But `require` refunds all remaining gas fees we offered to pay above and beyond, reverting all changes.
 
