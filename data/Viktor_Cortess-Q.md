@@ -24,7 +24,8 @@ Consider using only one approach throughout the codebase, e.g. only uint or only
 
 **\Ethos-Core\contracts\TroveManager.sol**
 
-48: uint constant public SECONDS_IN_ONE_MINUTE = 60;
+    48: uint constant public SECONDS_IN_ONE_MINUTE = 60;
+
 The value of 1 minute can be used directly.
 
 ### [NC] NAMED IMPORTS CAN BE USED
@@ -49,7 +50,7 @@ It’s possible to name the imports to improve code readability for all files in
 
 
 
-### [N] CONSTANT VALUES SUCH AS A CALL TO KECCAK256(), SHOULD USED TO IMMUTABLE RATHER THAN CONSTANT
+### [NC] CONSTANT VALUES SUCH AS A CALL TO KECCAK256(), SHOULD USED TO IMMUTABLE RATHER THAN CONSTANT
 
 There is a difference between constant variables and immutable variables, and they should each be used in their appropriate contexts.
 While it doesn’t save any gas because the compiler knows that developers often make this mistake, it’s still best to use the right tool for the task at hand.
@@ -69,6 +70,15 @@ Constants should be used for literal values written into the code, and immutable
     bytes32 public constant GUARDIAN = keccak256("GUARDIAN");
     bytes32 public constant ADMIN = keccak256("ADMIN");
 
+### [NC] TEST ENVIRONMENT COMMENTS AND CODES SHOULD NOT BE IN THE MAIN VERSION
+
+**\Ethos-Core\contracts\TroveManager.sol**
+
+    14: // import "./Dependencies/Ownable.sol";
+    18: contract TroveManager is LiquityBase, /*Ownable,*/ CheckContract, ITroveManager {
+    // string constant public NAME = "TroveManager";
+    431: // if (_ICR >= _MCR && ( _ICR >= _TCR || singleLiquidation.entireTroveDebt > _LUSDInStabPool))
+    539: // if !vars.recoveryModeAtStart
 
 ### [L-01] – PRAGMA FLOATING
 
@@ -146,3 +156,39 @@ Recommend considering using OpenZeppelin’s ECDSA library (which prevents this 
 
 It is a good practice to give time for users to react and adjust to critical changes. A timelock provides more guarantees and reduces the level of trust required, thus decreasing the risk for users. It also indicates that the project is legitimate.
 However, it appears that no timelock capabilities have been utilized, which could have a significant impact on multiple users, prompting them to respond or receive advance notifications.
+
+### [L-06] PREVENT DIVISION BY 0
+
+On several locations in the code precautions are not being taken for not dividing by 0, this will revert the code.
+These functions can be called with a 0 value in the input, this value is not checked for being bigger than 0, which that means in some scenarios can potentially trigger a division by zero.
+
+**\Ethos-Vault\contracts\ReaperVaultV2.sol**
+
+    347: shares = (_amount * totalSupply()) / freeFunds;
+    472: uint256 bpsChange = Math.min((loss * totalAllocBPS) / totalAllocated, stratParams.allocBPS);
+    499: uint256 shares = supply == 0 ? performanceFee : (performanceFee * supply) / _freeFunds();
+
+
+### [L-07] MISSING EVENTS FOR INITIALIZE AND CRITICAL CHANGES
+
+**\Ethos-Vault\contracts\ReaperStrategyGranarySupplyOnly.sol**
+
+    62: function initialize(
+        address _vault,
+        address[] memory _strategists,
+        address[] memory _multisigRoles,
+        IAToken _gWant
+    ) public initializer { 
+        gWant = _gWant;   
+        want = _gWant.UNDERLYING_ASSET_ADDRESS();
+        __ReaperBaseStrategy_init(_vault, want, _strategists, _multisigRoles);
+        rewardClaimingTokens = [address(_gWant)];
+    }
+
+**E:\audits\2023-02-ethos\Ethos-Vault\contracts\abstract\ReaperBaseStrategyv4.sol**
+
+    168: function setEmergencyExit() external {
+        _atLeastRole(GUARDIAN);
+        emergencyExit = true;
+        IVault(vault).revokeStrategy(address(this));
+    }
