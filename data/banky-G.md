@@ -26,13 +26,13 @@ Substituting values for `toWithdraw`,
 `yieldingAmount = currentAllocated - currentAllocated + finalYieldingAmount`
 `yieldingAmount = finalYieldingAmount`
 
-Thus, these extra computation steps are unnecessary and only waste gas. I suggest replacing this (line)[https://github.com/code-423n4/2023-02-ethos/blob/52aba524ede2e9becff9b8f0025b863c1029adac/Ethos-Core/contracts/ActivePool.sol#L267] with 
+Thus, these extra computation steps are unnecessary and only waste gas. I suggest replacing this [line](https://github.com/code-423n4/2023-02-ethos/blob/52aba524ede2e9becff9b8f0025b863c1029adac/Ethos-Core/contracts/ActivePool.sol#L267) with 
 `vars.yieldingAmount = vars.finalYieldingAmount`
 
-This same logic can be applied to the calculation (here)[https://github.com/code-423n4/2023-02-ethos/blob/52aba524ede2e9becff9b8f0025b863c1029adac/Ethos-Core/contracts/ActivePool.sol#L272]
+This same logic can be applied to the calculation [here](https://github.com/code-423n4/2023-02-ethos/blob/52aba524ede2e9becff9b8f0025b863c1029adac/Ethos-Core/contracts/ActivePool.sol#L272)
 
 # Adjust trove should use `>` instead of `!=`
-In the conditional check (here)[https://github.com/code-423n4/2023-02-ethos/blob/52aba524ede2e9becff9b8f0025b863c1029adac/Ethos-Core/contracts/BorrowerOperations.sol#L269], we can save 3 gas by using `>` instead of `!=` since `_collTopUp` is a `uint` and thus must be `>= 0`
+In the conditional check [here](https://github.com/code-423n4/2023-02-ethos/blob/52aba524ede2e9becff9b8f0025b863c1029adac/Ethos-Core/contracts/BorrowerOperations.sol#L269), we can save 3 gas by using `>` instead of `!=` since `_collTopUp` is a `uint` and thus must be `>= 0`
 
 # Prevent passing `LUSD_GAS_COMPENSATION` constant around
 We are passing around the constant `LUSD_GAS_COMPENSATION` instead of just using the value where it is needed directly. This defeats some of the benefit of constants where the compiler will directly replace the values in code. The value is used in these locations
