@@ -1,2 +1,3 @@
 1. Hardcoded addresses cannot be changed, risk if they get compromised. https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol#L24-L29 If any of the contracts get compromised or malfunction in some way, there's no real way to change any addresses, so this could result in lost funds.
+2. .
 
