@@ -1343,6 +1343,177 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L73-L76)
 
+##
+
+### [27] Upgrade Solidity’s optimizer
+
+Make sure Solidity’s optimizer is enabled. It reduces gas costs. If you want to gas optimize for contract deployment (costs less to deploy a contract) then set the Solidity optimizer at a low number. If you want to optimize for run-time gas costs (when functions are called on a contract) then set the optimizer to a high number.
+
+Set the optimization value higher than 800 in your hardhat.config.ts file
+
+FILE : 2023-02-ethos/Ethos-Core/hardhat.config.js 
+
+                      version: "0.4.23",
+                settings: {
+                    optimizer: {
+                        enabled: true,
+                        runs: 100
+                    }
+                }
+            },
+            {
+                version: "0.5.17",
+                settings: {
+                    optimizer: {
+                        enabled: true,
+                        runs: 100
+                    }
+                }
+            },
+            {
+                version: "0.6.11",
+                settings: {
+                    optimizer: {
+                        enabled: true,
+                        runs: 100
+                    }
+                }
+            },
+        ]
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/hardhat.config.js#L41-L67)
+
+##
+
+### [28] Use assembly to write address storage values
+
+Instances(49): 
+
+File : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
+
+
+        borrowerOperationsAddress = _borrowerOperationsAddress;
+        collateralConfig = ICollateralConfig(_collateralConfigAddress);
+        activePool = IActivePool(_activePoolAddress);
+        defaultPool = IDefaultPool(_defaultPoolAddress);
+        stabilityPool = IStabilityPool(_stabilityPoolAddress);
+        gasPoolAddress = _gasPoolAddress;
+        collSurplusPool = ICollSurplusPool(_collSurplusPoolAddress);
+        priceFeed = IPriceFeed(_priceFeedAddress);
+        lusdToken = ILUSDToken(_lusdTokenAddress);
+        sortedTroves = ISortedTroves(_sortedTrovesAddress);
+        lqtyToken = IERC20(_lqtyTokenAddress);
+        lqtyStaking = ILQTYStaking(_lqtyStakingAddress);
+        redemptionHelper = IRedemptionHelper(_redemptionHelperAddress);
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L266-L278)
+
+File : 2023-02-ethos/Ethos-Core/contracts/BorrowerOperations.sol
+
+       collateralConfig = ICollateralConfig(_collateralConfigAddress);
+        troveManager = ITroveManager(_troveManagerAddress);
+        activePool = IActivePool(_activePoolAddress);
+        defaultPool = IDefaultPool(_defaultPoolAddress);
+        stabilityPoolAddress = _stabilityPoolAddress;
+        gasPoolAddress = _gasPoolAddress;
+        collSurplusPool = ICollSurplusPool(_collSurplusPoolAddress);
+        priceFeed = IPriceFeed(_priceFeedAddress);
+        sortedTroves = ISortedTroves(_sortedTrovesAddress);
+        lusdToken = ILUSDToken(_lusdTokenAddress);
+        lqtyStakingAddress = _lqtyStakingAddress;
+        lqtyStaking = ILQTYStaking(_lqtyStakingAddress);
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L142-L153)
+
+File : 2023-02-ethos/Ethos-Core/contracts/ActivePool.sol
+
+        collateralConfigAddress = _collateralConfigAddress;
+        borrowerOperationsAddress = _borrowerOperationsAddress;
+        troveManagerAddress = _troveManagerAddress;
+        stabilityPoolAddress = _stabilityPoolAddress;
+        defaultPoolAddress = _defaultPoolAddress;
+        collSurplusPoolAddress = _collSurplusPoolAddress;
+        treasuryAddress = _treasuryAddress;
+        lqtyStakingAddress = _lqtyStakingAddress;
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L96-L103)
+
+File : 2023-02-ethos/Ethos-Core/contracts/StabilityPool.sol
+
+        borrowerOperations = IBorrowerOperations(_borrowerOperationsAddress);
+        collateralConfig = ICollateralConfig(_collateralConfigAddress);
+        troveManager = ITroveManager(_troveManagerAddress);
+        activePool = IActivePool(_activePoolAddress);
+        lusdToken = ILUSDToken(_lusdTokenAddress);
+        sortedTroves = ISortedTroves(_sortedTrovesAddress);
+        priceFeed = IPriceFeed(_priceFeedAddress);
+        communityIssuance = ICommunityIssuance(_communityIssuanceAddress);
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/StabilityPool.sol#L284-L291)
+
+File : 2023-02-ethos/Ethos-Core/contracts/LQTY/CommunityIssuance.sol
+
+        OathToken = IERC20(_oathTokenAddress);
+        stabilityPoolAddress = _stabilityPoolAddress;
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L74-L75)
+
+File : 2023-02-ethos/Ethos-Core/contracts/LQTY/LQTYStaking.sol
+
+        lqtyToken = IERC20(_lqtyTokenAddress);
+        lusdToken = ILUSDToken(_lusdTokenAddress);
+        troveManagerAddress = _troveManagerAddress;
+        borrowerOperationsAddress = _borrowerOperationsAddress;
+        activePoolAddress = _activePoolAddress;
+        collateralConfig = ICollateralConfig(_collateralConfigAddress);
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L86-L91)
+
+##
+
+### [29] Use nested if and, avoid multiple check combinations
+
+Using nested is cheaper than using && multiple check combinations. There are more advantages, such as easier to read code and better coverage reports
+
+Instances (5) : 
+
+File : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
+
+   616 : if (vars.ICR >= vars.collMCR && vars.remainingLUSDInStabPool == 0) { break; }
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L616)
+
+   817: if (vars.ICR >= vars.collMCR && vars.remainingLUSDInStabPool == 0) { continue; }
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L817)
+
+FILE : 2023-02-ethos/Ethos-Core/contracts/BorrowerOperations.sol
+
+   311:  if (_isDebtIncrease && !isRecoveryMode) { 
+
+   337:  if (!_isDebtIncrease && _LUSDChange > 0) {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L337)
+
+FILE : 2023-02-ethos/Ethos-Core/contracts/ActivePool.sol
+
+   264:  if (vars.percentOfFinalBal > vars.yieldingPercentage && vars.percentOfFinalBal.sub(vars.yieldingPercentage) > yieldingPercentageDrift) {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L264)
+
+Recommendation Code : 
+
+     - if (vars.percentOfFinalBal > vars.yieldingPercentage && vars.percentOfFinalBal.sub(vars.yieldingPercentage) 
+       >yieldingPercentageDrift) {
+
+     + if (vars.percentOfFinalBal > vars.yieldingPercentage )
+     + if (vars.percentOfFinalBal.sub(vars.yieldingPercentage) 
+       > yieldingPercentageDrift)
+
+ 
+
+
+   
 
 
     
