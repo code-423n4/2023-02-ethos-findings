@@ -248,3 +248,123 @@ The current function’s Signature is `199cb7d8` and as we know a function with 
 So `availableCapital()` can be renamed to `availableCapital_3()`, then its signature will be 0094169d.
 
 Similar optimization could be done for the most often callable functions from other contracts.
+
+### [G] UPGRADE SOLIDITY’S OPTIMIZER
+
+Make sure Solidity’s optimizer is enabled. It reduces gas costs. If you want to gas optimize for contract deployment (costs less to deploy a contract) then set the Solidity optimizer at a low number. If you want to optimize for run-time gas costs (when functions are called on a contract) then set the optimizer to a high number.
+
+Set the optimization value higher than 800 in your hardhat.config.js file.
+
+### [G] USE CONSTANTS INSTEAD OF TYPE(UINTX).MAX
+
+type(uint120).max or type(uint112).max, etc. it uses more gas in the distribution process and also for each transaction than constant usage.
+
+**\Ethos-Vault\contracts\ReaperVaultV2.sol**
+
+    624: updateTvlCap(type(uint256).max);
+
+**\Ethos-Vault\contracts\ReaperVaultERC4626.sol**
+
+    81: if (tvlCap == type(uint256).max) return type(uint256).max;
+    124: if (tvlCap == type(uint256).max) return type(uint256).max;
+
+**\Ethos-Vault\contracts\abstract\ReaperBaseStrategyv4.sol**
+
+    79: IERC20Upgradeable(want).safeApprove(vault, type(uint256).max);
+
+### [G] USE ASSEMBLY TO WRITE ADDRESS STORAGE VALUES
+
+**\Ethos-Vault\contracts\ReaperVaultV2.sol**
+
+    111: constructor(
+        address _token,
+        string memory _name,
+        string memory _symbol,
+        uint256 _tvlCap,
+        address _treasury,
+        address[] memory _strategists,
+        address[] memory _multisigRoles
+    ) ERC20(string(_name), string(_symbol)) { 
+        
+        token = IERC20Metadata(_token);
+        constructionTime = block.timestamp;
+        lastReport = block.timestamp;
+        tvlCap = _tvlCap;
+	- //treasury = _treasury;
+        +  assembly {
+            sstore(treasury.slot, _treasury)
+        }
+    663: function updateTreasury(address newTreasury) external {
+        _atLeastRole(DEFAULT_ADMIN_ROLE); 
+        require(newTreasury != address(0), "Invalid address");
+	- treasury = newTreasury;
+	+  assembly {
+	            sstore(treasury.slot, newTreasury)
+	        }
+
+    }
+
+**\Ethos-Vault\contracts\abstract\ReaperBaseStrategyv4.sol**
+
+    63: function __ReaperBaseStrategy_init(
+        address _vault,
+        address _want,
+        address[] memory _strategists,
+        address[] memory _multisigRoles
+    ) internal onlyInitializing {
+        __UUPSUpgradeable_init();
+        __AccessControlEnumerable_init();
+
+       -// vault = _vault;
+       -// want = _want;
+       + assembly {
+            sstore(vault.slot, _vault)
+            sstore(want.slot, _want)
+        }
+
+        IERC20Upgradeable(want).safeApprove(vault, type(uint256).max);
+
+        uint256 numStrategists = _strategists.length;
+        for (uint256 i = 0; i < numStrategists; i = i.uncheckedInc()) {
+            _grantRole(STRATEGIST, _strategists[i]);
+        }
+
+        require(_multisigRoles.length == 3, "Invalid number of multisig roles");
+        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _grantRole(DEFAULT_ADMIN_ROLE, _multisigRoles[0]);
+        _grantRole(ADMIN, _multisigRoles[1]);
+        _grantRole(GUARDIAN, _multisigRoles[2]);
+
+        clearUpgradeCooldown();
+    }
+
+There are several similar cases in Ethos-Core, but with the current solidity version 0.6.11; it doesn’t work there.
+
+### [G] SETTING THE CONSTRUCTOR TO PAYABLE
+
+You can cut out 10 opcodes in the creation-time EVM bytecode if you declare a constructor payable. Making the constructor payable eliminates the need for an initial check of msg.value == 0 and saves 13 gas on deployment with no security risks.
+
+**E:\audits\2023-02-ethos\Ethos-Vault\contracts\ReaperVaultERC4626.sol**
+
+    16: constructor(
+        address _token,
+        string memory _name,
+        string memory _symbol,
+        uint256 _tvlCap,
+        address _treasury,
+        address[] memory _strategists,
+        address[] memory _multisigRoles
+    ) + payable ReaperVaultV2(_token, _name, _symbol, _tvlCap, _treasury, _strategists, _multisigRoles) {}
+
+**\Ethos-Core\contracts\TroveManager.sol**
+
+    225: constructor() public {
+        // makeshift ownable implementation to circumvent contract size limit
+        owner = msg.sender;
+    }
+
+**\Ethos-Core\contracts\LQTY\CommunityIssuance.sol**
+
+    57: constructor() public {
+        distributionPeriod = 14 days;
+    }
