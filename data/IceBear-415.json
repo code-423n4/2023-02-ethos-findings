@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "IceBear",
+  "risk": "2",
+  "title": "OathToken is not compatible with tokens with missing return values",
+  "issueId": 415,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/415"
+}
