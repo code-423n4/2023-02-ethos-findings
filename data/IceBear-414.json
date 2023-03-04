@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "IceBear",
+  "risk": "2",
+  "title": "Centralization risks-Malicious admin can steal token in ReaperVaultV2 contract",
+  "issueId": 414,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/414"
+}
