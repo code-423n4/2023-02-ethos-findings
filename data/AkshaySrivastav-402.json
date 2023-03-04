@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "AkshaySrivastav",
+  "risk": "2",
+  "title": "ActivePool: DoS when ReaperVaultV2 reverts on deposit",
+  "issueId": 402,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/402"
+}
