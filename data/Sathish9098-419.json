@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Sathish9098",
+  "risk": "3",
+  "title": "Owner can accidentally sets a very high MCR values , it can limit borrower ability to borrow",
+  "issueId": 419,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/419"
+}
