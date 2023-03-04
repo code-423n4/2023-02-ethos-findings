@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "0xbepresent",
+  "risk": "2",
+  "title": "A malicious Strategist role can block the Strategy contract upgrades",
+  "issueId": 413,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/413"
+}
