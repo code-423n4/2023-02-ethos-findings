@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Sathish9098",
+  "risk": "3",
+  "title": "Owner unknowingly possible set MCR and CCR values ratio very low. There is no margin of safety to protect against sudden drops in the value of the collateral",
+  "issueId": 421,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/421"
+}
