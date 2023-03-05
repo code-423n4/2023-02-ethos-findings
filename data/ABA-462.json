@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "ABA",
+  "risk": "2",
+  "title": "Issued OATH token reward payout rate is not updated in CommunityIssuance when the distribution period is changed",
+  "issueId": 462,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/462"
+}
