@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "p0wd3r",
+  "risk": "2",
+  "title": "Add approve(vault,0) during initialization of ReaperBaseStrategy.",
+  "issueId": 453,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/453"
+}
