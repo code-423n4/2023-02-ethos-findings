@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "cryptothemex",
+  "risk": "2",
+  "title": "transfer function in CommunityIssuance contract may fail to execute",
+  "issueId": 479,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/479"
+}
