@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "cloudjunky",
+  "risk": "3",
+  "title": "ERC4626 vault vulnerable to price inflation leading to loss of funds",
+  "issueId": 437,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/437"
+}
