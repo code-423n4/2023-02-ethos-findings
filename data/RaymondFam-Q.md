@@ -1,3 +1,39 @@
+## Impractical upper bound limit in `_requireValidMaxFeePercentage()`
+In `_requireValidMaxFeePercentage()` of BorrowerOperations.sol, the upper bound of `_maxFeePercentage` is `DECIMAL_PRECISION`, i.e. 1e18 (or 100%). However, when [`getBorrowingFee()`](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L1471-L1473) is eventually invoked by [`_triggerBorrowingFee()`](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L421), the output returned will at most be equal to [`MAX_BORROWING_FEE`](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L1467), which is [5%](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L55). As such, `_requireValidMaxFeePercentage()` should be refactored as follows, regardless of the minimal impact this has on [`_requireUserAcceptsFee()`](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/Dependencies/LiquityBase.sol#L90), to be more expediently in line with the logic flow entailed:
+
+[File: BorrowerOperations.sol#L648-L656](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L648-L656)       
+
+```diff
+    function _requireValidMaxFeePercentage(uint _maxFeePercentage, bool _isRecoveryMode) internal pure {
+        if (_isRecoveryMode) {
+-            require(_maxFeePercentage <= DECIMAL_PRECISION,
++            require(_maxFeePercentage <= 5e15,
+                "Max fee percentage must less than or equal to 100%");
+        } else {
+-            require(_maxFeePercentage >= BORROWING_FEE_FLOOR && _maxFeePercentage <= DECIMAL_PRECISION,
+                "Max fee percentage must be between 0.5% and 100%");
++            require(_maxFeePercentage >= BORROWING_FEE_FLOOR && _maxFeePercentage <= 5e15,
+                "Max fee percentage must be between 0.5% and 100%");
+        }
+    }
+``` 
+## Uninitialized `baseRate` till the first call on `redeemCollateral()`
+The impact, though low, is twofold. First off, the output of `getBorrowingFee()` is always going to be `BORROWING_FEE_FLOOR`, i.e. [0.5%](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/Dependencies/LiquityBase.sol#L30) because `_baseRate == 0`:
+
+[File: TroveManager.sol#L1464-L1469](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L1464-L1469)
+
+```solidity
+    function _calcBorrowingRate(uint _baseRate) internal pure returns (uint) {
+        return LiquityMath._min(
+            BORROWING_FEE_FLOOR.add(_baseRate),
+            MAX_BORROWING_FEE
+        );
+    }
+```
+Next, when `baseRate` finally gets assigned via [`updateBaseRateFromRedemption()`](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L1408-L1417), increasing the `baseRate` based on the amount redeemed, as a proportion of total supply, is going to be minimally negligible unless the redemption amount is significantly sizable. And, if subsequently LUSD borrowing operations exceed redemptions, `baseRate` is as good as zero comparatively in [5e15, 5e16].
+
+In another words, this makes the complexity of introducing a decaying factor pegged to a half-life of 720 minutes pretty much obsolete considering the borrowing rate stays always at 0.5%.      
+
 ## Use a more recent version of solidity
 The protocol adopts version 0.6.11 on writing some of the smart contracts. For better security, it is best practice to use the latest Solidity version, 0.8.17.
 
@@ -101,3 +137,31 @@ Here are the contract instances entailed:
 -                "Max fee percentage must less than or equal to 100%");
 +                "Max fee percentage must be less than or equal to 100%");
 ```
+## Non-compliant contract layout with Solidity's Style Guide
+According to Solidity's Style Guide below:
+
+https://docs.soliditylang.org/en/v0.8.17/style-guide.html
+
+In order to help readers identify which functions they can call, and find the constructor and fallback definitions more easily, functions should be grouped according to their visibility and ordered in the following manner:
+
+constructor, receive function (if exists), fallback function (if exists), external, public, internal, private
+
+And, within a grouping, place the `view` and `pure` functions last.
+
+Additionally, inside each contract, library or interface, use the following order:
+
+type declarations, state variables, events, modifiers, functions
+
+Consider adhering to the above guidelines for all contract instances entailed.
+
+## Unspecific compiler version pragma
+For some source-units the compiler version pragma is very unspecific, i.e. ^0.8.0. While this often makes sense for libraries to allow them to be included with multiple different versions of an application, it may be a security risk for the actual application implementation itself. A known vulnerable compiler version may accidentally be selected or security tools might fall-back to an older compiler version ending up actually checking a different EVM compilation that is ultimately deployed on the blockchain.
+
+Avoid floating pragmas where possible. It is highly recommend pinning a concrete compiler version (latest without security issues) in at least the top-level “deployed” contracts to make it unambiguous which compiler version is being used. Rule of thumb: a flattened source-unit should have at least one non-floating concrete solidity compiler version pragma.
+
+Here are the contract instances entailed:
+
+[File: ReaperVaultV2.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperVaultV2.sol)
+[File: ReaperVaultERC4626.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperVaultERC4626.sol)
+[File: ReaperBaseStrategyv4.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol)
+[File: ReaperStrategyGranarySupplyOnly.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol)
