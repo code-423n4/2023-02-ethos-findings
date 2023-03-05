@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "cryptothemex",
+  "risk": "2",
+  "title": "Lack of zero address check before transferring tokens in CommunityIssuance contract",
+  "issueId": 480,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/480"
+}
