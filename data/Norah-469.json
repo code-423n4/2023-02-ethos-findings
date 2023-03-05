@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Norah",
+  "risk": "2",
+  "title": "Zero minting of shares due to rounding off caused by indirect increase in total balance of underlying assets of vault contract.",
+  "issueId": 469,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/469"
+}
