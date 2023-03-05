@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "0x73696d616f",
+  "risk": "3",
+  "title": "Governance transfer in function `updateGovernance(...)` in LUSDToken.sol should be done in a 2 step procedure.",
+  "issueId": 428,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/428"
+}
