@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "helios",
+  "risk": "2",
+  "title": "ERC20 transfer restriction can disturb 3rd-party interactions",
+  "issueId": 465,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/465"
+}
