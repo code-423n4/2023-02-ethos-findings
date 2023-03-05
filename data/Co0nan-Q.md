@@ -232,6 +232,8 @@ function hasPendingRewards(address _borrower, address _collateral) public view o
     }
 ```
 
+7.4 - The if condiation `(msg.sender == stabilityPoolAddress && _collTopUp > 0 && _LUSDChange == 0)` on https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L301 will always return False and it's useless as the function `_adjustTrove` never get called by StabilityPool contract.
+
 8. Correct the error message
 
 https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L525
