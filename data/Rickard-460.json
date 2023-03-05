@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Rickard",
+  "risk": "3",
+  "title": "`ReaperVaultV2.sol` is not EIP-4626 compliant",
+  "issueId": 460,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/460"
+}
