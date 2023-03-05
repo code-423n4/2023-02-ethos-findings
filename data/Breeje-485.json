@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Breeje",
+  "risk": "2",
+  "title": "`_withdraw` logic in `ReaperVaultV2` doesn't cover the case where Strategy takes withdrawal fees",
+  "issueId": 485,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/485"
+}
