@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "0xTheC0der",
+  "risk": "2",
+  "title": "Inconsistent support of ERC20 tokens that deduct transaction fee",
+  "issueId": 477,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/477"
+}
