@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "0xDING99YA",
+  "risk": "3",
+  "title": "Missed \"emit\" keyword before ActivePoolLUSDDebtUpdated(address _collateral, uint _LUSDDebt) event in ActivePool.sol",
+  "issueId": 493,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/493"
+}
