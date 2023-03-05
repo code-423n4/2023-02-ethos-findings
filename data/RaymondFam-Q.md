@@ -1,9 +1,20 @@
 ## Use a more recent version of solidity
-The protocol adopts version 0.6.11 on writing contracts. For better security, it is best practice to use the latest Solidity version, 0.8.17.
+The protocol adopts version 0.6.11 on writing some of the smart contracts. For better security, it is best practice to use the latest Solidity version, 0.8.17.
 
-Security fix list in the versions can be found in the link below:
+Security fix list where the protocol could benefit from, e.g. SafeMath in the versions can be found in the link below:
 
 https://github.com/ethereum/solidity/blob/develop/Changelog.md
+
+Here are the contract instances entailed:
+
+[File: CollateralConfig.sol#L3](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/CollateralConfig.sol#L3)
+[File: BorrowerOperations.sol#L3](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L3)
+[File: TroveManager.sol#L3](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L3)
+[File: ActivePool.sol#L3](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/ActivePool.sol#L3)
+[File: StabilityPool.sol#L3](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/StabilityPool.sol#L3)
+[File: CommunityIssuance.sol#L3](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L3)
+[File: LQTYStaking.sol#L3](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L3)
+[File: LUSDToken.sol#L3](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LUSDToken.sol#L3)
 
 ## Modularity on import usages
 For cleaner Solidity code in conjunction with the rule of modularity and modular programming, use named imports with curly braces instead of adopting the global import approach.
@@ -55,3 +66,38 @@ Here are some of the instances entailed:
 [File: BorrowerOperations.sol#L282](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L282)
 [File: BorrowerOperations.sol#L343](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L343)
 [File: BorrowerOperations.sol#L511](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L511)
+
+## Inadequate check in `initializa()` of CollateralConfig.sol
+When initializing config struct variables, the function does not check if `_MCRs[i]` is smaller than `_CCRs[i]`. Consider having the function refactored as follows to avoid input error considering these state variables can only be initialized once:
+
+[File: CollateralConfig.sol#L66-L71](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/CollateralConfig.sol#L66-L71)
+
+```diff
+            require(_MCRs[i] >= MIN_ALLOWED_MCR, "MCR below allowed minimum");
+            config.MCR = _MCRs[i];
+
+            require(_CCRs[i] >= MIN_ALLOWED_CCR, "CCR below allowed minimum");
+            config.CCR = _CCRs[i];
+
++            require(_CCRs[i] >= _MCRs[i], "CCR below MCR");
+```
+## `uint256` over `uint`
+Across the codebase, there are numerous instances of `uint`, as opposed to `uint256`. In favor of explicitness, consider replacing all instances of `uint` with `uint256`.
+
+Here are the contract instances entailed:
+
+[File: BorrowerOperations.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol)
+[File: TroveManager.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol)
+[File: ActivePool.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/ActivePool.sol)
+[File: StabilityPool.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/StabilityPool.sol)
+[File: CommunityIssuance.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/CommunityIssuance.sol)
+[File: LQTYStaking.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/LQTYStaking.sol)
+[File: LUSDToken.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LUSDToken.sol)
+
+## Typo mistakes
+[File: BorrowerOperations.sol#L651](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L651)
+
+```diff
+-                "Max fee percentage must less than or equal to 100%");
++                "Max fee percentage must be less than or equal to 100%");
+```
