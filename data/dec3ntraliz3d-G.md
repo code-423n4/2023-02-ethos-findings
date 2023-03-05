@@ -70,3 +70,27 @@ function _cascadingAccessRoles() internal pure override returns (bytes32[] memor
         return cascadingAccessRoles;
     }
 ```
+
+
+### G-03
+
+In the `setAddresses()` function of ActivePool.sol, an `SLOAD` can be saved by using a function parameter. When calling the `getAllowedCollaterals()` function, use `_collateralConfigAddress` instead of `collateralConfigAddress`, and hence save an `SLOAD`.
+
+[Link to the code on github](https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L105)
+Current code 
+
+   ```solidiy
+        collateralConfigAddress = _collateralConfigAddress;
+        // omitted ..
+
+        address[] memory collaterals = ICollateralConfig(collateralConfigAddress).getAllowedCollaterals();
+```
+
+Change to 
+
+   ```solidiy
+        collateralConfigAddress = _collateralConfigAddress;
+        // omitted ..
+
+        address[] memory collaterals = ICollateralConfig(_collateralConfigAddress).getAllowedCollaterals();
+```
