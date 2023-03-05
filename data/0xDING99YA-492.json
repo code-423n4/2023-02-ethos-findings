@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "0xDING99YA",
+  "risk": "2",
+  "title": "_deposit(uint256 toReinvest) in ReaperStrategyGranarySupplyOnly.sol should handle tokens not comply to ERC20 format. ",
+  "issueId": 492,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/492"
+}
