@@ -55,6 +55,30 @@ For instance, the following code line may be refactored as follows to save gas b
 -        _requireNonZeroDebtChange(_LUSDChange);
 +        require(_LUSDChange > 0, "BorrowerOps: Debt increase requires non-zero debtChange");
 ```
+## Function logic of `_requireValidMaxFeePercentage()` can be simplified
+In BorrowerOperations.sol, [`_triggerBorrowingFee()`](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L423) involving `_maxFeePercentage` will only be invoked in [`openTrove()`](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L189) and [`_adjustTrove()`](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L311) when `isRecoveryMode == false`. As such, only the else clause of the if else logic in `_requireValidMaxFeePercentage()` is needed to match up with the logic flow. The function entailed (along with the calling code lines) should be refactored as follows to save gas both on function calls and contract deployment:
+
+[File: BorrowerOperations.sol#L184](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L184)
+[File: BorrowerOperations.sol#L293](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L293)
+
+```diff
+-        _requireValidMaxFeePercentage(_maxFeePercentage, isRecoveryMode);
++        _requireValidMaxFeePercentage(_maxFeePercentage);
+```
+[File: BorrowerOperations.sol#L648-L656](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L648-L656)
+
+```diff
+-    function _requireValidMaxFeePercentage(uint _maxFeePercentage, bool _isRecoveryMode) internal pure {
++    function _requireValidMaxFeePercentage(uint _maxFeePercentage) internal pure {
+-        if (_isRecoveryMode) {
+-            require(_maxFeePercentage <= DECIMAL_PRECISION,
+-                "Max fee percentage must less than or equal to 100%");
+-        } else {
+            require(_maxFeePercentage >= BORROWING_FEE_FLOOR && _maxFeePercentage <= DECIMAL_PRECISION,
+                "Max fee percentage must be between 0.5% and 100%");
+-        }
+    } 
+```
 ## Unused imports
 Consider removing unused imports to help save gas on contract deployment.
 
@@ -148,3 +172,82 @@ For instance, the following code line may be refactored as follows:
 +        require (TroveOwnersArrayLength > 1);
 +        require (sortedTroves.getSize(_collateral) > 1);
 ```
+## Use of named returns for local variables saves gas
+You can have further advantages in term of gas cost by simply using named return values as temporary local variable.
+
+For instance, the code block below may be refactored as follows:
+
+[File: TroveManager.sol#L1397-L1423](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L1397-L1423)
+
+```diff
+    function updateBaseRateFromRedemption(
+        uint _collateralDrawn,
+        uint _price,
+        uint256 _collDecimals,
+        uint _totalLUSDSupply
+-    ) external override returns (uint) {
++    ) external override returns (uint newBaseRate) {
+        _requireCallerIsRedemptionHelper();
+        uint decayedBaseRate = _calcDecayedBaseRate();
+
+        /* Convert the drawn collateral back to LUSD at face value rate (1 LUSD:1 USD), in order to get
+        * the fraction of total supply that was redeemed at face value. */
+        uint redeemedLUSDFraction = 
+            LiquityMath._getScaledCollAmount(_collateralDrawn, _collDecimals).mul(_price).div(_totalLUSDSupply);
+
+        uint newBaseRate = decayedBaseRate.add(redeemedLUSDFraction.div(BETA));
+        newBaseRate = LiquityMath._min(newBaseRate, DECIMAL_PRECISION); // cap baseRate at a maximum of 100%
+        //assert(newBaseRate <= DECIMAL_PRECISION); // This is already enforced in the line above
+        assert(newBaseRate > 0); // Base rate is always non-zero after redemption
+
+        // Update the baseRate state variable
+        baseRate = newBaseRate;
+        emit BaseRateUpdated(newBaseRate);
+        
+        _updateLastFeeOpTime();
+
+-        return newBaseRate;
+    }
+```
+## Function order affects gas consumption
+The order of function will also have an impact on gas consumption. Because in smart contracts, there is a difference in the order of the functions. Each position will have an extra 22 gas. The order is dependent on method ID. So, if you rename the frequently accessed function to more early method ID, you can save gas cost. Please visit the following site for further information:
+
+https://medium.com/joyso/solidity-how-does-function-name-affect-gas-consumption-in-smart-contract-47d270d8ac92
+
+## Activate the optimizer
+Before deploying your contract, activate the optimizer when compiling using “solc --optimize --bin sourceFile.sol”. By default, the optimizer will optimize the contract assuming it is called 200 times across its lifetime. If you want the initial contract deployment to be cheaper and the later function executions to be more expensive, set it to “ --optimize-runs=1”. Conversely, if you expect many transactions and do not care for higher deployment cost and output size, set “--optimize-runs” to a high number.
+
+```
+module.exports = {
+solidity: {
+version: "0.8.0",
+settings: {
+  optimizer: {
+    enabled: true,
+    runs: 1000,
+  },
+},
+},
+};
+```
+Please visit the following site for further information:
+
+https://docs.soliditylang.org/en/v0.5.4/using-the-compiler.html#using-the-commandline-compiler
+
+Here's one example of instance on opcode comparison that delineates the gas saving mechanism:
+
+```
+for !=0 before optimization
+PUSH1 0x00
+DUP2
+EQ
+ISZERO
+PUSH1 [cont offset]
+JUMPI
+
+after optimization
+DUP1
+PUSH1 [revert offset]
+JUMPI
+```
+Disclaimer: There have been several bugs with security implications related to optimizations. For this reason, Solidity compiler optimizations are disabled by default, and it is unclear how many contracts in the wild actually use them. Therefore, it is unclear how well they are being tested and exercised. High-severity security issues due to optimization bugs have occurred in the past . A high-severity bug in the emscripten -generated solc-js compiler used by Truffle and Remix persisted until late 2018. The fix for this bug was not reported in the Solidity CHANGELOG. Another high-severity optimization bug resulting in incorrect bit shift results was patched in Solidity 0.5.6. Please measure the gas savings from optimizations, and carefully weigh them against the possibility of an optimization-related bug. Also, monitor the development and adoption of Solidity compiler optimizations to assess their maturity.
