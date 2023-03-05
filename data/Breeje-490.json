@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Breeje",
+  "risk": "3",
+  "title": "Attacker can exploit No Slippage check in swapping using Sandwich Attack",
+  "issueId": 490,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/490"
+}
