@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Koolex",
+  "risk": "3",
+  "title": "The vault could possibly burn user's shares even though s/he received less than the expected amount of underlying token when withdrawing",
+  "issueId": 468,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/468"
+}
