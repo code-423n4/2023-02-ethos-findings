@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Breeje",
+  "risk": "2",
+  "title": "Multiplication after division in calculating Fees to be charged can lead to large precision loss",
+  "issueId": 486,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/486"
+}
