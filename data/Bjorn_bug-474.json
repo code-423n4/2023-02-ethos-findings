@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Bjorn_bug",
+  "risk": "2",
+  "title": "The functions _withdraw() and _deposit() in ReaperVaultV2.sol do not handle the calculation correctly",
+  "issueId": 474,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/474"
+}
