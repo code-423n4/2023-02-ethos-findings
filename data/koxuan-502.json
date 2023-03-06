@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "koxuan",
+  "risk": "3",
+  "title": "loss of funds to user when withdrawing from ReaperVaultERC4626 due to cap on maximum value that can be withdrawn",
+  "issueId": 502,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/502"
+}
