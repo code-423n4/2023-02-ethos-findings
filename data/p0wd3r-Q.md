@@ -1,15 +1,15 @@
-# Failed to get pending rewards if the collateral's decimal is 0
+# The liquidateTroves function in TroveManager does not verify if the Trove is active.
 
-In TroveManager.sol, on lines 1132 and 1147, `div(10**collDecimals)` is used for calculation. However, if the collateral token has 0 decimal places (which is allowed in ERC20), the transaction will be reverted and the reward will not be received.
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L513
+
+
+Compared to the `liquidate` function, the `liquidateTroves` function is also an external function and does not check if the Trove is active, which could lead to unexpected issues.
 
 ```
-function getPendingCollateralReward(address _borrower, address _collateral) public view override returns (uint) {
+function liquidate(address _borrower, address _collateral) external override {
+        _requireTroveIsActive(_borrower, _collateral);
         ...
-        uint pendingCollateralReward = stake.mul(rewardPerUnitStaked).div(10**collDecimals);
-
-        return pendingCollateralReward;
-    }
+}
 ```
 
 
-Even if the collateral token is on the whitelist, due to the contracts being non-upgradable contracts, if we want to support tokens with decimal 0, we will need to redeploy the contract, which will cause a bad user experience.
