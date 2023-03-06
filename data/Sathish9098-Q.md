@@ -150,13 +150,13 @@ Recommended Mitigation :
 
 ##
 
-### [4]  CONSTANT REDEFINED ELSEWHERE
+### [4]  Use a single file for all system-wide constants
 
 TYPE : NON CRITICAL (NC)
 
-Consider defining in only one contract so that values cannot become out of sync when only one location is updated.
+There are many addresses and constants used in the system. It is recommended to put the most used ones in one file (for example constants.sol, use inheritance to access these values).
 
-A cheap way to store constants in a single location is to create an internal constant in a library. If the variable is a local cache of another contract’s value, consider making the cache variable internal or private, which will require external users to query the contract with the source of truth, so that callers don’t get out of sync.
+This will help with readability and easier maintenance for future changes. This also helps with any issues, as some of these hard-coded values are admin addresses
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L21)
 
@@ -181,6 +181,9 @@ A cheap way to store constants in a single location is to create an internal con
 ### [5] ADD A LIMIT FOR THE MAXIMUM NUMBER OF CHARACTERS PER LINE
 
 TYPE : NON CRITICAL (NC)
+
+CONTEXT:
+ALL CONTRACTS
 
 The solidity [documentation](https://docs.soliditylang.org/en/v0.8.17/style-guide.html#maximum-line-length) recommends a maximum of 120 characters
 
@@ -420,7 +423,7 @@ https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8
 
 ##
 
-### [13]  LACK OF CHECKS THE INTEGER RANGES
+### [13] LACK OF INTEGER CHECKS 
 
 TYPE : LOW FINDING
 
@@ -1289,6 +1292,178 @@ Recommended Mitigation :
 Call ActivePoolLUSDDebtUpdated event using emit keyword
 
        emit ActivePoolLUSDDebtUpdated(_collateral, LUSDDebt[_collateral]); 
+
+##
+
+### [44] Use Call() function instead of transfer()
+
+TYPE : LOW FINDING
+
+We now recommend that transfer() be avoided as gas costs can and will change.
+
+Ethereum’s upgrade in 2019, introducing cheaper gas costs for certain SSTORE operations suffered a major setback when, as an unwanted side effect, the smart contract enabled re-entrancy attacks when using address.transfer() because lowering gas costs caused code that was previously safe from reentrancy to no longer be.
+
+File : 2023-02-ethos/Ethos-Core/contracts/LQTY/CommunityIssuance.sol
+
+    127 :   OathToken.transfer(_account, _OathAmount);
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L127)
+
+FILE : 2023-02-ethos/Ethos-Core/contracts/LQTY/LQTYStaking.sol
+
+    135: lusdToken.transfer(msg.sender, LUSDGain);
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L135)
+
+    171 :  lusdToken.transfer(msg.sender, LUSDGain);
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L171)
+
+##
+
+### [45] Add a timelock to critical functions
+
+TYPE : LOW FINDING
+
+It is a good practice to give time for users to react and adjust to critical changes. A timelock provides more guarantees and reduces the level of trust required, thus decreasing risk for users. It also indicates that the project is legitimate (less risk of a malicious owner making a sandwich attack on a user). Consider adding a timelock to
+
+File :  2023-02-ethos/Ethos-Core/contracts/LUSDToken.sol
+
+      function updateGovernance(address _newGovernanceAddress) external {
+        _requireCallerIsGovernance();
+        checkContract(_newGovernanceAddress); // must be a smart contract (multi-sig, timelock, etc.)
+        governanceAddress = _newGovernanceAddress;
+        emit GovernanceAddressChanged(_newGovernanceAddress);
+      }
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L146-L151)
+
+      function updateGuardian(address _newGuardianAddress) external {
+        _requireCallerIsGovernance();
+        checkContract(_newGuardianAddress); // must be a smart contract (multi-sig, timelock, etc.)
+        guardianAddress = _newGuardianAddress;
+        emit GuardianAddressChanged(_newGuardianAddress);
+    }
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L153-L158)
+
+File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
+
+   function updateTreasury(address newTreasury) external {
+        _atLeastRole(DEFAULT_ADMIN_ROLE);
+        require(newTreasury != address(0), "Invalid address");
+        treasury = newTreasury;
+    }
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L627-L631)
+
+##
+
+### [46] Prevent division by 0
+
+TYPE : LOW FINDING
+
+On several locations in the code precautions are not being taken for not dividing by 0, this will revert the code.
+These functions can be called with 0 value in the input, this value is not checked for being bigger than 0, that means in some scenarios this can potentially trigger a division by zero
+
+File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
+
+   
+       334:  shares = (_amount * totalSupply()) / freeFunds; 
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L334)
+
+       365:  value = (_freeFunds() * _shares) / totalSupply();
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L365)
+      
+       440 :  uint256 bpsChange = Math.min((loss * totalAllocBPS) / totalAllocated, stratParams.allocBPS);
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L440)
+
+File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultERC4626.sol
+ 
+        53 : return (assets * totalSupply()) / _freeFunds();
+
+        68 : return (shares * _freeFunds()) / totalSupply();
+
+##
+
+### [47] A single point of failure
+
+TYPE : LOW FINDING
+
+The onlyOwner role has a single point of failure and onlyOwner can use critical a few functions.
+
+Even if protocol admins/developers are not malicious there is still a chance for Owner keys to be stolen. In such a case, the attacker can cause serious damage to the project due to important functions. In such a case, users who have invested in project will suffer high financial losses.
+
+> onlyOwner Functions : 
+
+File : CollateralConfig.sol
+
+       function initialize(
+        address[] calldata _collaterals,
+        uint256[] calldata _MCRs,
+        uint256[] calldata _CCRs
+       ) external override onlyOwner {
+
+
+        function updateCollateralRatios(
+        address _collateral,
+        uint256 _MCR,
+        uint256 _CCR
+        ) external onlyOwner checkCollateral(_collateral) {
+
+[LINK TO CODE] (https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/CollateralConfig.sol)
+
+File : BorrowerOperations.sol
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L110-L126)
+
+FILE : 2023-02-ethos/Ethos-Core/contracts/LQTY/CommunityIssuance.sol
+
+       function setAddresses
+       (
+        address _oathTokenAddress, 
+        address _stabilityPoolAddress
+        ) 
+        external 
+        onlyOwner 
+        override 
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L61-L69)
+
+File : 2023-02-ethos/Ethos-Core/contracts/LQTY/CommunityIssuance.sol
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L61-L68)
+
+       101 : function fund(uint amount) external onlyOwner {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L101)
+
+       120 :  function updateDistributionPeriod(uint256 _newDistributionPeriod) external onlyOwner {
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L120)
+
+Recommended Mitigation Steps
+
+Add a time lock to critical functions. Admin-only functions that change critical parameters should emit events and have timelocks.
+
+Events allow capturing the changed parameters so that off-chain tools/interfaces can register such changes with timelocks that allow users to evaluate them and consider if they would like to engage/exit based on how they perceive the changes as affecting the trustworthiness of the protocol or profitability of the implemented financial services.
+
+Also detail them in documentation and NatSpec comments
+
+
+
+
+
+
+
+
+
+
+
+ 
   
 
    
