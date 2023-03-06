@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "ziyou-",
+  "risk": "2",
+  "title": "Not checking _amountLeavingPool numeric size caused multiple parameters to be evaluated incorrectly within the function _rebalance",
+  "issueId": 504,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/504"
+}
