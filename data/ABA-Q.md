@@ -1,7 +1,7 @@
 # QA Report for Ethos Reserve contest
 
 ## Overview
-During the audit, 7 low and 12 non-critical issues were found.
+During the audit, 7 low and 14 non-critical issues were found.
 
 ### Low Risk Issues
 
@@ -19,7 +19,7 @@ Total: 11 instances over 7 issues
 
 ### Non-critical Issues
 
-Total: 25 instances over 12 issues
+Total: 29 instances over 14 issues
 
 |#|Issue|Instances|
 |-|:-|:-:|
@@ -35,6 +35,8 @@ Total: 25 instances over 12 issues
 |[NC-10]| Dead Comments | 1 |
 |[NC-11]| Inconsistent shares calculation across code base | 2 |
 |[NC-12]| Open TODOs | 3 |
+|[NC-13]| Already declared variable not reused | 2 |
+|[NC-14]| Functions do not respect camelCase naming convention | 2 |
 
 
 ## Low Risk Issues (7)
@@ -307,7 +309,7 @@ Ideally it should set strategy activation to 0 // delete it from the `strategies
 
 #
 
-## Non-critical Issues (12)
+## Non-critical Issues (14)
 
 ### [NC-01] `updateCollateralRatios` accepts redundant updating with the same values
 
@@ -884,5 +886,38 @@ Third case is a TODO by it's content.
 ##### Recommendation
 
 Resolve them and eliminate the comments.
+
+#
+
+### [NC-13] Already declared variable not reused
+##### Description
+
+In [ActivePool.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/ActivePool.sol#L246) the local variable `vars.yieldGenerator` is set in order to be used as `vars.yieldGenerator = IERC4626(yieldGenerator[_collateral]);`.
+The next 2 lines it is used but further down, the casting/setting is again, executed `IERC4626(yieldGenerator[_collateral])` when `vars.yieldGenerator` could simply be reused.
+
+##### Instances (2)
+
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/ActivePool.sol#L280
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/ActivePool.sol#L282
+
+##### Recommendation
+
+Modify the code to reuse the already initialized `vars.yieldGenerator` variable.
+
+#
+
+### [NC-14] Functions do not respect camelCase naming convention
+##### Description
+
+In [BorrowerOperations.sol](`https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol`) there are 2 functions that do not respect the camelCase naming convention.
+
+##### Instances (2)
+
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L541
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L546
+
+##### Recommendation
+
+Rename the functions to respect proper standards.
 
 #
