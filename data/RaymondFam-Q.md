@@ -59,6 +59,15 @@ In BorrowerOperations.sol, the require statement of `_requireSingularCollChange(
 +        require(_collTopUp != 0 || _collWithdrawal != 0, "BorrowerOperations: Cannot withdraw and add coll");
     }
 ```
+Note: The above refactoring is recommended since `_requireNonZeroAdjustment()` that ensues may not revert if `_collTopUp` and `_collWithdrawal` have been zero inputted with `_LUSDChange != 0`:
+
+[File: BorrowerOperations.sol#L537-L539](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L537-L539)
+
+```solidity
+    function _requireNonZeroAdjustment(uint _collTopUp, uint _collWithdrawal, uint _LUSDChange) internal pure {
+        require(_collTopUp != 0 || _collWithdrawal != 0 || _LUSDChange != 0, "BorrowerOps: There must be either a collateral change or a debt change");
+    }
+```
 ## Use a more recent version of solidity
 The protocol adopts version 0.6.11 on writing some of the smart contracts. For better security, it is best practice to use the latest Solidity version, 0.8.17.
 
