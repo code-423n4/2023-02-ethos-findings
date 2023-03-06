@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "PaludoX0",
+  "risk": "2",
+  "title": "Function _rebalance in ActivePool contract can revert if vault strategy is losing fund",
+  "issueId": 578,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/578"
+}
