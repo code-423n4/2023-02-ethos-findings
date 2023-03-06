@@ -168,7 +168,12 @@ File: Ethos-Core/contracts/LUSDToken.sol
 
 If `distributionPeriod` is set to zero, it won't be possible to fund the contract as there would be a division by zero in `fund`. 
 
-Add a `require(distributionPeriod > 0, "distributionPeriod = 0")` to the setter to avoid this situation.
+```solidity
+File: Ethos-Core\contracts\LQTY\CommunityIssuance.sol
+
+112:         rewardPerSecond = amount.div(distributionPeriod);
+```
+Add a `require(distributionPeriod > 0, "distributionPeriod = 0")` to `updateDistributionPeriod` to avoid this situation.
 
 
 *There is 1 instance of this issue.*
@@ -201,8 +206,8 @@ File: Ethos-Core/contracts/LQTY/CommunityIssuance.sol
 
 File: Ethos-Core/contracts/LQTY/LQTYStaking.sol
 
-135:                lusdToken.transfer(msg.sender, LUSDGain);
-171:            lusdToken.transfer(msg.sender, LUSDGain);
+135:         lusdToken.transfer(msg.sender, LUSDGain);
+171:         lusdToken.transfer(msg.sender, LUSDGain);
 
 ```
 
