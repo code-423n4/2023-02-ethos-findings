@@ -20,6 +20,9 @@
 | 17     |    Unused imports  |  3    |
 | 18     |   Duplicated `require()`/`revert()` checks should be refactored to a `modifier` or `function`  |   2   |
 | 19     |   The result of external function calls should be cached rather than re-calling the function  |   9   |
+
+Total: 162 instances
+
 ### [G-01] require()/revert() strings longer than 32 bytes cost extra gas
 Shortening revert strings to fit in 32 bytes will decrease deployment time gas and will decrease runtime gas when the revert condition is met. Revert strings that are longer than 32 bytes require at least one additional mstore, along with additional overhead for computing memory offset, etc.
 *There are 14 instances of this issue*
