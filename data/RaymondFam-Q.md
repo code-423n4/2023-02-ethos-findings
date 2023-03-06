@@ -212,3 +212,5 @@ Here are some of the instances entailed:
 
 116:    mapping (address => address[]) public TroveOwners;
 ```
+## Keeper for in time update of key variables
+Consider adopting a keeper for updating time sensitive state variables. For instance, `L_Collateral[_collateral]` and `L_LUSDDebt[_collateral]` that have not been [updated](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L1262) via in time liquidations may have users missing out on getting a higher rewards when [closing their troves](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L386). Where possible, make it remarkably noticeable front-end counting down key updates to be carried out so that users could make a sound decision in making the associated calls.
