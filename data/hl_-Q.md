@@ -9,6 +9,9 @@
 - [N-07] Non-library/interface files should use fixed compiler versions, not floating ones
 - [N-08] Best practice is to prevent signature malleability
 - [N-09] Import exact functions
+- [L-01] Include check to ensure lastReport time > activation time
+- [L-02] Loss of precision due to rounding
+- [L-03] Reentrancy Guard not initialized
 
 ## [N-01] Insufficient test coverage
 Testing all functions is best practice in terms of security criteria. Noted the current overall line coverage percentage provided by tests is 93. Due to its capacity, test coverage is expected to be 100%.
@@ -137,3 +140,54 @@ import "./Dependencies/LiquityBase.sol";
 import "./Dependencies/Ownable.sol";
 import "./Dependencies/CheckContract.sol";
 ```
+
+## [L-01] Include check to ensure lastReport time > activation time
+
+In function addStrategy, there is no check to ensure that lastReport time > activation time. Having a case where lastReport time happens earlier than acitivation time is not aligned with the intention of the function and may impact related code. 
+
+```
+ 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol (L144 - 171): 
+
+function addStrategy(
+        address _strategy,
+        uint256 _feeBPS,
+        uint256 _allocBPS
+    ) external {
+        _atLeastRole(DEFAULT_ADMIN_ROLE);
+        require(!emergencyShutdown, "Cannot add strategy during emergency shutdown");
+        require(_strategy != address(0), "Invalid strategy address");
+        require(strategies[_strategy].activation == 0, "Strategy already added");
+        require(address(this) == IStrategy(_strategy).vault(), "Strategy's vault does not match");
+        require(address(token) == IStrategy(_strategy).want(), "Strategy's want does not match");
+        require(_feeBPS <= PERCENT_DIVISOR / 5, "Fee cannot be higher than 20 BPS");
+        require(_allocBPS + totalAllocBPS <= PERCENT_DIVISOR, "Invalid allocBPS value");
+
+        strategies[_strategy] = StrategyParams({
+            activation: block.timestamp,
+            feeBPS: _feeBPS,
+            allocBPS: _allocBPS,
+            allocated: 0,
+            gains: 0,
+            losses: 0,
+            lastReport: block.timestamp
+        });
+
+        totalAllocBPS += _allocBPS;
+        withdrawalQueue.push(_strategy);
+        emit StrategyAdded(_strategy, _feeBPS, _allocBPS);
+    }
+```
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L144-L171
+
+## [L-02] Loss of precision due to rounding
+
+```
+2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol:
+237:     uint256 vaultMaxAllocation = (totalAllocBPS * balance()) / PERCENT_DIVISOR;
+```
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L237
+
+## [L-03] Reentrancy Guard not initialized
+
+In `ReaperVaultV2.sol`, openzepplin's reentrancy guard is imported but not initialized. 
