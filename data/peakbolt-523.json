@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "peakbolt",
+  "risk": "2",
+  "title": " Precision loss in bpsChange calculation causes unnecessary small deposits to lending pool resulting in a net loss",
+  "issueId": 523,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/523"
+}
