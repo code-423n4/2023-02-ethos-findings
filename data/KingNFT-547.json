@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "KingNFT",
+  "risk": "2",
+  "title": "````_rebalance```` will revert while ````tvlCap```` of vault is reached",
+  "issueId": 547,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/547"
+}
