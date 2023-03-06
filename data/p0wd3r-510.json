@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "p0wd3r",
+  "risk": "2",
+  "title": "Failed to get pending rewards if the collateral's decimal is 0",
+  "issueId": 510,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/510"
+}
