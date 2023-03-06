@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "hl_",
+  "risk": "2",
+  "title": "Lack of validation to ensure shares withdrawn < share balance ",
+  "issueId": 546,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/546"
+}
