@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "0xmuxyz",
+  "risk": "3",
+  "title": "Lack of logic to mint OATH within the CommunityIssuance#`issueOath()`, which results in that entire OATH insurance mechanism will not work properly",
+  "issueId": 590,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/590"
+}
