@@ -191,7 +191,7 @@ Here are the contract instances entailed:
 [File: ReaperBaseStrategyv4.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol)
 [File: ReaperStrategyGranarySupplyOnly.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol)
 
-## Camel/snake casing function names
+## Camel/snake casing variable names
 Non-constant state variables should also be conventionally camel cased where possible. If snake case is preferred/adopted, consider lower casing them.
 
 Here are some of the instances entailed:
