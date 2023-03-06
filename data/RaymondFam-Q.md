@@ -48,24 +48,40 @@ Consider having `_calcDecayedBaseRate()` refactored as follows if it is going to
         return baseRate.mul(decayFactor).div(DECIMAL_PRECISION);
     }
 ```
-## Inadequate sanity checks
-In BorrowerOperations.sol, the require statement of `_requireSingularCollChange()` serving to ensure either a collateral change or a debt change is not going to prevent zero changes on both instances. Consider refactoring the affected function as follows:
+## Inadequate `if else` checks
+In BorrowerOperations.sol, the `else` clauses of `_moveTokensAndCollateralfromAdjustment()` are allowing `_repayLUSD()` and `_activePool.sendCollateral()` to proceed even if the respective function parameters, i.e. `_LUSDChange` and `_collChange` are `0`. Specifically, `addColl()`, `moveCollateralGainToTrove()`, and `withdrawColl()` will have `_LUSDChange` inputted as `0` whereas `withdrawLUSD()` and `repayLUSD()` will have zero `_collChange` associated. Consider having the affected function refactored as follows to stem futile executions entailing zero repayment and collateral sending:
 
-[File: BorrowerOperations.sol#L533-L535](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L533-L535)
-
-```diff
-    function _requireSingularCollChange(uint _collTopUp, uint _collWithdrawal) internal pure {
-        require(_collTopUp == 0 || _collWithdrawal == 0, "BorrowerOperations: Cannot withdraw and add coll");
-+        require(_collTopUp != 0 || _collWithdrawal != 0, "BorrowerOperations: Cannot withdraw and add coll");
-    }
-```
-Note: The above refactoring is recommended since `_requireNonZeroAdjustment()` that ensues may not revert if `_collTopUp` and `_collWithdrawal` have been zero inputted with `_LUSDChange != 0`:
-
-[File: BorrowerOperations.sol#L537-L539](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L537-L539)
+[File: BorrowerOperations.sol#L476-L502](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L476-L502)
 
 ```solidity
-    function _requireNonZeroAdjustment(uint _collTopUp, uint _collWithdrawal, uint _LUSDChange) internal pure {
-        require(_collTopUp != 0 || _collWithdrawal != 0 || _LUSDChange != 0, "BorrowerOps: There must be either a collateral change or a debt change");
+    function _moveTokensAndCollateralfromAdjustment
+    (
+        IActivePool _activePool,
+        ILUSDToken _lusdToken,
+        address _borrower,
+        address _collateral,
+        uint _collChange,
+        bool _isCollIncrease,
+        uint _LUSDChange,
+        bool _isDebtIncrease,
+        uint _netDebtChange
+    )
+        internal
+    {
+        if (_isDebtIncrease) {
+            _withdrawLUSD(_activePool, _lusdToken, _collateral, _borrower, _LUSDChange, _netDebtChange);
+        } else {
+-            _repayLUSD(_activePool, _lusdToken, _collateral, _borrower, _LUSDChange);
++            if (_LUSDChange != 0) _repayLUSD(_activePool, _lusdToken, _collateral, _borrower, _LUSDChange);
+        }
+
+        if (_isCollIncrease) {
+            IERC20(_collateral).safeTransferFrom(msg.sender, address(this), _collChange);
+            _activePoolAddColl(_activePool, _collateral, _collChange);
+        } else {
+-            _activePool.sendCollateral(_collateral, _borrower, _collChange);
++            if (_collChange != 0) _activePool.sendCollateral(_collateral, _borrower, _collChange);
+        }
     }
 ```
 ## Use a more recent version of solidity
