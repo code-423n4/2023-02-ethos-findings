@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "matrix_0wl",
+  "risk": "2",
+  "title": "INITIALIZE FUNCTION IN COLLATERALCONFIG.SOL CAN BE INVOKED MULTIPLE TIMES FROM THE IMPLEMENTATION CONTRACT",
+  "issueId": 559,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/559"
+}
