@@ -155,11 +155,11 @@ File: Ethos-Core\contracts\LUSDToken.sol
 ```solidity
 File: Ethos-Core/contracts/LUSDToken.sol
 
-191:        function burn(address _account, uint256 _amount) external override {
-192:            _requireCallerIsBOorTroveMorSP();
-193:            _burn(_account, _amount);
-194:        }
-195:    
+185:     function mint(address _account, uint256 _amount) external override {
+186:         _requireMintingNotPaused();
+187:         _requireCallerIsBorrowerOperations();
+188:         _mint(_account, _amount);
+189:     }
 
 ```
 
@@ -175,11 +175,11 @@ Add a `require(distributionPeriod > 0, "distributionPeriod = 0")` to the setter 
 
 
 ```solidity
-File: Ethos-Core/contracts/LQTY/CommunityIssuance.sol
+File: Ethos-Core\contracts\LQTY\CommunityIssuance.sol
 
-121:            distributionPeriod = _newDistributionPeriod;
-122:        }
-123:    
+120:     function updateDistributionPeriod(uint256 _newDistributionPeriod) external onlyOwner {
+121:         distributionPeriod = _newDistributionPeriod;
+122:     }
 
 ```
 
@@ -195,7 +195,8 @@ Add a `require` to be sure that the transaction was a success, or use `safeTrans
 ```solidity
 File: Ethos-Core/contracts/LQTY/CommunityIssuance.sol
 
-128:        }
+127:         OathToken.transfer(_account, _OathAmount);
+
 
 
 File: Ethos-Core/contracts/LQTY/LQTYStaking.sol
