@@ -1,0 +1,1 @@
+In ReaperVaultV2.sol contract `revokeStrategy()` doesnt check whether _strategy address exist or not.
