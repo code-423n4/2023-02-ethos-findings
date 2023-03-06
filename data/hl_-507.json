@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "hl_",
+  "risk": "3",
+  "title": "First depositor can manipulate ERC4626 price per share to take an unfair share of future users",
+  "issueId": 507,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/507"
+}
