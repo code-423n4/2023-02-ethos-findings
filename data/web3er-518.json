@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "web3er",
+  "risk": "3",
+  "title": "Reentrancy Risk in Function report",
+  "issueId": 518,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/518"
+}
