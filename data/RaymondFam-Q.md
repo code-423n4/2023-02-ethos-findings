@@ -32,8 +32,22 @@ The impact, though low, is twofold. First off, the output of `getBorrowingFee()`
 ```
 Next, when `baseRate` finally gets assigned via [`updateBaseRateFromRedemption()`](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L1408-L1417), increasing the `baseRate` based on the amount redeemed, as a proportion of total supply, is going to be minimally negligible unless the redemption amount is significantly sizable. And, if subsequently LUSD borrowing operations exceed redemptions, `baseRate` is as good as zero comparatively in [5e15, 5e16].
 
-In another words, this makes the complexity of introducing a decaying factor pegged to a half-life of 720 minutes pretty much obsolete considering the borrowing rate stays always at 0.5%.      
+In another words, this makes the complexity of introducing a decaying factor pegged to a half-life of 720 minutes pretty much obsolete considering the borrowing rate stays always at 0.5%.  
 
+Consider having `_calcDecayedBaseRate()` refactored as follows if it is going to take a while before the first redemption is made. Better yet, return `0` if `baseRate` falls below a reasonable dust value:
+
+[File: TroveManager.sol#L1509-L1514](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L1509-L1514)
+     
+```diff
+    function _calcDecayedBaseRate() internal view returns (uint) {
++        if (baseRate == 0) return 0;
+
+        uint minutesPassed = _minutesPassedSinceLastFeeOp();
+        uint decayFactor = LiquityMath._decPow(MINUTE_DECAY_FACTOR, minutesPassed);
+
+        return baseRate.mul(decayFactor).div(DECIMAL_PRECISION);
+    }
+```
 ## Use a more recent version of solidity
 The protocol adopts version 0.6.11 on writing some of the smart contracts. For better security, it is best practice to use the latest Solidity version, 0.8.17.
 
