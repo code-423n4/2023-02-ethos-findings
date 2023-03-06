@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "GalloDaSballo",
+  "risk": "2",
+  "title": "`_harvest` uses `_swapVelo` which uses 0 min-out, allowing front-runs",
+  "issueId": 520,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/520"
+}
