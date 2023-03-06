@@ -1453,6 +1453,63 @@ Events allow capturing the changed parameters so that off-chain tools/interfaces
 
 Also detail them in documentation and NatSpec comments
 
+##
+
+### [48] require() Should Be Used Instead Of assert()
+
+TYPE : LOW FINDING
+
+Prior to solidity version 0.8.0, hitting an assert consumes the remainder of the transaction's available gas rather than returning it, as require()/revert() do. assert() should be avoided even past solidity version 0.8.0 as its documentation states that "The assert function creates an error of type Panic(uint256). ... Properly functioning code should never create a Panic, not even on invalid external input. If this happens, then there is a bug in your contract which you should fix.
+
+> Instances (12)
+
+File : BorrowerOperations.sol
+
+      128:  assert(MIN_NET_DEBT > 0);
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L128)
+
+      197:  assert(vars.compositeDebt > 0);
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L197)
+
+     331:  assert(_collWithdrawal <= vars.coll); 
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L331)
+
+
+FILE : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
+
+     1281 :  assert(closedStatus != Status.nonExistent && closedStatus != Status.active);
+
+ (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L1279)
+
+     1342 :  assert(troveStatus != Status.nonExistent && troveStatus != Status.active);
+
+     1348 :  assert(index <= idxLast);
+
+File : 2023-02-ethos/Ethos-Core/contracts/LUSDToken.sol
+
+      312:  assert(sender != address(0));
+      313:  assert(recipient != address(0));
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L312-L313)
+
+       321:   assert(account != address(0));
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L321)
+
+      329:   assert(account != address(0));
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L329)
+
+        337:  assert(owner != address(0));
+        338:  assert(spender != address(0));
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L337-L338)
+
+
+
 
 
 
