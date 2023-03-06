@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "PaludoX0",
+  "risk": "3",
+  "title": "Using _freefunds() to calculate share price lead to shares miscalculations and could benefit treasury",
+  "issueId": 585,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/585"
+}
