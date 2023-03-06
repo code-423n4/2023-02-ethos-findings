@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "GalloDaSballo",
+  "risk": "2",
+  "title": "Incorrect check can cause reverts for redemptions",
+  "issueId": 549,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/549"
+}
