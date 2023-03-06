@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "DeFiHackLabs",
+  "risk": "3",
+  "title": "sending collateral is executed before burning ` LUSD ` or repaying ` LUSD` and funds loss.",
+  "issueId": 538,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/538"
+}
