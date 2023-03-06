@@ -21,5 +21,3 @@ Consider `using SafeERC20 for IERC20;` In the `CommunityIssuance` contract. User
 [N-6] Cache 10_000 BPS in a constant variable in all Ethos-Core contracts
 
 [N-7] TODOs and commented code should be removed for readability
-
-[N-8] A `_LUSDAmount != 0` check can be added in **[openTrove()](https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L172)** to improve error handling
