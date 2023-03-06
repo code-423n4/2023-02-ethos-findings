@@ -120,6 +120,11 @@ For instance, the specific example below may be refactored as follows:
 -        LiquidationTotals memory totals;
 +        LiquidationTotals storage totals;
 ```
+## Unneeded structs
+Non-user specific structs intended to be overwritten in the next function call utilizing them for caching memory variables may be removed from the contract to significantly reduce storage slots on top of enhancing gas optimization. 
+
+For instance, struct [`LocalVariables_openTrove`](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L66-L78) and [`ContractsCache`](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L80-L84) having no users mapped to them in BorrowerOperations.sol may be removed from the contract. In lieu of this adoption, simply declare the struct variables as locally cached variables for corresponding assignments or function parameter inputs.   
+
 ## Non-strict inequalities are cheaper than strict ones
 In the EVM, there is no opcode for non-strict inequalities (>=, <=) and two operations are performed (> + = or < + =).
 
@@ -251,3 +256,4 @@ PUSH1 [revert offset]
 JUMPI
 ```
 Disclaimer: There have been several bugs with security implications related to optimizations. For this reason, Solidity compiler optimizations are disabled by default, and it is unclear how many contracts in the wild actually use them. Therefore, it is unclear how well they are being tested and exercised. High-severity security issues due to optimization bugs have occurred in the past . A high-severity bug in the emscripten -generated solc-js compiler used by Truffle and Remix persisted until late 2018. The fix for this bug was not reported in the Solidity CHANGELOG. Another high-severity optimization bug resulting in incorrect bit shift results was patched in Solidity 0.5.6. Please measure the gas savings from optimizations, and carefully weigh them against the possibility of an optimization-related bug. Also, monitor the development and adoption of Solidity compiler optimizations to assess their maturity.
+ 
