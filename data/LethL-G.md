@@ -238,8 +238,8 @@ Instances(10):
 ```
 File: Ethos-Core/contracts/LUSDToken.sol
 
-123:        _HASHED_NAME = hashedName;
-124:        _HASHED_VERSION = hashedVersion;
+120:        bytes32 hashedName = keccak256(bytes(_NAME));
+121:        bytes32 hashedVersion = keccak256(bytes(_VERSION));
 ```
 [Link to Code](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LUSDToken.sol)
 
