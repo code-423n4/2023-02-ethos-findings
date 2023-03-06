@@ -1,41 +1,43 @@
 # QA Report for Ethos Reserve contest
 
 ## Overview
-During the audit, 6 low and 11 non-critical issues were found.
+During the audit, 7 low and 12 non-critical issues were found.
 
 ### Low Risk Issues
 
-Total: 12 instances over 6 issues
+Total: 11 instances over 7 issues
 
 |#|Issue|Instances|
 |-|:-|:-:|
 | [L-01] | `hasPendingRewards` only checks for pending collateral rewards and not for pending LUSD Debt Rewards | 1 | 
-| [L-02] | Open TODOs | 3 | 
+| [L-02] | Fallback price oracle Tellor can be easily manipulated | 1 |
 | [L-03] | Local variables or function arguments declared as `storage` without actual need | 5 | 
 | [L-04] | `setHarvestSteps` accepts an empty array which simply deletes the steps | 1 | 
 | [L-05] | `updateStrategyFeeBPS` should have differentiating behavior when `emergencyShutdown` is set | 1 | 
-| [L-06] | ambiguous implementation of `setWithdrawalQueue` may lead to unforeseen issues | 1 | 
+| [L-06] | Ambiguous implementation of `setWithdrawalQueue` may lead to unforeseen issues | 1 | 
+| [L-07] | There is no way to completely remove a strategy from the ReaperVault | 1 | 
 
 ### Non-critical Issues
 
-Total: 22 instances over 11 issues
+Total: 25 instances over 12 issues
 
 |#|Issue|Instances|
 |-|:-|:-:|
 |[NC-01]| `updateCollateralRatios` accepts redundant updating with the same values | 1 |
-|[NC-02]| not enough tests for calculating collateral surplus in a sub-case of recovery mode | 6 |
+|[NC-02]| Not enough tests for calculating collateral surplus in a sub-case of recovery mode | 6 |
 |[NC-03]| Use "type(uint256).max" instead of "uint256(-1)" | 1 |
 |[NC-04]| Inconsistent event emission syntax used | 2 |
-|[NC-05]| incomplete require error messages | 2 |
+|[NC-05]| Incomplete require error messages | 2 |
 |[NC-06]| Unused code | 1 |
 |[NC-07]| Missing events for critical parameter changes | 3 |
 |[NC-08]| `_requireValidMaxFeePercentage` can be rewritten to optimize calculations | 1 |
 |[NC-09]| `_cascadingAccessRoles` can be pure instead of view | 2 |
 |[NC-10]| Dead Comments | 1 |
 |[NC-11]| Inconsistent shares calculation across code base | 2 |
+|[NC-12]| Open TODOs | 3 |
 
 
-## Low Risk Issues (6)
+## Low Risk Issues (7)
 #
 ### [L-01] `hasPendingRewards` only checks for pending collateral rewards and not for pending LUSD Debt Rewards
 ##### Description
@@ -86,50 +88,28 @@ Modify `hasPendingRewards` to also check for pending LUSD Debt rewards.
 
 #
 
-### [L-02] Open TODOs
-
+### [L-02] Fallback price oracle Tellor can be easily manipulated
 ##### Description
 
-Code architecture, incentives, and error handling/reporting questions/issues should be resolved before deployment
-2 TODOs are already mentioned in the C4 report but the third is not.
+Tellor is a Decentralized Oracle Protocol, which incentivizes permissionless data reporting and data validation. Anyone can report offchain data to Tellor oracles and any on-chain contract can consume that data.
+The only requirement to be a reporter is to stake 10 TRB tokens (Tellor protocol token). If the reporter reports incorrect price their staked amount (10 TRB) is slashed.
+At the time of this writing, TRB (Tellor) token price is $15.28 so an oracle manipulation can be done with less then $160.
 
-##### Instances (3)
+An exploit using a manipulated Tellor price has actually happened quite recently with *Bonq protocol*. A more detailed explanation can be found by warden [`Akshay Srivastav`](https://twitter.com/akshaysrivastv/status/1621024868304293890).
 
-https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/StabilityPool.sol#L380
+This issue affects `PriceFeed.sol` directly, which we are aware is out of scope, and indirectly the entire protocol.
+Although the implementation in `PriceFeed.sol` does have several safety features that will not allow a simple oracle manipulation attack (as well as Tellor being a backup solution) having an easily manipulated price oracle can lead to an actual exploit in the right conditions in the future and cannot be considered a good practice.
+
+##### Instances (1)
+
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/PriceFeed.sol#L558
 ```Solidity
-        /* TODO tess3rac7 unused var, but previously included in ETHGainWithdrawn event log.
-         * Doesn't make a lot of sense to include in multiple CollateralGainWithdrawn logs.
-         * If needed could create a separate event just to report this.
-         */
+        try tellorCaller.getTellorCurrentValue(tellorQueryId[_collateral]) returns
 ```
-
-```Solidity
-        /* TODO tess3rac7 unused var, but previously included in ETHGainWithdrawn event log.
-         * Doesn't make a lot of sense to include in multiple CollateralGainWithdrawn logs.
-         * If needed could create a separate event just to report this.
-         */
-        uint LUSDLoss = initialDeposit.sub(compoundedLUSDDeposit); // Needed only for event log
-```
-This second case also includes an unused variable `LUSDLoss`
-
-https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/StabilityPool.sol#L759-L767
-```Solidity
-        /*
-        * If compounded deposit is less than a billionth of the initial deposit, return 0.
-        *
-        * NOTE: originally, this line was in place to stop rounding errors making the deposit too large. However, the error
-        * corrections should ensure the error in P "favors the Pool", i.e. any given compounded deposit should slightly less
-        * than it's theoretical value.
-        *
-        * Thus it's unclear whether this line is still really needed.
-        */
-```
-
-Third case is a TODO by it's content.
 
 ##### Recommendation
 
-Resolve them and eliminate the comments.
+Use a different secondary/backup price oracle.
 
 #
 
@@ -146,7 +126,7 @@ https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/Stabi
 ```Solidity
             Snapshots storage snapshots = depositSnapshots[_depositor];
 ```
-Also modify `_getCollateralGainFromSnapshots` and `_getSingularCollateralGain` to change the `Snapshots` type parameter from `storage` to memory, as it's never commited to.
+Also modify `_getCollateralGainFromSnapshots` and `_getSingularCollateralGain` to change the `Snapshots` type parameter from `storage` to memory, as it's never committed to.
 
 https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/StabilityPool.sol#L637
 ```Solidity
@@ -249,7 +229,7 @@ index b5f2a58..43cd745 100644
 ```
 #
 
-### [L-06] ambiguous implementation of `setWithdrawalQueue` may lead to unforeseen issues
+### [L-06] Ambiguous implementation of `setWithdrawalQueue` may lead to unforeseen issues
 
 ##### Description 
 
@@ -261,6 +241,7 @@ There are too many subcases that this function does not explicitly cover:
 - protocol may use the function to remove a strategy from withdrawal. This must be documented
 - although the strategy is removed from queue, it still exists and is operated with within the Vault
 - if only a reordering is intended, a check/parameter to ensure same-size queue can facilitate a more safe transition
+- a revoked strategy can be added to the queue
 
 ##### Instances (1)
 
@@ -290,8 +271,43 @@ Modify the documentation or function to clearly define it's purpose and expected
 
 #
 
+### [L-07] There is no way to completely remove a strategy from the ReaperVault
+##### Description
 
-## Non-critical Issues (11)
+`ReaperVaultV2` supports adding strategies via `addStrategy` but does not support removing them.
+Through a combination of calls:
+- updateStrategyFeeBPS
+- updateStrategyAllocBPS
+- revokeStrategy
+- setWithdrawalQueue
+
+A strategy will be reduced as not to impacti the protocol in a negative way while also allowing for it to pay off it's debt (via `report`) even if it was set with lowest possible permissions.
+After a strategy has paid off it's debt and there is no more use for it, if there will ever be such a case, there is currently no complete removal mechanism implementation.
+
+Actions that are possible to be done on a revoked, debtless, stripped strategy:
+- add to withdrawal queue via `setWithdrawalQueue`
+- change it's configurations via:
+    - `updateStrategyFeeBPS`
+    - `updateStrategyAllocBPS`
+- report profit/loss as well as any repayment of debt via `report`
+
+The above check for an inexistent strategy only via `strategy.activation` variable (which is set with the block timestamp of when the strategy was added) and is never reset.
+`require(strategy.activation != 0, "Unauthorized strategy");`
+
+This issue does not lead to any loss of funds as the operations above, although will not directly reject a strategy, have code paths that use the parameters of a revoked strategy in a correct manner.
+
+##### Instances (1)
+
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperVaultV2.sol
+
+##### Recommendation
+
+Add a removeStrategy function for when the complete removal of a strategy can be done.
+Ideally it should set strategy activation to 0 // delete it from the `strategies` array only after debt has been paid.
+
+#
+
+## Non-critical Issues (12)
 
 ### [NC-01] `updateCollateralRatios` accepts redundant updating with the same values
 
@@ -314,7 +330,7 @@ Modify the 2 require statements to accept only "<" versus "<=" how it is now
 
 #
 
-### [NC-02] not enough tests for calculating collateral surplus in a sub-case of recovery mode
+### [NC-02] Not enough tests for calculating collateral surplus in a sub-case of recovery mode
 ##### Description
 
 In [`TroveManager.sol`](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol) when a specific subcase of recovery mode is activated, a calculated value, collateral surplus, is determined in `_getCappedOffsetVals` which users can then withdrawal.
@@ -605,7 +621,7 @@ Use the newer style format, that uses the `emit` keyword.
 
 #
 
-### [NC-05] incomplete require error messages
+### [NC-05] Incomplete require error messages
 
 ##### Description
 
@@ -821,5 +837,52 @@ https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/Reap
 ##### Recommendation
 
 Consider combining them into a separate function or alt least have the same consistent implementation version.
+
+#
+
+### [NC-12] Open TODOs
+
+##### Description
+
+Code architecture, incentives, and error handling/reporting questions/issues should be resolved before deployment
+2 TODOs are already mentioned in the C4 report but the third is not.
+
+##### Instances (3)
+
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/StabilityPool.sol#L380
+```Solidity
+        /* TODO tess3rac7 unused var, but previously included in ETHGainWithdrawn event log.
+         * Doesn't make a lot of sense to include in multiple CollateralGainWithdrawn logs.
+         * If needed could create a separate event just to report this.
+         */
+```
+
+```Solidity
+        /* TODO tess3rac7 unused var, but previously included in ETHGainWithdrawn event log.
+         * Doesn't make a lot of sense to include in multiple CollateralGainWithdrawn logs.
+         * If needed could create a separate event just to report this.
+         */
+        uint LUSDLoss = initialDeposit.sub(compoundedLUSDDeposit); // Needed only for event log
+```
+This second case also includes an unused variable `LUSDLoss`
+
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/StabilityPool.sol#L759-L767
+```Solidity
+        /*
+        * If compounded deposit is less than a billionth of the initial deposit, return 0.
+        *
+        * NOTE: originally, this line was in place to stop rounding errors making the deposit too large. However, the error
+        * corrections should ensure the error in P "favors the Pool", i.e. any given compounded deposit should slightly less
+        * than it's theoretical value.
+        *
+        * Thus it's unclear whether this line is still really needed.
+        */
+```
+
+Third case is a TODO by it's content.
+
+##### Recommendation
+
+Resolve them and eliminate the comments.
 
 #
