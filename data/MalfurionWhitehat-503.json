@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "MalfurionWhitehat",
+  "risk": "2",
+  "title": "CommunityIssuance functions can be called even if contract has not been initialized, which leads to unwanted behavior",
+  "issueId": 503,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/503"
+}
