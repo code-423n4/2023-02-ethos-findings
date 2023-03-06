@@ -123,7 +123,7 @@ For instance, the specific example below may be refactored as follows:
 ## Unneeded structs
 Non-user specific structs intended to be overwritten in the next function call utilizing them for caching memory variables may be removed from the contract to significantly reduce storage slots on top of enhancing gas optimization. 
 
-For instance, struct [`LocalVariables_openTrove`](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L66-L78) and [`ContractsCache`](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L80-L84) having no users mapped to them in BorrowerOperations.sol may be removed from the contract. In lieu of this adoption, simply declare the struct variables as locally cached variables for corresponding assignments or function parameter inputs.   
+For instance, struct [`LocalVariables_openTrove`](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L66-L78) and [`ContractsCache`](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L80-L84) that are neither having users mapped to them in BorrowerOperations.sol nor intended to be inputted as struct instances in function parameters may be removed from the contract. In lieu of this adoption, simply declare the struct variables separately as locally cached variables for corresponding assignments or function parameter inputs.   
 
 ## Non-strict inequalities are cheaper than strict ones
 In the EVM, there is no opcode for non-strict inequalities (>=, <=) and two operations are performed (> + = or < + =).
