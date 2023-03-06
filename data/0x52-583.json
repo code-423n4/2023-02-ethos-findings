@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "0x52",
+  "risk": "2",
+  "title": "ReaperVaultV2#_deposit may revert earlier than expected for some tokens",
+  "issueId": 583,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/583"
+}
