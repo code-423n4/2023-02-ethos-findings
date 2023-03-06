@@ -1,3 +1,32 @@
+# Low Risk Issues
+|       | Issue | Instances     |
+| :---              |    :----             |         :----:  |
+| 1     | Deprecated safeApprove() function     | 1      |
+| 2     |   _safeMint() should be used rather than _mint() wherever possible   | 2    |
+
+Total: 3 instances
+
+# Non-Critical Issues
+|       | Issue | Instances     |
+| :---              |    :----             |         :----:  |
+| 1     | Imports can be grouped together     | 3      |
+| 2     |  Constant redefined elsewhere  |  2   |
+| 3     | Named imports can be used    | 3      |
+| 4     |   Remove console.log import   | 5  |
+| 5     | Interchangeable usage of uint and uint256   | 3      |
+| 6     |   Add a limit for the maximum number of characters per line   | 1    |
+| 7     | Can be rewritten in many lines    | 2      |
+| 8     |  NatSpec comments should be increased in contracts  | 2    |
+| 9     | Commented code    | 1      |
+| 10     |  Unused events  | 2    |
+| 11    | Proper use of _ as a function name prefix   | 1      |
+| 12     |   Use named returns for local variables where it is possible   | 22    |
+| 13     | No need to use return    | 4      |
+| 14     |   Code is not properly formatted  | 5    |
+| 15     | Use _ with big numbers     | 1      |
+
+Total: 57 instances
+
 ### [L-01] Deprecated safeApprove() function
 Deprecated in favor of safeIncreaseAllowance() and safeDecreaseAllowance(). If only setting the initial allowance to the value that means infinite, safeIncreaseAllowance() can be used instead
 ```
