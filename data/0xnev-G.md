@@ -13,8 +13,10 @@
 | [G-10] | Use a more recent version of solidity | - |
 | [G-11] | Do not initialize variables with default value | 4 |
 | [G-12] | Multiple address mappings can be combined into a single mapping of an address to a struct, where appropriate | 8 |
+| [G-13] | Unnecessary `return` statements in functions that do not return anything | 4 |
+| [G-14] |Unnecessary `return` statements in functions that have already define named return variable(s) | 4 |
 
-| Total Gas-Optimization Issues | 12 |
+| Total Gas-Optimization Issues | 14 |
 |:--:|:--:|
 
 ### [G-01] Usage of `uint` smaller than 32 bytes (256 bits) incurs overhead
@@ -906,3 +908,85 @@ Saves a storage slot for the mapping. Depending on the circumstances and sizes o
 
 Recommendation:
 Combine mappings multiple address mappings to a single mapping of an address to a struct, where appropriate
+
+### [G-13] Unnecessary `return` statements in functions that do not return anything
+Context:
+```solidity
+4 results - 1 file
+
+/TroveManager.sol
+1076:    function applyPendingRewards(address _borrower, address _collateral) external override {
+1077:        _requireCallerIsBorrowerOperationsOrRedemptionHelper();
+1078:        return _applyPendingRewards(activePool, defaultPool, _borrower, _collateral);
+1079:    }
+
+1111:    function updateTroveRewardSnapshots(address _borrower, address _collateral) external override {
+1112:        _requireCallerIsBorrowerOperations();
+1113:       return _updateTroveRewardSnapshots(_borrower, _collateral);
+1114:    }
+
+1183:    function removeStake(address _borrower, address _collateral) external override {
+1184:        _requireCallerIsBorrowerOperationsOrRedemptionHelper();
+1185:        return _removeStake(_borrower, _collateral);
+1186:    }
+
+1273:    function closeTrove(address _borrower, address _collateral, uint256 _closedStatusNum) external override {
+1274:        _requireCallerIsBorrowerOperationsOrRedemptionHelper();
+1275:        return _closeTrove(_borrower, _collateral, Status(_closedStatusNum));
+1276:    }
+```
+
+Description:
+Some functions use the return keyword after checks. However, the corresponding functions invoked does not return anything. As such, `return` keyword is not required
+
+Recommendation:
+Remove return keyword in functions that do not return anything
+
+### [G-14] Unnecessary return statements in functions that have already define named return variable(s)
+Context:
+```solidity
+4 results - 2 files
+
+/TroveManager.sol
+357:    function _liquidateRecoveryMode(
+358:        IActivePool _activePool,
+359:        IDefaultPool _defaultPool,
+360:        address _collateral,
+361:        address _borrower,
+362:        uint _ICR,
+363:        uint _LUSDInStabPool,
+364:        uint _TCR,
+365:        uint _price,
+366:        uint256 _MCR
+367:    )
+368:        internal
+369:        returns (LiquidationValues memory singleLiquidation)
+
+432:            LiquidationValues memory zeroVals;
+433:            return zeroVals;
+434:        }
+435:
+436:        return singleLiquidation;
+437:    }
+
+1321:    function _addTroveOwnerToArray(address _borrower, address _collateral) internal returns (uint128 index) {
+1329:        index = uint128(TroveOwners[_collateral].length.sub(1));
+1330:        Troves[_borrower][_collateral].arrayIndex = index;
+1331:
+1332:        return index;
+1333:    }
+
+/StabilityPool.sol
+504:    function _computeRewardsPerUnitStaked(
+505:        address _collateral,
+506:        uint _collToAdd,
+507:        uint _debtToOffset,
+508:        uint _totalLUSDDeposits
+509:    )
+510:        internal
+511:        returns (uint collGainPerUnitStaked, uint LUSDLossPerUnitStaked)
+
+543:        return (collGainPerUnitStaked, LUSDLossPerUnitStaked);
+```
+Recommendation:
+Remove `return` statements for functions that have already define named return variable(s)
