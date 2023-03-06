@@ -48,6 +48,17 @@ Consider having `_calcDecayedBaseRate()` refactored as follows if it is going to
         return baseRate.mul(decayFactor).div(DECIMAL_PRECISION);
     }
 ```
+## Inadequate sanity checks
+In BorrowerOperations.sol, the require statement of `_requireSingularCollChange()` serving to ensure either a collateral change or a debt change is not going to prevent zero changes on both instances. Consider refactoring the affected function as follows:
+
+[File: BorrowerOperations.sol#L533-L535](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L533-L535)
+
+```diff
+    function _requireSingularCollChange(uint _collTopUp, uint _collWithdrawal) internal pure {
+        require(_collTopUp == 0 || _collWithdrawal == 0, "BorrowerOperations: Cannot withdraw and add coll");
++        require(_collTopUp != 0 || _collWithdrawal != 0, "BorrowerOperations: Cannot withdraw and add coll");
+    }
+```
 ## Use a more recent version of solidity
 The protocol adopts version 0.6.11 on writing some of the smart contracts. For better security, it is best practice to use the latest Solidity version, 0.8.17.
 
@@ -117,7 +128,7 @@ Here are some of the instances entailed:
 [File: BorrowerOperations.sol#L343](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L343)
 [File: BorrowerOperations.sol#L511](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L511)
 
-## Inadequate check in `initializa()` of CollateralConfig.sol
+## Inadequate checks in `initialize()` of CollateralConfig.sol
 When initializing config struct variables, the function does not check if `_MCRs[i]` is smaller than `_CCRs[i]`. Consider having the function refactored as follows to avoid input error considering these state variables can only be initialized once:
 
 [File: CollateralConfig.sol#L66-L71](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/CollateralConfig.sol#L66-L71)
@@ -179,3 +190,16 @@ Here are the contract instances entailed:
 [File: ReaperVaultERC4626.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperVaultERC4626.sol)
 [File: ReaperBaseStrategyv4.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol)
 [File: ReaperStrategyGranarySupplyOnly.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol)
+
+## Camel/snake casing function names
+Non-constant state variables should also be conventionally camel cased where possible. If snake case is preferred/adopted, consider lower casing them.
+
+Here are some of the instances entailed:
+
+[File: TroveManager.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol)
+
+```solidity
+86:    mapping (address => mapping (address => Trove)) public Troves;
+
+116:    mapping (address => address[]) public TroveOwners;
+```
