@@ -1,0 +1,1 @@
+In [DefaultPool#L91](https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/DefaultPool.sol#L91), `activePool` can be used to save gas. None of the operations in between are expected to be able to change the storage value, so it is unnecessary to read it again.
