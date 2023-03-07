@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Bauer",
+  "risk": "2",
+  "title": "If LUSD updates the protocol the borrower operations ,trove manager and stability pool will not work",
+  "issueId": 680,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/680"
+}
