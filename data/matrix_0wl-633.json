@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "matrix_0wl",
+  "risk": "2",
+  "title": "CENTRALIZATION RISK: ADMIN HAVE PRIVILEGES: ADMIN CAN SET CRUCIAL ADDRESSES AND A SINGLE CHECK FOR AUTHORIZATION CAN BE RISKY",
+  "issueId": 633,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/633"
+}
