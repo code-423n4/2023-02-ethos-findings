@@ -24,35 +24,35 @@
 
 *Instances (8)*:
 ```solidity
-File: example/ActivePool.sol
+File: ActivePool.sol
 
 30:     string constant public NAME = "ActivePool";
 
 ```
 
 ```solidity
-File: example/BorrowerOperations.sol
+File: BorrowerOperations.sol
 
 21:     string constant public NAME = "BorrowerOperations";
 
 ```
 
 ```solidity
-File: example/LQTY/CommunityIssuance.sol
+File: LQTY/CommunityIssuance.sol
 
 19:     string constant public NAME = "CommunityIssuance";
 
 ```
 
 ```solidity
-File: example/LQTY/LQTYStaking.sol
+File: LQTY/LQTYStaking.sol
 
 23:     string constant public NAME = "LQTYStaking";
 
 ```
 
 ```solidity
-File: example/LUSDToken.sol
+File: LUSDToken.sol
 
 32:     string constant internal _NAME = "LUSD Stablecoin";
 
@@ -63,7 +63,7 @@ File: example/LUSDToken.sol
 ```
 
 ```solidity
-File: example/StabilityPool.sol
+File: StabilityPool.sol
 
 150:     string constant public NAME = "StabilityPool";
 
@@ -73,21 +73,21 @@ File: example/StabilityPool.sol
 
 *Instances (3)*:
 ```solidity
-File: example/LQTY/CommunityIssuance.sol
+File: LQTY/CommunityIssuance.sol
 
 15:     using SafeMath for uint;
 
 ```
 
 ```solidity
-File: example/LQTY/LQTYStaking.sol
+File: LQTY/LQTYStaking.sol
 
 20:     using SafeMath for uint;
 
 ```
 
 ```solidity
-File: example/StabilityPool.sol
+File: StabilityPool.sol
 
 147:     using LiquitySafeMath128 for uint128;
 
@@ -98,14 +98,14 @@ Using `memory` copies the struct or array in memory. Use `storage` to save the l
 
 *Instances (16)*:
 ```solidity
-File: example/ActivePool.sol
+File: ActivePool.sol
 
 106:         uint256 numCollaterals = collaterals.length;
 
 ```
 
 ```solidity
-File: example/BorrowerOperations.sol
+File: BorrowerOperations.sol
 
 176:         LocalVariables_openTrove memory vars;
 
@@ -114,7 +114,7 @@ File: example/BorrowerOperations.sol
 ```
 
 ```solidity
-File: example/LQTY/LQTYStaking.sol
+File: LQTY/LQTYStaking.sol
 
 148:         uint LUSDGain = _getPendingLUSDGain(msg.sender);
 
@@ -125,21 +125,21 @@ File: example/LQTY/LQTYStaking.sol
 ```
 
 ```solidity
-File: example/ReaperStrategyGranarySupplyOnly.sol
+File: ReaperStrategyGranarySupplyOnly.sol
 
 167:             require(step[0] != address(0));
 
 ```
 
 ```solidity
-File: example/ReaperVaultV2.sol
+File: ReaperVaultV2.sol
 
 661:         cascadingAccessRoles[0] = DEFAULT_ADMIN_ROLE;
 
 ```
 
 ```solidity
-File: example/StabilityPool.sol
+File: StabilityPool.sol
 
 333:         uint compoundedLUSDDeposit = getCompoundedLUSDDeposit(msg.sender);
 
@@ -158,7 +158,7 @@ File: example/StabilityPool.sol
 ```
 
 ```solidity
-File: example/TroveManager.sol
+File: TroveManager.sol
 
 314:         borrowers[0] = _borrower;
 
@@ -168,14 +168,14 @@ File: example/TroveManager.sol
 
 *Instances (14)*:
 ```solidity
-File: example/ActivePool.sol
+File: ActivePool.sol
 
 108:         for(uint256 i = 0; i < numCollaterals; i++) {
 
 ```
 
 ```solidity
-File: example/LQTY/LQTYStaking.sol
+File: LQTY/LQTYStaking.sol
 
 206:         for (uint i = 0; i < assets.length; i++) {
 
@@ -186,7 +186,7 @@ File: example/LQTY/LQTYStaking.sol
 ```
 
 ```solidity
-File: example/StabilityPool.sol
+File: StabilityPool.sol
 
 351:         for (uint i = 0; i < numCollaterals; i++) {
 
@@ -203,7 +203,7 @@ File: example/StabilityPool.sol
 ```
 
 ```solidity
-File: example/TroveManager.sol
+File: TroveManager.sol
 
 608:         for (vars.i = 0; vars.i < _n && vars.user != firstUser; vars.i++) {
 
@@ -220,14 +220,14 @@ File: example/TroveManager.sol
 
 *Instances (15)*:
 ```solidity
-File: example/ActivePool.sol
+File: ActivePool.sol
 
 108:         for(uint256 i = 0; i < numCollaterals; i++) {
 
 ```
 
 ```solidity
-File: example/LQTY/LQTYStaking.sol
+File: LQTY/LQTYStaking.sol
 
 206:         for (uint i = 0; i < assets.length; i++) {
 
@@ -238,14 +238,14 @@ File: example/LQTY/LQTYStaking.sol
 ```
 
 ```solidity
-File: example/ReaperVaultERC4626.sol
+File: ReaperVaultERC4626.sol
 
 273:         if (x % y != 0) q++;
 
 ```
 
 ```solidity
-File: example/StabilityPool.sol
+File: StabilityPool.sol
 
 351:         for (uint i = 0; i < numCollaterals; i++) {
 
@@ -262,7 +262,7 @@ File: example/StabilityPool.sol
 ```
 
 ```solidity
-File: example/TroveManager.sol
+File: TroveManager.sol
 
 608:         for (vars.i = 0; vars.i < _n && vars.user != firstUser; vars.i++) {
 
@@ -279,7 +279,7 @@ Shifting left by N is like multiplying by 2^N and shifting right by N is like di
 
 *Instances (1)*:
 ```solidity
-File: example/BorrowerOperations.sol
+File: BorrowerOperations.sol
 
 398: 
 
@@ -290,14 +290,14 @@ File: example/BorrowerOperations.sol
 
 *Instances (8)*:
 ```solidity
-File: example/ActivePool.sol
+File: ActivePool.sol
 
 93:         require(_treasuryAddress != address(0), "Treasury cannot be 0 address");
 
 ```
 
 ```solidity
-File: example/LUSDToken.sol
+File: LUSDToken.sol
 
 312:         assert(sender != address(0));
 
@@ -320,21 +320,21 @@ Use uint256(1) and uint256(2) for true/false to avoid a Gwarmaccess (100 gas), a
 
 *Instances (7)*:
 ```solidity
-File: example/ActivePool.sol
+File: ActivePool.sol
 
 32:     bool public addressesSet = false;
 
 ```
 
 ```solidity
-File: example/LQTY/CommunityIssuance.sol
+File: LQTY/CommunityIssuance.sol
 
 21:     bool public initialized = false;
 
 ```
 
 ```solidity
-File: example/LUSDToken.sol
+File: LUSDToken.sol
 
 37:     bool public mintingPaused = false;
 
@@ -347,7 +347,7 @@ File: example/LUSDToken.sol
 ```
 
 ```solidity
-File: example/ReaperVaultV2.sol
+File: ReaperVaultV2.sol
 
 49:     bool public emergencyShutdown;
 
@@ -358,7 +358,7 @@ If not cached, the solidity compiler will always read the length of the array du
 
 *Instances (7)*:
 ```solidity
-File: example/LQTY/LQTYStaking.sol
+File: LQTY/LQTYStaking.sol
 
 206:         for (uint i = 0; i < assets.length; i++) {
 
@@ -367,7 +367,7 @@ File: example/LQTY/LQTYStaking.sol
 ```
 
 ```solidity
-File: example/StabilityPool.sol
+File: StabilityPool.sol
 
 640:         for (uint i = 0; i < assets.length; i++) {
 
@@ -378,7 +378,7 @@ File: example/StabilityPool.sol
 ```
 
 ```solidity
-File: example/TroveManager.sol
+File: TroveManager.sol
 
 808:         for (vars.i = 0; vars.i < _troveArray.length; vars.i++) {
 
@@ -393,7 +393,7 @@ The instances below point to the second+ access of a state variable within a fun
 
 *Instances (10)*:
 ```solidity
-File: example/ActivePool.sol
+File: ActivePool.sol
 
 181:             IDefaultPool(defaultPoolAddress).pullCollateralFromActivePool(_collateral, _amount);
 
@@ -406,7 +406,7 @@ File: example/ActivePool.sol
 ```
 
 ```solidity
-File: example/LQTY/CommunityIssuance.sol
+File: LQTY/CommunityIssuance.sol
 
 113:         lastDistributionTime = block.timestamp.add(distributionPeriod);
 
@@ -415,7 +415,7 @@ File: example/LQTY/CommunityIssuance.sol
 ```
 
 ```solidity
-File: example/StabilityPool.sol
+File: StabilityPool.sol
 
 577:             emit EpochUpdated(currentEpoch);
 
@@ -432,7 +432,7 @@ Mark data types as `calldata` instead of `memory` where possible. This makes it 
 
 *Instances (1)*:
 ```solidity
-File: example/TroveManager.sol
+File: TroveManager.sol
 
 715:     function batchLiquidateTroves(address _collateral, address[] memory _troveArray) public override {
 
@@ -444,7 +444,7 @@ Instead of using error strings, to reduce deployment and runtime cost, you shoul
 
 *Instances (58)*:
 ```solidity
-File: example/ActivePool.sol
+File: ActivePool.sol
 
 85:         require(!addressesSet, "Can call setAddresses only once");
 
@@ -463,7 +463,7 @@ File: example/ActivePool.sol
 ```
 
 ```solidity
-File: example/BorrowerOperations.sol
+File: BorrowerOperations.sol
 
 525:         require(collateralConfig.isCollateralAllowed(_collateral), "BorrowerOps: Invalid collateral address");
 
@@ -500,7 +500,7 @@ File: example/BorrowerOperations.sol
 ```
 
 ```solidity
-File: example/LQTY/CommunityIssuance.sol
+File: LQTY/CommunityIssuance.sol
 
 70:         require(!initialized, "issuance has been initialized");
 
@@ -511,14 +511,14 @@ File: example/LQTY/CommunityIssuance.sol
 ```
 
 ```solidity
-File: example/LQTY/LQTYStaking.sol
+File: LQTY/LQTYStaking.sol
 
 262:         require(msg.sender == borrowerOperationsAddress, "LQTYStaking: caller is not BorrowerOps");
 
 ```
 
 ```solidity
-File: example/LUSDToken.sol
+File: LUSDToken.sol
 
 362:         require(msg.sender == borrowerOperationsAddress, "LUSDToken: Caller is not BorrowerOperations");
 
@@ -531,14 +531,14 @@ File: example/LUSDToken.sol
 ```
 
 ```solidity
-File: example/ReaperVaultERC4626.sol
+File: ReaperVaultERC4626.sol
 
 270:         require(y != 0, "Division by 0");
 
 ```
 
 ```solidity
-File: example/ReaperVaultV2.sol
+File: ReaperVaultV2.sol
 
 150:         require(!emergencyShutdown, "Cannot add strategy during emergency shutdown");
 
@@ -589,7 +589,7 @@ File: example/ReaperVaultV2.sol
 ```
 
 ```solidity
-File: example/StabilityPool.sol
+File: StabilityPool.sol
 
 849:         require( msg.sender == address(activePool), "StabilityPool: Caller is not ActivePool");
 
@@ -603,14 +603,14 @@ File: example/StabilityPool.sol
 
 *Instances (18)*:
 ```solidity
-File: example/ActivePool.sol
+File: ActivePool.sol
 
 108:         for(uint256 i = 0; i < numCollaterals; i++) {
 
 ```
 
 ```solidity
-File: example/LQTY/LQTYStaking.sol
+File: LQTY/LQTYStaking.sol
 
 206:         for (uint i = 0; i < assets.length; i++) {
 
@@ -621,7 +621,7 @@ File: example/LQTY/LQTYStaking.sol
 ```
 
 ```solidity
-File: example/ReaperStrategyGranarySupplyOnly.sol
+File: ReaperStrategyGranarySupplyOnly.sol
 
 35:     uint16 private constant LENDER_REFERRAL_CODE_NONE = 0;
 
@@ -632,7 +632,7 @@ File: example/ReaperStrategyGranarySupplyOnly.sol
 ```
 
 ```solidity
-File: example/ReaperVaultV2.sol
+File: ReaperVaultV2.sol
 
 128:         for (uint256 i = 0; i < numStrategists; i = i.uncheckedInc()) {
 
@@ -647,7 +647,7 @@ File: example/ReaperVaultV2.sol
 ```
 
 ```solidity
-File: example/StabilityPool.sol
+File: StabilityPool.sol
 
 351:         for (uint i = 0; i < numCollaterals; i++) {
 
@@ -667,7 +667,7 @@ File: example/StabilityPool.sol
 
 *Instances (34)*:
 ```solidity
-File: example/ActivePool.sol
+File: ActivePool.sol
 
 107:         require(numCollaterals == _erc4626vaults.length, "Vaults array length must match number of collaterals");
 
@@ -676,7 +676,7 @@ File: example/ActivePool.sol
 ```
 
 ```solidity
-File: example/BorrowerOperations.sol
+File: BorrowerOperations.sol
 
 525:         require(collateralConfig.isCollateralAllowed(_collateral), "BorrowerOps: Invalid collateral address");
 
@@ -711,14 +711,14 @@ File: example/BorrowerOperations.sol
 ```
 
 ```solidity
-File: example/LQTY/CommunityIssuance.sol
+File: LQTY/CommunityIssuance.sol
 
 133:         require(msg.sender == stabilityPoolAddress, "CommunityIssuance: caller is not SP");
 
 ```
 
 ```solidity
-File: example/LQTY/LQTYStaking.sol
+File: LQTY/LQTYStaking.sol
 
 262:         require(msg.sender == borrowerOperationsAddress, "LQTYStaking: caller is not BorrowerOps");
 
@@ -729,7 +729,7 @@ File: example/LQTY/LQTYStaking.sol
 ```
 
 ```solidity
-File: example/LUSDToken.sol
+File: LUSDToken.sol
 
 362:         require(msg.sender == borrowerOperationsAddress, "LUSDToken: Caller is not BorrowerOperations");
 
@@ -742,7 +742,7 @@ File: example/LUSDToken.sol
 ```
 
 ```solidity
-File: example/ReaperVaultV2.sol
+File: ReaperVaultV2.sol
 
 150:         require(!emergencyShutdown, "Cannot add strategy during emergency shutdown");
 
@@ -755,7 +755,7 @@ File: example/ReaperVaultV2.sol
 ```
 
 ```solidity
-File: example/StabilityPool.sol
+File: StabilityPool.sol
 
 849:         require( msg.sender == address(activePool), "StabilityPool: Caller is not ActivePool");
 
@@ -774,35 +774,35 @@ If needed, the values can be read from the verified contract source code, or if 
 
 *Instances (21)*:
 ```solidity
-File: example/ActivePool.sol
+File: ActivePool.sol
 
 30:     string constant public NAME = "ActivePool";
 
 ```
 
 ```solidity
-File: example/BorrowerOperations.sol
+File: BorrowerOperations.sol
 
 21:     string constant public NAME = "BorrowerOperations";
 
 ```
 
 ```solidity
-File: example/LQTY/CommunityIssuance.sol
+File: LQTY/CommunityIssuance.sol
 
 19:     string constant public NAME = "CommunityIssuance";
 
 ```
 
 ```solidity
-File: example/LQTY/LQTYStaking.sol
+File: LQTY/LQTYStaking.sol
 
 23:     string constant public NAME = "LQTYStaking";
 
 ```
 
 ```solidity
-File: example/ReaperStrategyGranarySupplyOnly.sol
+File: ReaperStrategyGranarySupplyOnly.sol
 
 24:     address public constant VELO_ROUTER = 0xa132DAB612dB5cB9fC9Ac426A0Cc215A3423F9c9;
 
@@ -815,7 +815,7 @@ File: example/ReaperStrategyGranarySupplyOnly.sol
 ```
 
 ```solidity
-File: example/ReaperVaultV2.sol
+File: ReaperVaultV2.sol
 
 40:     uint256 public constant DEGRADATION_COEFFICIENT = 10**18; // The unit for calculating profit degradation.
 
@@ -832,7 +832,7 @@ File: example/ReaperVaultV2.sol
 ```
 
 ```solidity
-File: example/StabilityPool.sol
+File: StabilityPool.sol
 
 150:     string constant public NAME = "StabilityPool";
 
@@ -841,7 +841,7 @@ File: example/StabilityPool.sol
 ```
 
 ```solidity
-File: example/TroveManager.sol
+File: TroveManager.sol
 
 48:     uint constant public SECONDS_IN_ONE_MINUTE = 60;
 
@@ -859,14 +859,14 @@ File: example/TroveManager.sol
 
 *Instances (27)*:
 ```solidity
-File: example/ActivePool.sol
+File: ActivePool.sol
 
 278:         if (vars.netAssetMovement > 0) {
 
 ```
 
 ```solidity
-File: example/BorrowerOperations.sol
+File: BorrowerOperations.sol
 
 128:         assert(MIN_NET_DEBT > 0);
 
@@ -881,7 +881,7 @@ File: example/BorrowerOperations.sol
 ```
 
 ```solidity
-File: example/LQTY/LQTYStaking.sol
+File: LQTY/LQTYStaking.sol
 
 152:         if (_LQTYamount > 0) {
 
@@ -896,14 +896,14 @@ File: example/LQTY/LQTYStaking.sol
 ```
 
 ```solidity
-File: example/LUSDToken.sol
+File: LUSDToken.sol
 
 279:         if (uint256(s) > 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5D576E7357A4501DDFE92F46681B20A0) {
 
 ```
 
 ```solidity
-File: example/ReaperVaultV2.sol
+File: ReaperVaultV2.sol
 
 502:         } else if (_roi > 0) {
 
@@ -912,7 +912,7 @@ File: example/ReaperVaultV2.sol
 ```
 
 ```solidity
-File: example/StabilityPool.sol
+File: StabilityPool.sol
 
 591:         assert(newP > 0);
 
@@ -923,7 +923,7 @@ File: example/StabilityPool.sol
 ```
 
 ```solidity
-File: example/TroveManager.sol
+File: TroveManager.sol
 
 424:             if (singleLiquidation.collSurplus > 0) {
 
@@ -952,7 +952,7 @@ If the functions are required by an interface, the contract should inherit from 
 
 *Instances (1)*:
 ```solidity
-File: example/BorrowerOperations.sol
+File: BorrowerOperations.sol
 
 432:     function _getUSDValue(uint _coll, uint _price, uint256 _collDecimals) internal pure returns (uint) {
 
