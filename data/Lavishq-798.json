@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Lavishq",
+  "risk": "2",
+  "title": "Address(0) check on array of addresses is not performed",
+  "issueId": 798,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/798"
+}
