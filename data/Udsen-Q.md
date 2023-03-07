@@ -156,3 +156,14 @@ NatSpec is missing for the following contracts, functions, constructor and modif
 `ReaperBaseStrategyv4.sol`, `ReaperVaultERC4626.sol` and `ReaperStrategyGranarySupplyOnly.sol` are main contracts of the project. But NatSpec is missing in the code. 
 
 It is recommended to use the NatSpec for commenting for better readability and understanding of the code base.
+
+## 13. `want` IS AN ADDRESS AND NO NEED TO RECAST IT BACK INTO AN ADDRESS
+
+        ILendingPool(ADDRESSES_PROVIDER.getLendingPool()).withdraw(address(want), _withdrawAmount, address(this)); 
+		
+Above line of code can be rewritten as follows (by removing the address recast of want):
+
+        ILendingPool(ADDRESSES_PROVIDER.getLendingPool()).withdraw(want, _withdrawAmount, address(this)); 
+		
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol#L200
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol#L232
