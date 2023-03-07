@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Koolex",
+  "risk": "3",
+  "title": "Withdrawal functionality could possibly be blocked if a strategy's withdrawal fails ",
+  "issueId": 671,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/671"
+}
