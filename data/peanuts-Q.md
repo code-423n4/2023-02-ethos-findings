@@ -212,7 +212,7 @@ There are 4 instances of this.
 
 #### Description:
 
-Pragma versions are outdated. Some contracts uses 0.6.11, whereas other contracts uses 0.8.0. The latest version of solidity as of now is 0.8.17, but version 0.8.16 is considered to be more stable. Use a later version of solidity.
+Pragma versions are outdated. Some contracts uses 0.6.11, whereas other contracts uses 0.8.0. The latest version of solidity as of now is 0.8.19, but version 0.8.15-17 is considered to be more stable. Use a later version of solidity.
 
 ```
 -     pragma solidity 0.6.11;
