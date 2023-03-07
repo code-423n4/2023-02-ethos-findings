@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "ast3ros",
+  "risk": "2",
+  "title": "[M-03] High slippage may cause protocol to stop working or lose assets.",
+  "issueId": 664,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/664"
+}
