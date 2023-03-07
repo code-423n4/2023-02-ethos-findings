@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "rbserver",
+  "risk": "2",
+  "title": "Calling `ReaperBaseStrategyv4.harvest` function loses accrued rewards if `emergencyExit` is true",
+  "issueId": 704,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/704"
+}
