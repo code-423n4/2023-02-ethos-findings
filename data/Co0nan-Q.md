@@ -1,4 +1,4 @@
-Total of 30 issue either Low or NC.
+Total of 33 issue Low and NC.
 ---------
 1 - delete doesn’t delete mapping in struct
 
@@ -121,6 +121,10 @@ The contract `CommunityIssuance` has the function `updateDistributionPeriod` whi
         distributionPeriod = _newDistributionPeriod;
     }
 ```
+
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/RedemptionHelper.sol#L54-L73
+
+The setAddresses function doesn't emit the addresses change event.
 
 6 - Missing zero balance check.
 
@@ -253,5 +257,12 @@ Display a correct message indicates the collateral address it not allowed.
         _;
     }
 ```
+
+8-  Improper Input validation
+
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/RedemptionHelper.sol#L54-L73
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/SortedTroves.sol#L80-L90
+
+Both functions doesn't use `checkContract` method for input validation.
 
 
