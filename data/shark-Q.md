@@ -219,3 +219,35 @@ https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/Reap
 Here is 1 other instance of this issue:
 
 - File: `TroveManager.sol` [Line 53](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L53)
+
+## 13. `require()` statements without messages
+
+It is recommended to add informative error messages to `require()` statements. If no error message is provided, users won't know the cause of failure, leading to frustration.
+
+Consider adding informative error messages to these instances:
+
+File: [TroveManager.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L250)
+
+```solidity
+File: Ethos-Core/contracts/TroveManager.sol
+
+250:        require(msg.sender == owner);
+
+551:        require(totals.totalDebtInSequence > 0);
+
+716:        require(_troveArray.length != 0);
+
+754:        require(totals.totalDebtInSequence > 0);
+
+1450:        require(redemptionFee < _collateralDrawn);
+
+1523:        require(msg.sender == borrowerOperationsAddress);
+
+1527:        require(msg.sender == address(redemptionHelper));
+
+1531:        require(msg.sender == borrowerOperationsAddress || msg.sender == address(redemptionHelper));
+
+1535:        require(Troves[_borrower][_collateral].status == Status.active);
+
+1539:        require (TroveOwnersArrayLength > 1 && sortedTroves.getSize(_collateral) > 1);
+```
