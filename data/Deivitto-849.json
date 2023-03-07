@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Deivitto",
+  "risk": "2",
+  "title": "ERC20 `approve` can fail for some tokens",
+  "issueId": 849,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/849"
+}
