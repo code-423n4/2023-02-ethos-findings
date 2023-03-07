@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "matrix_0wl",
+  "risk": "2",
+  "title": "ActivePool, StabilityPool and LQTYStaking doesn't check whether the ERC20 contract exists",
+  "issueId": 659,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/659"
+}
