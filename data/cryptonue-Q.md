@@ -207,10 +207,4 @@ Remove unnecessary commented code:
 
 - TroveManager, remove the `Ownable` contract commented code to cleanup the source code
 
-# Flatten internal function which being use only once
 
-These functions are being used only once thus it's better to flatten it.
-
-- \_requireCallerIsStabilityPool
-- \_requireValidLUSDRepayment
-- \_requireNewICRisAboveOldICR
