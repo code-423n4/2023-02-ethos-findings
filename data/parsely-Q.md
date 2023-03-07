@@ -1,4 +1,4 @@
-# [N-01] Consider in certain instances only importing only what is needed above global imports.
+# [N-01] Consider in certain instances only importing only what is needed rather than using global imports.
 ### Context
 All contracts
 ### Description
@@ -7,7 +7,7 @@ Importing only what is necessary is preferred above global imports
 ### Recommendation
 ```import {contractName} from "theContractFile.sol";```
 
-# [N-02]  Natspec comments should be added to public contracts
+# [N-02]  NatSpec comments should be added to public contracts
 ### Context
 All public contracts eg. BorrowerOperations
 ### Description
@@ -33,6 +33,8 @@ LQTY/LQTYStaking.sol:9:import "../Dependencies/console.sol";
 BorrowerOperations.sol:15:import "./Dependencies/console.sol";
 ActivePool.sol:15:import "./Dependencies/console.sol";
 ```
+### Description
+It does not seem that the logging function is used within the code.
 ### Recommendation
 Remove unused imports.
 
