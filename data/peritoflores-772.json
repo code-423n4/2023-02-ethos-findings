@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "peritoflores",
+  "risk": "3",
+  "title": "[H1]  Low data feed frequency from Tellor makes you protocol vulnerable to flash loan attacks",
+  "issueId": 772,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/772"
+}
