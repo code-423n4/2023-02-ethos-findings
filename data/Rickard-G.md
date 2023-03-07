@@ -922,3 +922,313 @@ Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol
 74:	IERC20Upgradeable(want).safeApprove(vault, type(uint256).max);
 ````
 [https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol#L74](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol#L74)
+
+# [G-17] Use nested `if` and, avoid multiple check combinations
+
+## Vulnerability details
+Using nested is cheaper than using && multiple check combinations. There are more advantages, such as easier to read code and better coverage reports.         
+     
+10 results - 3 files:
+
+````solidity
+Ethos-Core/contracts/ActivePool.sol
+264:	if (vars.percentOfFinalBal > vars.yieldingPercentage && vars.percentOfFinalBal.sub(vars.yieldingPercentage) > yieldingPercentageDrift) {
+
+269:	} else if(vars.percentOfFinalBal < vars.yieldingPercentage && vars.yieldingPercentage.sub(vars.percentOfFinalBal) > yieldingPercentageDrift) {
+````
+[https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/ActivePool.sol#L264](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/ActivePool.sol#L264)
+````solidity
+Ethos-Core/contracts/BorrowerOperations.sol
+311:	if (_isDebtIncrease && !isRecoveryMode) {
+
+337:	if (!_isDebtIncrease && _LUSDChange > 0) {
+````
+[https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L311](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L311)
+````solidity
+Ethos-Core/contracts/TroveManager.sol
+397:	} else if ((_ICR > _100pct) && (_ICR < _MCR)) {
+
+415:	} else if ((_ICR >= _MCR) && (_ICR < _TCR) && (singleLiquidation.entireTroveDebt <= _LUSDInStabPool)) {
+
+616:	if (vars.ICR >= vars.collMCR && vars.remainingLUSDInStabPool == 0) { break; }
+
+651:	else if (vars.backToNormalMode && vars.ICR < vars.collMCR) {
+
+817:	if (vars.ICR >= vars.collMCR && vars.remainingLUSDInStabPool == 0) { continue; }
+
+853:	else if (vars.backToNormalMode && vars.ICR < vars.collMCR) {
+````
+[https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L397](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L397)
+### Recommended mitigation steps
+````solidity
+Ethos-Core/contracts/ActivePool.sol
+- 264:	if (vars.percentOfFinalBal > vars.yieldingPercentage && vars.percentOfFinalBal.sub(vars.yieldingPercentage) > yieldingPercentageDrift) {
++ 264:	if (vars.percentOfFinalBal > vars.yieldingPercentage) {
++		if (vars.percentOfFinalBal.sub(vars.yieldingPercentage) > yieldingPercentageDrift) {
++		}
++	}
+````
+
+# [G-18] Setting the constructor to `payable`
+
+## Vulnerability details
+You can cut out 10 opcodes in the creation-time EVM bytecode if you declare a constructor payable. Making the constructor payable eliminates the need for an initial check of `msg.value == 0` and saves `13 gas` on deployment with no security risks.        
+     
+3 results - 3 files:
+
+````solidity
+Ethos-Core/contracts/LUSDToken.sol
+84	    constructor
+85	    ( 
+86		address _troveManagerAddress,
+87		address _stabilityPoolAddress,
+88		address _borrowerOperationsAddress,
+89		address _governanceAddress,
+90		address _guardianAddress
+91	    ) 
+92		public 
+93:	    {  
+````
+[https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LUSDToken.sol#L84-L93](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LUSDToken.sol#L84-L93)
+````solidity
+Ethos-Core/contracts/TroveManager.sol
+225:    	constructor() public {
+````
+[https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L225](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L225)
+````solidity
+Ethos-Vault/contracts/ReaperVaultV2.sol
+111	    constructor(
+112		address _token,
+113		string memory _name,
+114		string memory _symbol,
+115		uint256 _tvlCap,
+116		address _treasury,
+117		address[] memory _strategists,
+118		address[] memory _multisigRoles
+119:	    ) ERC20(string(_name), string(_symbol)) {
+````
+[https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperVaultV2.sol#L111-L119](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperVaultV2.sol#L111-L119)
+### Recommended mitigation steps
+Set the constructor to `payable`.
+
+# [G-19] Use `assembly` to write address storage values
+
+## Vulnerability details
+54 results - 9 files:
+
+````solidity
+Ethos-Core/contracts/ActivePool.sol
+71	function setAddresses(
+96:		collateralConfigAddress = _collateralConfigAddress;
+97:		borrowerOperationsAddress = _borrowerOperationsAddress;
+98:		troveManagerAddress = _troveManagerAddress;
+99:		stabilityPoolAddress = _stabilityPoolAddress;
+100:		defaultPoolAddress = _defaultPoolAddress;
+101:		collSurplusPoolAddress = _collSurplusPoolAddress;
+102:		treasuryAddress = _treasuryAddress;
+103:		lqtyStakingAddress = _lqtyStakingAddress;
+````
+[https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/ActivePool.sol#L96-L103](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/ActivePool.sol#L96-L103)
+````solidity
+Ethos-Core/contracts/HintHelpers.sol
+27	function setAddresses(
+39:		collateralConfig = ICollateralConfig(_collateralConfigAddress);
+40:		sortedTroves = ISortedTroves(_sortedTrovesAddress);
+41:		troveManager = ITroveManager(_troveManagerAddress);
+````
+[https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/HintHelpers.sol#L39-L41](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/HintHelpers.sol#L39-L41)
+````solidity
+Ethos-Core/contracts/LUSDToken.sol
+84	constructor
+102:		troveManagerAddress = _troveManagerAddress;
+106:		stabilityPoolAddress = _stabilityPoolAddress;        
+110:		borrowerOperationsAddress = _borrowerOperationsAddress;       
+114:		governanceAddress = _governanceAddress;        
+117:		guardianAddress = _guardianAddress;
+
+146	function updateGovernance(address _newGovernanceAddress) external {
+149:		governanceAddress = _newGovernanceAddress;
+
+153	function updateGuardian(address _newGuardianAddress) external {
+156:		guardianAddress = _newGuardianAddress;
+
+160	function upgradeProtocol(
+170:		troveManagerAddress = _newTroveManagerAddress;		
+174:		stabilityPoolAddress = _newStabilityPoolAddress;		
+178:		borrowerOperationsAddress = _newBorrowerOperationsAddress;
+````
+````solidity
+Ethos-Core/contracts/StabilityPool.sol
+261	function setAddresses(
+284:		borrowerOperations = IBorrowerOperations(_borrowerOperationsAddress);
+285:		collateralConfig = ICollateralConfig(_collateralConfigAddress);
+286:		troveManager = ITroveManager(_troveManagerAddress);
+287:		activePool = IActivePool(_activePoolAddress);
+288:		lusdToken = ILUSDToken(_lusdTokenAddress);
+289:		sortedTroves = ISortedTroves(_sortedTrovesAddress);
+290:		priceFeed = IPriceFeed(_priceFeedAddress);
+291:		communityIssuance = ICommunityIssuance(_communityIssuanceAddress);
+````
+[https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/StabilityPool.sol#L284-L291](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/StabilityPool.sol#L284-L291)
+````solidity
+Ethos-Core/contracts/TroveManager.sol
+232		function setAddresses(
+266:			borrowerOperationsAddress = _borrowerOperationsAddress;
+267:			collateralConfig = ICollateralConfig(_collateralConfigAddress);
+268:			activePool = IActivePool(_activePoolAddress);
+269:			defaultPool = IDefaultPool(_defaultPoolAddress);
+270:			stabilityPool = IStabilityPool(_stabilityPoolAddress);
+271:			gasPoolAddress = _gasPoolAddress;
+272:			collSurplusPool = ICollSurplusPool(_collSurplusPoolAddress);
+273:			priceFeed = IPriceFeed(_priceFeedAddress);
+274:			lusdToken = ILUSDToken(_lusdTokenAddress);
+275:			sortedTroves = ISortedTroves(_sortedTrovesAddress);
+276:			lqtyToken = IERC20(_lqtyTokenAddress);
+277:			lqtyStaking = ILQTYStaking(_lqtyStakingAddress);
+278:			redemptionHelper = IRedemptionHelper(_redemptionHelperAddress);
+````
+[https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L266-L278](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L266-L278)
+````solidity
+Ethos-Core/contracts/LQTY/CommunityIssuance.sol
+261	function setAddresses
+74:		OathToken = IERC20(_oathTokenAddress);
+75:		stabilityPoolAddress = _stabilityPoolAddress;
+````
+[https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L74-L75](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L74-L75)
+````solidity
+Ethos-Core/contracts/LQTY/LQTYStaking.sol
+66	function setAddresses
+86:		lqtyToken = IERC20(_lqtyTokenAddress);
+87:		lusdToken = ILUSDToken(_lusdTokenAddress);
+88:		troveManagerAddress = _troveManagerAddress;
+89:		borrowerOperationsAddress = _borrowerOperationsAddress;
+90:		activePoolAddress = _activePoolAddress;
+91:		collateralConfig = ICollateralConfig(_collateralConfigAddress);
+````
+[https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L86-L91](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L86-L91)
+````solidity
+Ethos-Vault/contracts/ReaperVaultV2.sol
+111	constructor(
+120:		token = IERC20Metadata(_token);    
+124:		treasury = _treasury;
+````
+[https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperVaultV2.sol#L120](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperVaultV2.sol#L120)
+````solidity
+Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol
+63	function __ReaperBaseStrategy_init(
+72:		vault = _vault;
+73:		want = _want;
+````
+[https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol#L72-L73](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol#L72-L73)
+### Recommended mitigation steps
+````solidity
+Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol
+	function __ReaperBaseStrategy_init(
+		assembly{
+			sstore(vault.store = _vault)
+			sstore(want.store = _store)
+		}
+	}
+````
+
+# [G-20] Use a more recent version of solidity
+
+## Vulnerability details
+In `0.8.15` the conditions necessary for inlining are relaxed. Benchmarks show that the change significantly decreases the bytecode size (which impacts the deployment cost) while the effect on the runtime gas usage is smaller.     
+     
+In `0.8.17` prevent the incorrect removal of storage writes before calls to Yul functions that conditionally terminate the external EVM call; Simplify the starting offset of zero-length operations to zero. More efficient overflow checks for multiplication.        
+````solidity
+Ethos-Core/contracts/CollateralConfig.sol
+3:	pragma solidity 0.6.11;
+
+Ethos-Core/contracts/BorrowerOperations.sol
+3:	pragma solidity 0.6.11;
+
+Ethos-Core/contracts/TroveManager.sol
+3:	pragma solidity 0.6.11;
+
+Ethos-Core/contracts/ActivePool.sol
+3:	pragma solidity 0.6.11;
+
+Ethos-Core/contracts/StabilityPool.sol
+3:	pragma solidity 0.6.11;
+
+Ethos-Core/contracts/LQTY/CommunityIssuance.sol
+3:	pragma solidity 0.6.11;
+
+Ethos-Core/contracts/LQTY/LQTYStaking.sol
+3:	pragma solidity 0.6.11;
+
+Ethos-Core/contracts/LUSDToken.sol
+3:	pragma solidity 0.6.11;
+
+Ethos-Vault/contracts/ReaperVaultV2.sol
+3:	pragma solidity ^0.8.0;
+
+Ethos-Vault/contracts/ReaperVaultERC4626.sol
+3:	pragma solidity ^0.8.0;
+
+Ethos-Vault/contracts/abstract/ReaperBaseStrategyV4.sol
+3:	pragma solidity ^0.8.0;
+
+Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol
+3:	pragma solidity ^0.8.0;
+
+````
+
+# [G-21] Upgrade Solidity’s `optimizer`
+
+## Vulnerability details
+Make sure Solidity’s `optimizer` is enabled. It reduces gas costs. If you want to gas optimize for contract deployment (costs less to deploy a contract) then set the Solidity `optimizer` at a low number. If you want to optimize for run-time gas costs (when functions are called on a contract) then set the `optimizer` to a high number.     
+     
+Set the optimization value higher than `800` in your `hardhat.config.js` file.
+````solidity
+38	    solidity: {
+39		compilers: [
+40		    {
+41			version: "0.4.23",
+42			settings: {
+43			    optimizer: {
+44				enabled: true,
+45				runs: 100
+46			    }
+47			}
+48		    },
+49		    {
+50			version: "0.5.17",
+51			settings: {
+52			    optimizer: {
+53				enabled: true,
+54				runs: 100
+55			    }
+56			}
+57		    },
+58		    {
+59			version: "0.6.11",
+60			settings: {
+61			    optimizer: {
+62				enabled: true,
+63				runs: 100
+64			    }
+65			}
+66		    },
+67		]
+68	    },
+````
+[https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/hardhat.config.js#L38-L68](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/hardhat.config.js#L38-L68)
+````solidity
+11	  solidity: {
+12	    compilers: [
+13	      {
+14		version: "0.8.11",
+15		settings: {
+16		  optimizer: {
+17		    enabled: true,
+18		    runs: 200,
+19		  },
+20		},
+21	      },
+22	    ],
+23:	  },
+````
+[https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/hardhat.config.js#L11-L23](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/hardhat.config.js#L11-L23)
