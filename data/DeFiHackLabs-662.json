@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "DeFiHackLabs",
+  "risk": "2",
+  "title": "Unsafe type casting  will cause miscalculation",
+  "issueId": 662,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/662"
+}
