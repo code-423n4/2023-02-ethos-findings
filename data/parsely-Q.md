@@ -66,3 +66,18 @@ Without context of the deployment it is worth mentioning that if setAddresses is
 ### Recommendation
 Either implement a deployment pipeline ensuring that the values are initialised or have modifiers that check per function.
 
+# [N-07] A malicious privileged user could manipulate the upgrade time in ReaperBaseStrategyv4.sol
+### Context
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol#L167
+### Description
+The function to initiate the upgrade time is callable by any privileged user at any stage. This could allow them to delay the upgrade as long as they still have the necessary role.
+```
+function initiateUpgradeCooldown() external {
+        _atLeastRole(STRATEGIST);
+        upgradeProposalTime = block.timestamp;
+    }
+```
+### Recommendation
+Consider implementing MultiSig or a strategy where it cannot be the same ```msg.sender``` twice in a row.
+
+
