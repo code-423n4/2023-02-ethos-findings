@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Bauer",
+  "risk": "2",
+  "title": "LUSD.approve might be exposed to front running",
+  "issueId": 682,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/682"
+}
