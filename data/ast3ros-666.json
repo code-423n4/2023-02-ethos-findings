@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "ast3ros",
+  "risk": "2",
+  "title": "[M-05] Function to `convertToAssets` does not handle underlying assets's decimal.",
+  "issueId": 666,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/666"
+}
