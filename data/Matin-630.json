@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Matin",
+  "risk": "2",
+  "title": "`LUSD` permit does not check the `recoveredAddress` not to be zero",
+  "issueId": 630,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/630"
+}
