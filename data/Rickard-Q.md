@@ -314,6 +314,282 @@ if (msg.sender != DEPLOYER_ADDRESS) {
 ````
 Alternatively, add the `onlyOwner` modifier like it has been done in other contract's `initialize()` function.
 
+# [L-06] Consider using OpenZeppelin’s SafeCast library to prevent unexpected overflows when casting from `uint256`
+
+## Vulnerability details
+In the protocol, there are function's values with the risk of being downcasted.
+
+### Recommended Mitigation Steps
+Consider using OpenZeppelin’s SafeCast library to prevent unexpected overflows when casting from `uint256`.
+
+# [L-07] Front running attacks by the `onlyOwner`
+
+## Vulnerability details
+`setAddresses` function can be triggered by onlyOwner and operations can be blocked.
+````solidity
+	function setAddresses
+	    (
+		address _lqtyTokenAddress,
+		address _lusdTokenAddress,
+		address _troveManagerAddress, 
+		address _borrowerOperationsAddress,
+		address _activePoolAddress,
+		address _collateralConfigAddress
+	    ) 
+		external 
+		onlyOwner
+		override 
+	    {
+		checkContract(_lqtyTokenAddress);
+		checkContract(_lusdTokenAddress);
+		checkContract(_troveManagerAddress);
+		checkContract(_borrowerOperationsAddress);
+		checkContract(_activePoolAddress);
+		checkContract(_collateralConfigAddress);
+
+		lqtyToken = IERC20(_lqtyTokenAddress);
+		lusdToken = ILUSDToken(_lusdTokenAddress);
+		troveManagerAddress = _troveManagerAddress;
+		borrowerOperationsAddress = _borrowerOperationsAddress;
+		activePoolAddress = _activePoolAddress;
+		collateralConfig = ICollateralConfig(_collateralConfigAddress);
+````
+[https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/ActivePool.sol#L71-L103](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/ActivePool.sol#L71-L103)
+````solidity
+    function setAddresses(
+        address _collateralConfigAddress,
+        address _troveManagerAddress,
+        address _activePoolAddress,
+        address _defaultPoolAddress,
+        address _stabilityPoolAddress,
+        address _gasPoolAddress,
+        address _collSurplusPoolAddress,
+        address _priceFeedAddress,
+        address _sortedTrovesAddress,
+        address _lusdTokenAddress,
+        address _lqtyStakingAddress
+    )
+        external
+        override
+        onlyOwner
+    {
+        // This makes impossible to open a trove with zero withdrawn LUSD
+        assert(MIN_NET_DEBT > 0);
+
+
+        checkContract(_collateralConfigAddress);
+        checkContract(_troveManagerAddress);
+        checkContract(_activePoolAddress);
+        checkContract(_defaultPoolAddress);
+        checkContract(_stabilityPoolAddress);
+        checkContract(_gasPoolAddress);
+        checkContract(_collSurplusPoolAddress);
+        checkContract(_priceFeedAddress);
+        checkContract(_sortedTrovesAddress);
+        checkContract(_lusdTokenAddress);
+        checkContract(_lqtyStakingAddress);
+
+
+        collateralConfig = ICollateralConfig(_collateralConfigAddress);
+        troveManager = ITroveManager(_troveManagerAddress);
+        activePool = IActivePool(_activePoolAddress);
+        defaultPool = IDefaultPool(_defaultPoolAddress);
+        stabilityPoolAddress = _stabilityPoolAddress;
+        gasPoolAddress = _gasPoolAddress;
+        collSurplusPool = ICollSurplusPool(_collSurplusPoolAddress);
+        priceFeed = IPriceFeed(_priceFeedAddress);
+        sortedTroves = ISortedTroves(_sortedTrovesAddress);
+        lusdToken = ILUSDToken(_lusdTokenAddress);
+        lqtyStakingAddress = _lqtyStakingAddress;
+        lqtyStaking = ILQTYStaking(_lqtyStakingAddress);
+````
+[https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L110-L153](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L110-L153)
+````solidity
+    function setAddresses(
+        address _collateralConfigAddress,
+        address _sortedTrovesAddress,
+        address _troveManagerAddress
+    )
+        external
+        onlyOwner
+    {
+        checkContract(_collateralConfigAddress);
+        checkContract(_sortedTrovesAddress);
+        checkContract(_troveManagerAddress);
+
+
+        collateralConfig = ICollateralConfig(_collateralConfigAddress);
+        sortedTroves = ISortedTroves(_sortedTrovesAddress);
+        troveManager = ITroveManager(_troveManagerAddress);
+````
+[https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/HintHelpers.sol#L27-L41](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/HintHelpers.sol#L27-L41)
+````solidity
+    function setAddresses(
+        address _borrowerOperationsAddress,
+        address _collateralConfigAddress,
+        address _troveManagerAddress,
+        address _activePoolAddress,
+        address _lusdTokenAddress,
+        address _sortedTrovesAddress,
+        address _priceFeedAddress,
+        address _communityIssuanceAddress
+    )
+        external
+        override
+        onlyOwner
+    {
+        checkContract(_borrowerOperationsAddress);
+        checkContract(_collateralConfigAddress);
+        checkContract(_troveManagerAddress);
+        checkContract(_activePoolAddress);
+        checkContract(_lusdTokenAddress);
+        checkContract(_sortedTrovesAddress);
+        checkContract(_priceFeedAddress);
+        checkContract(_communityIssuanceAddress);
+
+
+        borrowerOperations = IBorrowerOperations(_borrowerOperationsAddress);
+        collateralConfig = ICollateralConfig(_collateralConfigAddress);
+        troveManager = ITroveManager(_troveManagerAddress);
+        activePool = IActivePool(_activePoolAddress);
+        lusdToken = ILUSDToken(_lusdTokenAddress);
+        sortedTroves = ISortedTroves(_sortedTrovesAddress);
+        priceFeed = IPriceFeed(_priceFeedAddress);
+        communityIssuance = ICommunityIssuance(_communityIssuanceAddress);
+````
+[https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/StabilityPool.sol#L261-L291](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/StabilityPool.sol#L261-L291)
+````solidity
+    function setAddresses
+    (
+        address _oathTokenAddress, 
+        address _stabilityPoolAddress
+    ) 
+        external 
+        onlyOwner 
+        override 
+    {
+        require(!initialized, "issuance has been initialized");
+        checkContract(_oathTokenAddress);
+        checkContract(_stabilityPoolAddress);
+
+
+        OathToken = IERC20(_oathTokenAddress);
+        stabilityPoolAddress = _stabilityPoolAddress;
+````
+[https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L61-L75](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/CommunityIssuance.sol#L61-L75)
+````solidity
+    function setAddresses
+    (
+        address _lqtyTokenAddress,
+        address _lusdTokenAddress,
+        address _troveManagerAddress, 
+        address _borrowerOperationsAddress,
+        address _activePoolAddress,
+        address _collateralConfigAddress
+    ) 
+        external 
+        onlyOwner 
+        override 
+    {
+        checkContract(_lqtyTokenAddress);
+        checkContract(_lusdTokenAddress);
+        checkContract(_troveManagerAddress);
+        checkContract(_borrowerOperationsAddress);
+        checkContract(_activePoolAddress);
+        checkContract(_collateralConfigAddress);
+
+
+        lqtyToken = IERC20(_lqtyTokenAddress);
+        lusdToken = ILUSDToken(_lusdTokenAddress);
+        troveManagerAddress = _troveManagerAddress;
+        borrowerOperationsAddress = _borrowerOperationsAddress;
+        activePoolAddress = _activePoolAddress;
+        collateralConfig = ICollateralConfig(_collateralConfigAddress);
+````
+[https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L66-L91](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L66-L91)
+
+### Recommended Mitigation Steps
+Use a timelock to avoid instant changes of the parameters.
+
+# [L-08] A single point of failure 
+
+## Vulnerability details 
+The `onlyOwner` role has a single point of failure and `onlyOwner` can use critical a few functions.       
+      
+Even if protocol admins/developers are not malicious there is still a chance for Owner keys to be stolen. In such a case, the attacker can cause serious damage to the project due to important functions. In such a case, users who have invested in project will suffer high financial losses.      
+      
+`onlyOwner` functions;
+````solidity
+14 results - 7 files
+
+Ethos-Core/contracts/ActivePool.sol
+71:	function setAddresses(
+125:	function setYieldingPercentage(address _collateral, uint256 _bps) external onlyOwner {
+132:	function setYieldingPercentageDrift(uint256 _driftBps) external onlyOwner {
+138:	function setYieldClaimThreshold(address _collateral, uint256 _threshold) external onlyOwner {
+144:	function setYieldDistributionParams(uint256 _treasurySplit, uint256 _SPSplit, uint256 _stakingSplit) external onlyOwner {
+214:	function manualRebalance(address _collateral, uint256 _simulatedAmountLeavingPool) external onlyOwner {
+
+Ethos-Core/contracts/BorrowerOperations.sol
+110:	function setAddresses(
+
+Ethos-Core/contracts/CollateralConfig.sol
+46:	function initialize(
+85:	function updateCollateralRatios(
+
+Ethos-Core/contracts/HintHelpers.sol
+27:	function setAddresses(
+
+Ethos-Core/contracts/StabilityPool.sol
+261:	function setAddresses(
+
+Ethos-Core/contracts/LQTY/CommunityIssuance.sol
+61:	function setAddresses
+101:	function fund(uint amount) external onlyOwner {
+
+Ethos-Core/contracts/LQTY/LQTYStaking.sol
+66:	function setAddresses
+````
+This increases the risk of `A single point of failure`.
+
+Recommended Mitigation Steps
+
+### Recommended Mitigation Steps
+Add a time lock to critical functions. Admin-only functions that change critical parameters should emit events and have timelocks.     
+     
+Events allow capturing the changed parameters so that off-chain tools/interfaces can register such changes with timelocks that allow users to evaluate them and consider if they would like to engage/exit based on how they perceive the changes as affecting the trustworthiness of the protocol or profitability of the implemented financial services.      
+      
+Also detail them in documentation and NatSpec comments.
+
+# [L-09] Minting tokens to the zero address should be avoided
+
+## Vulnerability details 
+`address(0)` check is missing in both these contracts, consider applying a check in the function to ensure tokens aren’t minted to the zero address.
+````solidity
+Ethos-Core/contracts/LUSDToken.sol
+185	function mint(address _account, uint256 _amount) external override { 
+186		_requireMintingNotPaused();
+187		_requireCallerIsBorrowerOperations();
+188		_mint(_account, _amount);
+189:	    }
+
+Ethos-Vault/contracts/ReaperVaultERC4626.sol
+154	function mint(uint256 shares, address receiver) external override returns (uint256 assets) {
+155		assets = previewMint(shares); // previewMint rounds up so exactly "shares" should be minted and not 1 wei less
+156		_deposit(assets, receiver);
+157:	    }
+````
+This increases the risk of `A single point of failure`.
+
+Recommended Mitigation Steps
+
+### Recommended Mitigation Steps
+Add a time lock to critical functions. Admin-only functions that change critical parameters should emit events and have timelocks.     
+     
+Events allow capturing the changed parameters so that off-chain tools/interfaces can register such changes with timelocks that allow users to evaluate them and consider if they would like to engage/exit based on how they perceive the changes as affecting the trustworthiness of the protocol or profitability of the implemented financial services.      
+      
+Also detail them in documentation and NatSpec comments.
+
 # [N-01] For modern and more readable code; update import usages
 
 ## Vulnerability details
@@ -1030,17 +1306,115 @@ Ethos-Core/contracts/TroveManager.sol
 ### Recommended Mitigation Steps
 Consider whether the condition checked in the `assert()` is actually an invariant. If not, replace the `assert()` statement with a `require()` statement.
 
-# [I-01] Missing natspec comments for contract's constructor, variables or functions
+# [N-19] NatSpec comments should be increased in contracts
 
-## Lines of code
-Most of the files.
 ## Vulnerability details
-Some of the contract's constructor, variables and functions are missing natespec comments.
+### Context
+All Contracts
+
+### Description
+It is recommended that Solidity contracts are fully annotated using NatSpec for all public interfaces (everything in the ABI). It is clearly stated in the Solidity official documentation.       
+     
+In complex projects such as Defi, the interpretation of all functions and their arguments and returns is important for code readability and auditability. [https://docs.soliditylang.org/en/v0.8.15/natspec-format.html](https://docs.soliditylang.org/en/v0.8.15/natspec-format.html)
 
 ### Recommended Mitigation Steps
- Consider adding the missing natspec comments to the corresponding items.
+NatSpec comments should be increased in contracts.
 
-# [I-02] `event` is not emitted when an important action happens on-chain
+# [N-20] `Function writing` that does not comply with the `Solidity Style Guide`
+
+## Vulnerability details
+### Context
+All Contracts
+
+### Description
+Order of Functions; ordering helps readers identify which functions they can call and to find the constructor and fallback definitions easier. But there are contracts in the project that do not comply with this.      
+      
+[https://docs.soliditylang.org/en/v0.8.17/style-guide.html](https://docs.soliditylang.org/en/v0.8.17/style-guide.html)          
+    
+Functions should be grouped according to their visibility and ordered:       
+      
+- constructor
+- receive function (if exists)
+- fallback function (if exists)
+- external
+- public
+- internal
+- private
+- within a grouping, place the view and pure functions last
+
+# [N-21] Include return parameters in NatSpec comments
+
+## Vulnerability details
+### Context
+All Contracts
+
+### Description
+It is recommended that Solidity contracts are fully annotated using NatSpec for all public interfaces (everything in the ABI). It is clearly stated in the Solidity official documentation. In complex projects such as Defi, the interpretation of all functions and their arguments and returns is important for code readability and auditability.        
+      
+[https://docs.soliditylang.org/en/v0.8.15/natspec-format.html](https://docs.soliditylang.org/en/v0.8.15/natspec-format.html)      
+
+### Recommended mitigaton steps
+Include return parameters in NatSpec comments.     
+      
+Recommendation Code Style: (from Uniswap3)
+````solidity
+    /// @notice Adds liquidity for the given recipient/tickLower/tickUpper position
+    /// @dev The caller of this method receives a callback in the form of IUniswapV3MintCallback#uniswapV3MintCallback
+    /// in which they must pay any token0 or token1 owed for the liquidity. The amount of token0/token1 due depends
+    /// on tickLower, tickUpper, the amount of liquidity, and the current price.
+    /// @param recipient The address for which the liquidity will be created
+    /// @param tickLower The lower tick of the position in which to add liquidity
+    /// @param tickUpper The upper tick of the position in which to add liquidity
+    /// @param amount The amount of liquidity to mint
+    /// @param data Any data that should be passed through to the callback
+    /// @return amount0 The amount of token0 that was paid to mint the given amount of liquidity. Matches the value in the callback
+    /// @return amount1 The amount of token1 that was paid to mint the given amount of liquidity. Matches the value in the callback
+    function mint(
+        address recipient,
+        int24 tickLower,
+        int24 tickUpper,
+        uint128 amount,
+        bytes calldata data
+    ) external returns (uint256 amount0, uint256 amount1);
+````
+# [N-22] Long lines are not suitable for the `Solidity Style Guide`
+
+## Vulnerability details
+### Context
+[https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L268](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L268)      
+[https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L282](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L282)     
+[https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L343](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L343)
+
+### Description
+It is generally recommended that lines in the source code should not exceed 80-120 characters. Today’s screens are much larger, so in some cases it makes sense to expand that. The lines above should be split when they reach that length, as the files will most likely be on GitHub and GitHub always uses a scrollbar when the length is more than 164 characters.       
+      
+[why-is-80-characters-the-standard-limit-for-code-width](https://softwareengineering.stackexchange.com/questions/148677/why-is-80-characters-the-standard-limit-for-code-width)
+### Recommended mitigaton steps
+Multiline output parameters and return statements should follow the same style recommended for wrapping long lines found in the Maximum Line Length section.
+
+[https://docs.soliditylang.org/en/v0.8.17/style-guide.html#introduction](https://docs.soliditylang.org/en/v0.8.17/style-guide.html#introduction)
+````solidity
+	thisFunctionCallIsReallyLong(
+	    longArgument1,
+	    longArgument2,
+	    longArgument3
+	);  
+````
+# [N-23] For functions, follow Solidity standard naming conventions (internal function style rule)
+
+## Vulnerability details
+### Context
+[https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L269](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L269)
+
+### Description
+````solidity
+269    	function roundUpDiv(uint256 x, uint256 y) internal pure returns (uint256) {
+````
+The above codes don’t follow Solidity’s standard naming convention,      
+     
+internal and private functions : the mixedCase format starting with an underscore (_mixedCase starting with an underscore).
+
+# [I-01] `event` is not emitted when an important action happens on-chain
 
 ## Vulnerability details
 ### Proof of Concept
