@@ -62,3 +62,9 @@ if (vars.profit < yieldClaimThreshold[_collateral]) {
     vars.profit = 0;
 }
 ```
+
+## **QA-10**: Upgradeable contract is missing a __gap[50] storage variable to allow for new storage variables in later versions
+
+File : https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol#L17
+
+Note: inhering contract of this abstract contract is also missing the __gap field variable.
