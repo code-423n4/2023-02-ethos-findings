@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Bauer",
+  "risk": "2",
+  "title": " Unbounded Loop in batchLiquidateTroves() causes the transaction to fail",
+  "issueId": 678,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/678"
+}
