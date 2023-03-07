@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "0x52",
+  "risk": "2",
+  "title": "_chargeFees is called too early inside ReaperVaultV2#report and will result in too many shares minted to the fee recipient",
+  "issueId": 741,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/741"
+}
