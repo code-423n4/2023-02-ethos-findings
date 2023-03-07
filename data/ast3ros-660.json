@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "ast3ros",
+  "risk": "2",
+  "title": "[M-01] Borrowers cannot close Trove in Recovery mode and under risk to be liquidated",
+  "issueId": 660,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/660"
+}
