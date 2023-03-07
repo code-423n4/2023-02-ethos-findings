@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "rbserver",
+  "risk": "2",
+  "title": "It is possible that strategy cannot be harvested and its loss fails to be reported or realized",
+  "issueId": 710,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/710"
+}
