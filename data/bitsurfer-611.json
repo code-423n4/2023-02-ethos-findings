@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "bitsurfer",
+  "risk": "2",
+  "title": "Chainlink's `latestRoundData` might return stale results",
+  "issueId": 611,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/611"
+}
