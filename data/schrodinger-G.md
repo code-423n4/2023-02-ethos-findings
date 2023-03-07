@@ -1,3 +1,22 @@
+### Gas Optimizations
+| |Issue|Instances| |
+|-|:-|:-:|:-:|
+| [G-0.1] | Functions guaranteed to revert when called by normal users can be marked payable | 7 |  
+| [G-01] | Optimize names to save gas | 12 | 
+| [G&#x2011;02] | ++i costs less gas than i++, especially when it’s used in for-loops (--i/i-- too) | 17 | 
+| [G&#x2011;03] | State variables only set in the constructor should be declared immutable | 1 | 
+| [G&#x2011;04] | <array>.length should not be looked up in every loop of a for-loop | 6 | 
+| [G-05] | Avoid compound assignment operator in state variables | 21 |
+| [G-06] | Using bools for storage incurs overhead | 8 |
+| [G-07] | Using storage instead of memory for structs/arrays saves gas | 5 |
+| [G-08] | Using calldata instead of memory for read-only arguments in external functions saves gas | 4 |
+| [G-09] | Use require instead of assert | 2 |
+| [G-10] | Avoid contract existence checks by using low level calls | 3 |
+| [G-11] | Refactor a modifier to call a local function instead of directly having the code in the modifier | 1 |
+
+Total: 87 instances over 12 issues .
+
+
 # [G‑0.1] Functions guaranteed to revert when called by normal users can be marked payable
 If a function modifier such as `onlyOwner` is used, the function will `revert` if a normal user tries to pay the function. Marking the function as payable will lower the gas cost for legitimate callers because the compiler will not include checks for whether a payment was provided. The extra opcodes avoided are `CALLVALUE(2),DUP1(3),ISZERO(3),PUSH2(3),JUMPI(10),PUSH1(3),DUP1(3),REVERT(0),JUMPDEST(1),POP(2)`, which costs an average of about 21 gas per call to the function, in addition to the extra deployment cost.
 
@@ -229,7 +248,7 @@ https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8
 
 https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L1489
 
-## [G‑11] Avoid contract existence checks by using low level calls
+## [G‑10] Avoid contract existence checks by using low level calls
 
 Prior to 0.8.10 the compiler inserted extra code, including EXTCODESIZE (100 gas), to check for contract existence for external function calls. In more recent solidity versions, the compiler will not insert these checks if the external call has a return value. Similar behavior can be achieved in earlier versions by using low-level calls, since low level calls never check for contract existence.
 
@@ -241,7 +260,7 @@ https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8
 
 https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L191
 
-## [G-12] Refactor a modifier to call a local function instead of directly having the code in the modifier, saving bytecode size and thereby deployment cost
+## [G-11] Refactor a modifier to call a local function instead of directly having the code in the modifier, saving bytecode size and thereby deployment cost
 Modifiers code is copied in all instances where it's used, increasing bytecode size. By doing a refractor to the internal function, one can reduce bytecode size significantly at the cost of one JUMP. Consider doing this only if you are constrained by bytecode size.
  **Bad practice:**
 
