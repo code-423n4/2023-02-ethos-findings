@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "pipoca",
+  "risk": "2",
+  "title": "CommunityIssuance.sol – Stability pool can manipulate time stamps with the fund function to issue more oath than appropriate. ",
+  "issueId": 784,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/784"
+}
