@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "ivanrdy",
+  "risk": "2",
+  "title": "pullCollateralFromBorrowerOperationsOrDefaultPool can fail on  if _amount will set to zero",
+  "issueId": 845,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/845"
+}
