@@ -20,7 +20,7 @@ In the ActivePool contract, the `_treasuryAddress` is not `checkContract`ed. I u
 
 ```diff
 +       checkContract(_treasuryAddress);
--       require(_treasuryAddress != address(0), "Treasury cannot be 0 address");
+-       　require(_treasuryAddress != address(0), "Treasury cannot be 0 address");
 ```
 
 ## L-02 Consider mitigating the centralization risk
@@ -52,13 +52,13 @@ Should import the `checkContract` function and use it as a checker for `_token`.
 
 ......
 
--   contract ReaperVaultV2 is ReaperAccessControl, ERC20, IERC4626Events, AccessControlEnumerable, ReentrancyGuard {
+-   　contract ReaperVaultV2 is ReaperAccessControl, ERC20, IERC4626Events, AccessControlEnumerable, ReentrancyGuard {
 +   contract ReaperVaultV2 is ReaperAccessControl, ERC20, IERC4626Events, AccessControlEnumerable, ReentrancyGuard, checkContract {
 
 ......
 
 +	checkContract(_token);
-    token = IERC20Metadata(_token);
+    　　　　token = IERC20Metadata(_token);
 ```
 
 ## L-04 The `tvlCap` should be initialized as a reasonable value
@@ -72,7 +72,7 @@ The `tvlCap` value is set to zero when the input of it is zero. This makes the V
 Make a change as below: 
 
 ```diff
-				token = IERC20Metadata(_token);
+	token = IERC20Metadata(_token);
         constructionTime = block.timestamp;
         lastReport = block.timestamp;
 +	    if (_tvlCap == 0) {
@@ -110,19 +110,19 @@ function initialize(
         uint256[] calldata _MCRs,
         uint256[] calldata _CCRs
     ) external override onlyOwner {
-				require(!initialized, "Can only initialize once");
+	　require(!initialized, "Can only initialize once");
 +       uint256 length = _collaterals.length;
--		require(_collaterals.length != 0, "At least one collateral required");
-+		require(length != 0, "At least one collateral required");
+-	　require(_collaterals.length != 0, "At least one collateral required");
++	　require(length != 0, "At least one collateral required");
 +       require(length <= 50, "too many kinds of collaterals");
 ```
 
 ```diff
-		uint256 numStrategists = _strategists.length;
+	　uint256 numStrategists = _strategists.length;
 +       require(numStrategiests <= 10, "too many strategists")
-        for (uint256 i = 0; i < numStrategists; i = i.uncheckedInc()) {
-            _grantRole(STRATEGIST, _strategists[i]);
-        }
+        　for (uint256 i = 0; i < numStrategists; i = i.uncheckedInc()) {
+         　   _grantRole(STRATEGIST, _strategists[i]);
+        　}
 ```
 
 ## L-06 Add `__gap` into the contract
@@ -154,7 +154,7 @@ So it is recommended that developers implement this and follow the best practice
 +    * variables without shifting down storage in the inheritance chain.
 +    * See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
 +    */
-+   uint256[24] private __gap; 
++   　uint256[24] private __gap; 
     // [24] should equal to [50 -  (the number of how many used slots exist)]
 }
 ```
@@ -172,7 +172,7 @@ function updateVeloSwapPath(
 +    * variables without shifting down storage in the inheritance chain.
 +    * See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
 +    */
-+   uint256[49] private __gap; 
++   　uint256[49] private __gap; 
     // [49] should equal to [50 - (the number of how many used slots exist)]
 }
 ```
@@ -237,7 +237,7 @@ Developers should follow the best practice and add the contract name into the er
 [https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L651](https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L651)
 
 ```diff
-if (_isRecoveryMode) {
+　　　　　　　if (_isRecoveryMode) {
             require(_maxFeePercentage <= DECIMAL_PRECISION,
 -               "Max fee percentage must less than or equal to 100%");
 +               "BorrowerOperations: Max fee percentage must less than or equal to 100%");
@@ -262,14 +262,14 @@ The same rule is also adoptable for other parts of the contracts in the Ethos-Co
 e.g., [https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L85](https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L85)
 
 ```diff
--    require(!addressesSet, "Can call setAddresses only once");
+-   　 require(!addressesSet, "Can call setAddresses only once");
 +    require(!addressesSet, "ActivePool: Can call setAddresses only once");
 ```
 
 [https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L238](https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/LUSDToken.sol#L238)
 
 ```diff
--    _approve(sender, msg.sender, _allowances[sender][msg.sender].sub(amount, "ERC20: transfer amount exceeds allowance"));
+-    　_approve(sender, msg.sender, _allowances[sender][msg.sender].sub(amount, "ERC20: transfer amount exceeds allowance"));
 +    _approve(sender, msg.sender, _allowances[sender][msg.sender].sub(amount, "LUSDToken: transfer amount exceeds allowance"));
 ```
 
@@ -294,7 +294,7 @@ Another minor fix to the wrong error message:
 [https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L651](https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L651)
 
 ```diff
-				require(_maxFeePercentage <= DECIMAL_PRECISION,
+	require(_maxFeePercentage <= DECIMAL_PRECISION,
 -                "Max fee percentage must less than or equal to 100%"); 
 +                "Max fee percentage must be less than or equal to 100%"); 
 ```
@@ -312,10 +312,10 @@ Always do the multiply first and then division. Follow the best practice.
 [https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L54-L56](https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/TroveManager.sol#L54-L56)
 
 ```diff
--	 uint constant public override REDEMPTION_FEE_FLOOR = DECIMAL_PRECISION / 1000 * 5; // 0.5%  
--    uint constant public MAX_BORROWING_FEE = DECIMAL_PRECISION / 100 * 5; // 5% 
-+	 uint constant public override REDEMPTION_FEE_FLOOR = DECIMAL_PRECISION * 5 / 1000; // 0.5%  // @audit-ok should multiply first then divide to follow the best priactice.
-+    uint constant public MAX_BORROWING_FEE = DECIMAL_PRECISION * 5 / 100; // 5% // @audit-ok should multiply first then divide to follow the best priactice.
+-　　　　uint constant public override REDEMPTION_FEE_FLOOR = DECIMAL_PRECISION / 1000 * 5; // 0.5%  
+-　　　　uint constant public MAX_BORROWING_FEE = DECIMAL_PRECISION / 100 * 5; // 5% 
++   uint constant public override REDEMPTION_FEE_FLOOR = DECIMAL_PRECISION * 5 / 1000; // 0.5%  // @audit-ok should multiply first then divide to follow the best practice.
++    uint constant public MAX_BORROWING_FEE = DECIMAL_PRECISION * 5 / 100; // 5% // @audit-ok should multiply first then divide to follow the best practice.
 ```
 
 ## NC-08 Follow other contracts’ pattern of using `Ownable` contract
@@ -351,7 +351,7 @@ The `LiquityMath` contract should use `uint256` instead of `uint` for following 
 [https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/Dependencies/LiquityMath.sol#L9](https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/Dependencies/LiquityMath.sol#L9)
 
 ```diff
--   using SafeMath for uint; 
+-    using SafeMath for uint; 
 +   using SafeMath for uint256; // @audit use uint256 to follow best practice.
 ```
 
@@ -366,7 +366,7 @@ It is recommended use a static version of solidity instead of a floating version
 As recommended in the [slither document](https://github.com/crytic/slither/wiki/Detector-Documentation#incorrect-versions-of-solidity), `0.8.16` is a good option. 
 
 ```diff
--    pragma solidity ^0.8.0;
+-     pragma solidity ^0.8.0;
 +    pragma soliidty 0.8.16;
 ```
 
@@ -385,7 +385,7 @@ You should separate the number digits as 3 digits.
 [https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L41](https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L41)
 
 ```diff
--    uint256 public constant PERCENT_DIVISOR = 10000;
+-     uint256 public constant PERCENT_DIVISOR = 10000;
 +    uint256 public constant PERCENT_DIVISOR = 10_000;
 ```
 
@@ -398,16 +398,16 @@ It should emits events when contract’s storage is changed.
 ### Recommendation
 
 ```diff
-		event StrategyReported(
-        address indexed strategy,
-        uint256 gain,
-        uint256 loss,
-        uint256 debtPaid,
-        uint256 gains,
-        uint256 losses,
-        uint256 allocated,
-        uint256 allocationAdded,
-        uint256 allocBPS
+    event StrategyReported(
+         address indexed strategy,
+         uint256 gain,
+         uint256 loss,
+         uint256 debtPaid,
+         uint256 gains,
+         uint256 losses,
+         uint256 allocated,
+         uint256 allocationAdded,
+         uint256 allocBPS
     );
 +   event TokenIsSet(address tokenAddress);
 +   event ConstructionTime(uint256 constructionTime);
@@ -451,12 +451,12 @@ It should emits events when contract’s storage is changed.
         _grantRole(DEFAULT_ADMIN_ROLE, _multisigRoles[0]);
         _grantRole(ADMIN, _multisigRoles[1]);
         _grantRole(GUARDIAN, _multisigRoles[2]);
-+       emit TokenIsSet(_token);
-+       emit ConstructionTime(block.timestamp);
-+       emit LastReportTime(block.timestamp);
-+       emit TvlCapUpdated(_tvlCap);
-+       emit TreasuryAdded(_treasury);
-+       emit LockedProfitDegradationUpdated(lockedProfitDegradation);
++      emit TokenIsSet(_token);
++      emit ConstructionTime(block.timestamp);
++      emit LastReportTime(block.timestamp);
++      emit TvlCapUpdated(_tvlCap);
++      emit TreasuryAdded(_treasury);
++      emit LockedProfitDegradationUpdated(lockedProfitDegradation);
     }
 ```
 
