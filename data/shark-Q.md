@@ -1,6 +1,6 @@
 ## 1. Use a more recent version of solidity
 
-The current version being used is `0.6.11`. However, it is considered best practice to use the latest version of solidity. More recent versions of solidity have compiler optimizations, and bugfixes, among other things. This could help in reading and writing safe and clean code.
+The current version being used is `0.6.11`. However, it is considered best practice to use the latest version of solidity. More recent versions of solidity have compiler optimizations, bugfixes, among other things. This could help in reading and writing safe and clean code.
 
 For a list of new releases: [blog.soliditylang.org/category/releases/](https://blog.soliditylang.org/category/releases/)
 
@@ -118,15 +118,15 @@ Consider adding the following `require()` to the above function:
 
 It is recommended that contracts be thoroughly documented using [NatSpec](https://docs.soliditylang.org/en/develop/natspec-format.html). Using NatSpec will improve readability for all readers. However, most contracts do not utilize it fully.
 
-For example, the following contract is missing NatSpec fully:
+For example, this following contract is missing NatSpec fully:
 
 https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/ActivePool.sol
 
 ## 8. Unspecific Compiler Version Pragma
 
-Floating pragmas should be avoided for non-library contracts as they may be a security risk.
+Floating pragmas should be avoided for non-library contracts as it may be a security risk.
 
-A known vulnerable compiler version may accidentally be selected or security tools might fall back to an older compiler version ending up checking a different EVM compilation that is ultimately deployed on the blockchain.
+A known vulnerable compiler version may accidentally be selected or security tools might fall-back to an older compiler version ending up checking a different EVM compilation that is ultimately deployed on the blockchain.
 
 It is recommended to pin to a concrete compiler version.
 
@@ -152,8 +152,70 @@ File: `TroveManager.sol` [Line 1316-1319](https://github.com/code-423n4/2023-02-
     }
 ```
 
-Consider either removing the unused named returns or using them instead.
+Consider either removing the unused named returns or using it instead.
 
 Here is 1 other instance of this issue:
 
 - File: `TroveManager.sol` [Line 1321-1333](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L1321-L1333)
+
+## 10. Use time units for better readability
+
+[Solidity has time units](https://docs.soliditylang.org/en/v0.8.14/units-and-global-variables.html) (seconds, minutes, hours, etc). As such, consider using time units instead of using literal numbers, this will increase readability and decrease the likelihood of mistakes being made.
+
+For example, the following `constant` could use time units:
+
+File: `TroveManager.sol` [Line 48](https://github.com/code-423n4/2023-02-ethos/blob/d46ede81e35c1ed86242c9ba3c5c57d2ca2b57d8/Ethos-Core/contracts/TroveManager.sol#L48)
+
+```
+    uint constant public SECONDS_IN_ONE_MINUTE = 60;
+```
+
+## 11. `constant` variables should be defined rather than using magic numbers
+
+In the following instances, consider declaring a `constant` instead of magic numbers:
+
+File: `ReaperVaultV2.sol` [Line 125](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperVaultV2.sol#L125)
+
+```solidity
+File: contracts/ReaperVaultV2.sol
+
+125: lockedProfitDegradation = (DEGRADATION_COEFFICIENT * 46) / 10**6; // 6 hours in blocks
+```
+
+File: [`ActivePool.sol`](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/ActivePool.sol#L127)
+
+```solidity
+File: contracts/ActivePool.sol
+
+        /// @audit 10_000
+127:    require(_bps <= 10_000, "Invalid BPS value");
+
+        /// @audit 500
+133:    require(_driftBps <= 500, "Exceeds max allowed value of 500 BPS");
+
+        /// @audit 10_000
+145:    require(_treasurySplit + _SPSplit + _stakingSplit == 10_000, "Splits must add up to 10000 BPS");
+
+        /// @audit 10_000
+258:    vars.percentOfFinalBal = vars.finalBalance == 0 ? uint256(-1) : vars.currentAllocated.mul(10_000).div(vars.finalBalance);
+
+        /// @audit 10_000
+262:    vars.finalYieldingAmount = vars.finalBalance.mul(vars.yieldingPercentage).div(10_000);
+```
+
+## 12. Large numbers are hard to read
+
+Consider using underscores/scientific notation on large numbers to increase readability.
+
+For example:
+
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperVaultV2.sol#L41
+
+```diff
+-    uint256 public constant PERCENT_DIVISOR = 10000;
++    uint256 public constant PERCENT_DIVISOR = 10_000;
+```
+
+Here is 1 other instance of this issue:
+
+- File: `TroveManager.sol` [Line 53](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L53)
