@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "MohammedRizwan",
+  "risk": "2",
+  "title": "The contract owner privileges/access functions can cause complete destruction of the project, if the private key of owner is exploited.[critical]",
+  "issueId": 684,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/684"
+}
