@@ -228,5 +228,16 @@ Here are some of the instances entailed:
 
 116:    mapping (address => address[]) public TroveOwners;
 ```
-## Keeper for in time update of key variables
-Consider adopting a keeper for updating time sensitive state variables. For instance, `L_Collateral[_collateral]` and `L_LUSDDebt[_collateral]` that have not been [updated](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L1262) via in time liquidations may have users missing out on getting a higher rewards when [closing their troves](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L386). Where possible, make it remarkably noticeable front-end counting down key updates to be carried out so that users could make a sound decision in making the associated calls.
+## Use `delete` to clear variables
+`delete a` assigns the initial value for the type to `a`. i.e. for integers it is equivalent to `a = 0`, but it can also be used on arrays, where it assigns a dynamic array of length zero or a static array of the same length with all elements reset. For structs, it assigns a struct with all members reset. Similarly, it can also be used to set an address to zero address or a boolean to false. It has no effect on whole mappings though (as the keys of mappings may be arbitrary and are generally unknown). However, individual keys and what they map to can be deleted: If `a` is a mapping, then `delete a[x]` will delete the value stored at x.
+
+The delete key better conveys the intention and is also more idiomatic.
+
+For instance, the `a[x] = 0` instance below may be refactored as follows:
+
+[File: TroveManager.sol#L1192](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L1192)
+
+```diff
+-        Troves[_borrower][_collateral].stake = 0;
++        delete Troves[_borrower][_collateral].stake;
+```
