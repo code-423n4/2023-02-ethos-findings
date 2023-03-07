@@ -243,3 +243,26 @@ While the DIV opcode uses 5 gas, the SHR opcode only uses 3 gas. Furthermore, So
 https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L397 => troveManagerCached.closeTrove(msg.sender, collateral, 2); // 2 = closedByOwner
 https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/Dependencies/LiquityMath.sol#L47 => decProd = prod_xy.add(DECIMAL_PRECISION / 2).div(DECIMAL_PRECISION);
 https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/Dependencies/UsingTellor.sol#L102 => middle = (end + start) / 2;
+
+## FOR-LOOPS: ++I COSTS LESS GAS COMPARED TO I++
+++i costs less gas compared to i++ for unsigned integer, as pre-increment is cheaper (about 5 gas per iteration)
+
+i++ increments i and returns the initial value of i. Which means:
+
+uint i = 1;  
+i++; // == 1 but i == 2  
+But ++i returns the actual incremented value:
+
+uint i = 1;  
+++i; // == 2 and i == 2 too, so no need for a temporary variable  
+In the first case, the compiler has to create a temporary variable (when used) for returning 1 instead of 2
+
+Instances include:
+
+
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/StabilityPool.sol#L351
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/StabilityPool.sol#L397
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/StabilityPool.sol#L640
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/StabilityPool.sol#L810
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/StabilityPool.sol#L831
+https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/StabilityPool.sol#L859
