@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "CryptoKicker",
+  "risk": "2",
+  "title": "Integer Overflow",
+  "issueId": 825,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/825"
+}
