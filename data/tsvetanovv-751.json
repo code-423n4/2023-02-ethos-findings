@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "tsvetanovv",
+  "risk": "2",
+  "title": "Logical omission in `report()`",
+  "issueId": 751,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/751"
+}
