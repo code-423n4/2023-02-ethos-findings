@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "hansfriese",
+  "risk": "2",
+  "title": "`ReaperVaultV2._withdraw()` will revert if one strategy in `withdrawalQueue` is in the debt.",
+  "issueId": 732,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/732"
+}
