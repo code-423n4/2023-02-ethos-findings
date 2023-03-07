@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "saneryee",
+  "risk": "2",
+  "title": "ERC20 implementations are not always consistent. Some implementations of `transfer` and `transferFrom` could return `false` on failure instead of reverting.",
+  "issueId": 623,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/623"
+}
