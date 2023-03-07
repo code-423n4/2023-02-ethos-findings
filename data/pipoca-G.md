@@ -127,7 +127,7 @@ File: StabilityPool.sol Line 874: 38 bytes
  https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/StabilityPool.sol#L874
 StabilityPool: Amount must be non-zero
 
-#5 many contracts – pack struct items in descending order of size to save gas 
+#5 Pack struct items in descending order of size to save gas 
 Packing the struct in descending order of size of its members can save gas by reducing the amount of storage needed for the struct. This is because the Solidity compiler will automatically pack the struct members into the smallest number of storage slots possible, based on their size and alignment requirements.
 
 By ordering the members in descending order of size, we ensure that the largest members are packed first, reducing the likelihood of wasted storage space. This can also reduce the number of storage slots needed for the struct, which can save gas costs for operations that read or write the struct to storage.
@@ -154,9 +154,10 @@ struct LocalVariables_getSingularCollateralGain {
         uint128 scaleSnapshot;
         uint128 epochSnapshot;
 }
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/StabilityPool.sol#L646
 
-#6 Use ++i instead of i++  and could be uncheck to save
-In terms of gas cost, using ++i instead of i++ or i += 1 is more efficient for unsigned integers. This is because pre-incrementing (++i) is about 5 gas cheaper per iteration, even with the optimizer enabled. When using i++, the value of i is incremented but the initial value is returned. On the other hand, ++i increments i and returns the new value. Therefore, it is recommended to use ++i when possible to optimize gas usage. 
+#6 Use ++i instead of i++ and could be uncheck to save gas in certain cases
+In terms of gas cost, using ++i instead of i++ or i += 1 is more efficient for unsigned integers. This is because pre-incrementing (++i) is cheaper per iteration, even with the optimizer enabled. When using i++, the value of i is incremented but the initial value is returned. On the other hand, ++i increments i and returns the new value. Therefore, it is recommended to use ++i when possible to optimize gas usage. 
 Moreover, ++i/i++ should be unchecked{++i}/unchecked{i++} when it is not possible for them to overflow, as is the case when used in for- and while-loops
 
 Instances:
