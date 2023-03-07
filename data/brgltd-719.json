@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "brgltd",
+  "risk": "3",
+  "title": "First depositor can prevent future users from getting shares by depositing a dust amount and transfering a larger amount directly to the vault",
+  "issueId": 719,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/719"
+}
