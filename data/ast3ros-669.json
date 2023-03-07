@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "ast3ros",
+  "risk": "2",
+  "title": "[M-07] Wrong calculation in Reaper Vault because Deposit and Withdraw function do not use ERC4626 standard functions.",
+  "issueId": 669,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/669"
+}
