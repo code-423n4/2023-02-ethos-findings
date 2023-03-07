@@ -7,13 +7,14 @@ In `_requireValidMaxFeePercentage()` of BorrowerOperations.sol, the upper bound 
     function _requireValidMaxFeePercentage(uint _maxFeePercentage, bool _isRecoveryMode) internal pure {
         if (_isRecoveryMode) {
 -            require(_maxFeePercentage <= DECIMAL_PRECISION,
-+            require(_maxFeePercentage <= 5e15,
                 "Max fee percentage must less than or equal to 100%");
++            require(_maxFeePercentage <= 5e15,
+                "Max fee percentage must less than or equal to 5%");
         } else {
 -            require(_maxFeePercentage >= BORROWING_FEE_FLOOR && _maxFeePercentage <= DECIMAL_PRECISION,
                 "Max fee percentage must be between 0.5% and 100%");
 +            require(_maxFeePercentage >= BORROWING_FEE_FLOOR && _maxFeePercentage <= 5e15,
-                "Max fee percentage must be between 0.5% and 100%");
+                "Max fee percentage must be between 0.5% and 5%");
         }
     }
 ``` 
