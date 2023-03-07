@@ -1001,7 +1001,7 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultERC4626.sol
 
 ### [G-15] ADD UNCHECKED {} FOR SUBTRACTIONS WHERE THE OPERANDS CANNOT UNDERFLOW BECAUSE OF A PREVIOUS REQUIRE() OR IF-STATEMENT . This saves 200-210 gas as per remix 
 
-The unchecked keyword was introduced in Solidity version 0.8.0. Prior to that version. 
+The unchecked keyword was introduced in Solidity version 0.8.0. 
 
 > Instances (8) :
 
@@ -1619,6 +1619,18 @@ Recommendation Code :
      + if (vars.percentOfFinalBal > vars.yieldingPercentage )
      + if (vars.percentOfFinalBal.sub(vars.yieldingPercentage) 
        > yieldingPercentageDrift)
+
+##
+
+### [G-30]  ++I/I++ OR --I/I-- SHOULD BE UNCHECKED{++I}/UNCHECKED{I++} OR  UNCHECKED{--I}/UNCHECKED{I--}WHEN IT IS NOT POSSIBLE FOR THEM TO OVERFLOW, AS IS THE CASE WHEN USED IN FOR- AND WHILE-LOOPS
+
+The unchecked keyword is new in solidity version 0.8.0, so this only applies to that version or higher, which these instances are. This saves 30-40 gas per loop
+
+File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultERC4626.sol
+
+  273: if (x % y != 0) q++;
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L273)
 
  
 
