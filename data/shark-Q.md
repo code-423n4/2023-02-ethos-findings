@@ -253,3 +253,13 @@ File: `TroveManager.sol` ([387](https://github.com/code-423n4/2023-02-ethos/blob
 1288:       rewardSnapshots[_borrower][_collateral].collAmount = 0;
 1289:       rewardSnapshots[_borrower][_collateral].LUSDDebt = 0;
 ```
+
+## 14. Unused imports
+
+Imports not used anywhere in code can be removed to improve code clarity.
+
+- File: `ActivePool.sol` [Line 15](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/ActivePool.sol#L15)
+- File: `BorrowerOperations.sol` [Line 15](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L15)
+- File: `LUSDToken.sol` [Line 9](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LUSDToken.sol#L9)
+- File: `StabilityPool.sol` [Line 18](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/StabilityPool.sol#L18)
+- File: `LQTYStaking.sol` [Line 9](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LQTY/LQTYStaking.sol#L9)
