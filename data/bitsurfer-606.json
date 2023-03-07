@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "bitsurfer",
+  "risk": "2",
+  "title": "Possibility of frontrunning `ReaperStrategyGranarySupplyOnly.initialize()` can lead to arbitrary user have admin role",
+  "issueId": 606,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/606"
+}
