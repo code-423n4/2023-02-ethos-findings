@@ -13,7 +13,7 @@
 | [G-10] | Avoid contract existence checks by using low level calls | 3 |
 | [G-11] | Refactor a `modifier` to call a local function instead of directly having the code in the modifier | 1 |
 
-Total: 83 instances over 12 issues .
+Total: 83 instances over 11 issues .
 
 
 # [G‑01] Functions guaranteed to revert when called by normal users can be marked payable
@@ -248,20 +248,24 @@ https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8
 
 ## [G-11] Refactor a modifier to call a local function instead of directly having the code in the modifier, saving bytecode size and thereby deployment cost
 Modifiers code is copied in all instances where it's used, increasing bytecode size. By doing a refractor to the internal function, one can reduce bytecode size significantly at the cost of one JUMP. Consider doing this only if you are constrained by bytecode size.
- **Bad practice:**
+```solidity
 
-  `modifier onlyOwner() {
+**Bad practice:**
+
+modifier onlyOwner() {
 		require(owner() == msg.sender, "Ownable: caller is not the owner");
 		_;
-}`
+
  **Good practice:**
-`modifier onlyOwner() {
+
+modifier onlyOwner() {
 		_checkOwner();
 		_;
 }
 function _checkOwner() internal view virtual {
     require(owner() == msg.sender, "Ownable: caller is not the owner");
-}`
+}
+```
 
 **Affected source code:**
 
