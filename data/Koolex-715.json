@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Koolex",
+  "risk": "2",
+  "title": "Trove can not be closed if we have only one trove",
+  "issueId": 715,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/715"
+}
