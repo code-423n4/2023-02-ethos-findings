@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "StefanAndrei",
+  "risk": "2",
+  "title": "Max approve will not work for tokens that do not support it ",
+  "issueId": 795,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/795"
+}
