@@ -3,16 +3,16 @@
 |-|:-|:-:|:-:|
 | [G-0.1] | Functions guaranteed to revert when called by normal users can be marked payable | 7 |  
 | [G-01] | Optimize names to save gas | 12 | 
-| [G&#x2011;02] | ++i costs less gas than i++, especially when it’s used in for-loops (--i/i-- too) | 17 | 
+| [G&#x2011;02] | `++i` costs less gas than `i++`, especially when it’s used in for-loops (--i/i-- too) | 17 | 
 | [G&#x2011;03] | State variables only set in the constructor should be declared immutable | 1 | 
-| [G&#x2011;04] | <array>.length should not be looked up in every loop of a for-loop | 6 | 
+| [G&#x2011;04] | `<array>.length` should not be looked up in every loop of a `for`-loop | 6 | 
 | [G-05] | Avoid compound assignment operator in state variables | 21 |
-| [G-06] | Using bools for storage incurs overhead | 8 |
+| [G-06] | Using `bool`s for storage incurs overhead | 8 |
 | [G-07] | Using storage instead of memory for structs/arrays saves gas | 5 |
-| [G-08] | Using calldata instead of memory for read-only arguments in external functions saves gas | 4 |
-| [G-09] | Use require instead of assert | 2 |
+| [G-08] | Using `calldata` instead of memory for read-only arguments in external functions saves gas | 4 |
+| [G-09] | Use `require` instead of `assert()` | 2 |
 | [G-10] | Avoid contract existence checks by using low level calls | 3 |
-| [G-11] | Refactor a modifier to call a local function instead of directly having the code in the modifier | 1 |
+| [G-11] | Refactor a `modifier` to call a local function instead of directly having the code in the modifier | 1 |
 
 Total: 87 instances over 12 issues .
 
