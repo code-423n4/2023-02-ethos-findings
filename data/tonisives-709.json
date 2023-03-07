@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "tonisives",
+  "risk": "2",
+  "title": "Liquidations can be disabled if it deposits to the vault and vault’s TVL is full",
+  "issueId": 709,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/709"
+}
