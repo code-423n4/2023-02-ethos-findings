@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Deivitto",
+  "risk": "2",
+  "title": "`setWithdrawalQueue` never removes items from the queue and can get out of gas",
+  "issueId": 842,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/842"
+}
