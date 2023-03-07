@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "StefanAndrei",
+  "risk": "2",
+  "title": "Re-entrancy inside BorrowOperations if collateral is ERC777",
+  "issueId": 819,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/819"
+}
