@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "zzzitron",
+  "risk": "2",
+  "title": "DOS condition when calling the function `BorrowerOperations.repayLUSD` (or `BorrowerOperations.withdrawLUSD`), when using a token that reverts on a zero value transfer as collateral",
+  "issueId": 700,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/700"
+}
