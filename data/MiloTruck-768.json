@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "MiloTruck",
+  "risk": "2",
+  "title": "`_rebalance()` in `ActivePool` fails if a vault is at a deficit",
+  "issueId": 768,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/768"
+}
