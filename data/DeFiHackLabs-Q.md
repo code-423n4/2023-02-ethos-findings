@@ -435,3 +435,95 @@ https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/Trove
 ```js
 require(totals.totalDebtInSequence > 0, "TroveManager: nothing to liquidate");
 ```
+
+
+## [N6] Open TODOs 
+Use temporary TODOs as you work on a feature, but make sure to treat them before merging. Either add a link to a proper issue in your TODO, or remove it from the code
+### Context:
+[StabilityPool.sol#L335-L338](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/StabilityPool.sol#L335-L338)
+```
+     File: Ethos-Core/contracts/StabilityPool.sol
+    335:         /* TODO tess3rac7 unused var, but previously included in ETHGainWithdrawn event log.
+    336:          * Doesn't make a lot of sense to include in multiple CollateralGainWithdrawn logs.
+    337:          * If needed could create a separate event just to report this.
+    338:          */
+```
+[StabilityPool.sol#L380-L383](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/StabilityPool.sol#L380-L383)
+```
+    File: Ethos-Core/contracts/StabilityPool.sol
+    380:         /* TODO tess3rac7 unused var, but previously included in ETHGainWithdrawn event log.
+    381:          * Doesn't make a lot of sense to include in multiple CollateralGainWithdrawn logs.
+    382:          * If needed could create a separate event just to report this.
+    383:          */
+```
+## [N7] Use `require` instead of `assert` 
+### Context :- 
+[BorrowerOperations.sol#L301](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L301)
+```
+        File: Ethos-Core/contracts/BorrowerOperations.sol
+        301:         assert(msg.sender == _borrower || (msg.sender == stabilityPoolAddress && _collTopUp > 0 && _LUSDChange == 0)); 
+```
+[LUSDToken.sol#L321](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LUSDToken.sol#L321)
+```
+    File: Ethos-Core/contracts/LUSDToken.sol
+    321:         assert(account != address(0));
+```
+[LUSDToken.sol#L312-L313](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LUSDToken.sol#L312-L313)
+```
+    File: Ethos-Core/contracts/LUSDToken.sol
+    312:         assert(sender != address(0));
+    313:         assert(recipient != address(0));
+
+```
+    
+### Description
+Assert should not be used except for tests, require should be used.
+
+Prior to Solidity 0.8.0, pressing a confirm consumes the remainder of the process’s available gas instead of returning it, as request()/revert() did.
+
+assert() and require();
+The big difference between the two is that the assert()function when false, uses up all the remaining gas and reverts all the changes made.
+Meanwhile, a require() function when false, also reverts back all the changes made to the contract but does refund all the remaining gas fees we offered to pay.
+This is the most common Solidity function used by developers for debugging and error handling.
+
+Assertion() should be avoided even after solidity version 0.8.0, because its documentation states “The Assert function generates an error of type Panic(uint256).Code that works properly should never Panic, even on invalid external input. If this happens, you need to fix it in your contract. There’s a mistake”.
+
+## [N8] use underscore for number literals 
+[TroveManager.sol#L53](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L53)
+```
+    File: Ethos-Core/contracts/TroveManager.sol
+    53:     uint constant public MINUTE_DECAY_FACTOR = 999037758833783000;
+```
+[ReaperVaultV2.sol#L41](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperVaultV2.sol#L41)
+```
+    File: Ethos-Vault/contracts/ReaperVaultV2.sol
+    41:     uint256 public constant PERCENT_DIVISOR = 10000;
+```
+### Description
+There is occasions where certain number have been hardcoded, either in variable or in the code itself. Large numbers can become hard to read.
+
+### Recommendation
+Consider using underscores for number literals to improve its readability.like this
+```
+File: Ethos-Vault/contracts/ReaperVaultV2.sol
+
+- 41:   uint256 public constant PERCENT_DIVISOR = 10000;
++       uint256 public constant PERCENT_DIVISOR = 10_000
+```
+
+
+## [S-1] Remove unecessary comments 
+
+here the commented out portions serves no purpose at all,consider removing these
+[TroveManager.sol#L14](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L14)
+```
+File: Ethos-Core/contracts/TroveManager.sol
+14: // import "./Dependencies/Ownable.sol";
+
+```
+[TroveManager.sol#L18-L19](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L18-L19)
+```
+    File: Ethos-Core/contracts/TroveManager.sol
+    18: contract TroveManager is LiquityBase, /*Ownable,*/ CheckContract, ITroveManager {
+    19:     // string constant public NAME = "TroveManager";
+```
