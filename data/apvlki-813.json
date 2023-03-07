@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "apvlki",
+  "risk": "2",
+  "title": "Last good price might be not good if both Tellor and Chainlink prices are unreliable",
+  "issueId": 813,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/813"
+}
