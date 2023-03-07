@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "pipoca",
+  "risk": "3",
+  "title": "ActivePool.sol – Re-entrancy risk on _rebalance function ",
+  "issueId": 808,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/808"
+}
