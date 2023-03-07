@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "MiloTruck",
+  "risk": "2",
+  "title": "Depositors might not be able to withdraw from `StabilityPool` if any collateral's price drops significantly",
+  "issueId": 857,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/857"
+}
