@@ -10,8 +10,7 @@
 | [G&#x2011;05] | Use require instead of assert | 17 |
 | [G&#x2011;06] | Use mapping instead of arrays | - |
 | [G&#x2011;07] | Use a safe and secure smart contract libraries | - |
-| [G&#x2011;08] | Do not use floting solidity compiler version. Lock the solidity compiler version  | 4 |
-| [G&#x2011;09] | Use a more recent version of solidity | 8 |
+| [G&#x2011;08] | Use a more recent version of solidity | 8 |
 
 ## Gas Optimizations
 ### [G&#x2011;01]  require() or revert() statements that check input arguments should be at the top of the function
@@ -292,39 +291,7 @@ https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8
 ### [G&#x2011;07]  Use a safe and secure smart contract libraries 
 It is seen that ALL Ethos-Core contracts with compiler version 0.6.11 uses own libraries as dependencies. It is recommended to use openzeppelin Libraries as they most secure and safe also these libraries are stateless contracts that don't store any state. when the public function of a library from the contract is called, the bytecode of that function doesn't get deployed with the smart  contract, and thus some gas cost can be saved BUT, If the libraries are written during the project, say own libraries as it is in this project case, These libraries need to be deployed them and shall be required to pay one time gas fee for deployement. If libraries from OpenZeppelin  are used, they will not add to your deployment cost.
 
-### [G&#x2011;08]  Do not use floting solidity compiler version. Lock the solidity compiler version 
-Contracts should be deployed with the same compiler version and flags that they have been tested with thoroughly. Locking the pragma helps to ensure that contracts do not accidentally get deployed using, for example, an outdated compiler version that might introduce bugs that affect the contract system negatively.
-There are 4 instances of this issue.
-
-```solidity
-File: Ethos-Vault/contracts/ReaperVaultV2.sol
-
-3     pragma solidity ^0.8.0;
-```
-https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L3
-
-```solidity
-File: Ethos-Vault/contracts/ReaperVaultERC4626.sol
-
-3     pragma solidity ^0.8.0;
-```
-https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L3
-
-```solidity
-File: Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol
-
-3     pragma solidity ^0.8.0;
-```
-https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol#L3
-
-```solidity
-File: Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol
-
-3     pragma solidity ^0.8.0;
-```
-https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol#L3
-
-### [G&#x2011;09]  Use a more recent version of solidity 
+### [G&#x2011;08]  Use a more recent version of solidity 
 Recommend to use solidity compiler version ^0.8.0. This will safeguard from underflow and overflow conditions. This modification will make the contracts more gas optimized. safeMath library wont be explicitely required as ^0.8.0 version has already taken  the underflow and overflow conditions by default.
 1- Use a solidity version of at least 0.8 to get default underflow/overflow checks.
 2- Use a solidity version of at least 0.8.2 to get simple compiler automatic inlining. 
