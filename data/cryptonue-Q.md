@@ -48,7 +48,7 @@ File: CommunityIssuance.sol
 122:     }
 ```
 
-# Unnecessary `\_scaleTellorPriceByDigits` because of constants
+# Unnecessary `_scaleTellorPriceByDigits` because of constants
 
 As the `TARGET_DIGITS` and `TELLOR_DIGITS` are both a constant `18`, then the `_scaleTellorPriceByDigits` function is actually unnecessary, as it would just return the `_price` since the conditional `if-else` statement will not being entered.
 
@@ -130,6 +130,32 @@ In `LUSDToken.sol` exist `permit()` function which contains `ecrecover()`. This 
 The `permit` function which calls the Solidity `ecrecover()` function directly to verify the given signatures. However, the `ecrecover()` EVM opcode allows malleable (non-unique) signatures and thus is susceptible to replay attacks.
 
 Although a replay attack seems not possible for this LUSDToken contract, I recommend using the battle-tested OpenZeppelin’s ECDSA library.
+
+# Use safeTransfer/safeTransferFrom consistently instead of transfer/transferFrom
+
+A transfer function can fail without reverting, and the return values are not properly checked, the contract may assume a transfer succeeded and end up in a bad state with inaccurate assumptions about the value held in different locations. To prepare for such situations, a contract should either check the return value of the transfer function or use a solution such as Open Zeppelin's SafeTransfer function. The SafeTransfer or SafeTransferFrom are used in the Unipool contracts, but not in other locations. While some of the uses of transfer check the return value, not all do.
+
+```js
+File: CommunityIssuance.sol
+103:         OathToken.transferFrom(msg.sender, address(this), amount);
+...
+127:         OathToken.transfer(_account, _OathAmount);
+
+File: LQTYStaking.sol
+135:             lusdToken.transfer(msg.sender, LUSDGain);
+...
+171:         lusdToken.transfer(msg.sender, LUSDGain);
+
+```
+
+# No Reentrancy Guard in BorrowerOperations & TroveManager
+
+There are some external function, user-facing function which potentially introduce reentrancy
+
+* BorrowerOperations.sol (openTrove, closeTrove, addColl, and others which basicall call the `_adjustTrove` which potentially impacts user debt, collateral top-ups or withdrawals)
+* TroveManager.sol (redeemCollateral, and other that invokes `_applyPendingRewards` which potentially impacts collateral and debt rewards from redistributions.)
+
+The Ethos protocol makes no use of reentrancy guards in those files which can externally be called by any user. Our recommendation is to use of the Open Zeppelin ReentrancyGuard.sol
 
 # Wrong comment information
 
