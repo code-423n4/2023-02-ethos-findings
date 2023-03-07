@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "rbserver",
+  "risk": "2",
+  "title": "Calling `ReaperVaultV2._withdraw` function can cause owner of shares to burn shares but receive 0 tokens",
+  "issueId": 712,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/712"
+}
