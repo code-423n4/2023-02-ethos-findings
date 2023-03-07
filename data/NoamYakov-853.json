@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "NoamYakov",
+  "risk": "3",
+  "title": "`CommunityIssuance` doesn't check the return value of `OathToken.transferFrom()` and `OathToken.transfer()`",
+  "issueId": 853,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/853"
+}
