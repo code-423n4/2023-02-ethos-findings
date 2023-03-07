@@ -14,7 +14,7 @@
 | 10     | OPTIMIZE NAMES TO SAVE GAS                                                                                   | 12        |
 | 11     | INTERNAL FUNCTIONS ONLY CALLED ONCE CAN BE INLINED TO SAVE GAS                                               | 24        |
 | 12     | STATE VARIABLES CAN BE PACKED INTO FEWER STORAGE SLOTS                                                       |  2         |
-| 13     | ```require()``` OR ```revert()``` STATEMENTS THAT CHECK INPUT ARGUMENTS SHOULD BE AT THE TOP OF THE FUNCTION |           |
+| 13     | ```require()``` OR ```revert()``` STATEMENTS THAT CHECK INPUT ARGUMENTS SHOULD BE AT THE TOP OF THE FUNCTION |    6       |
 | 14     | SPLITTING ```require()``` STATEMENTS THAT USE && SAVES GAS                                                   |       7    |
 | 15     | EXPRESSION CAN BE UNCHECKED WHEN OVERFLOW IS NOT POSSIBLE                                                    |  1         |
 | 16     | BEFORE SOME FUNCTIONS, WE SHOULD CHECK SOME VARIABLES FOR POSSIBLE GAS SAVE                                  |     2      |
