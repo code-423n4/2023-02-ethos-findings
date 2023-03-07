@@ -6,6 +6,7 @@
 | L-02 | Missing zero address check | CommunityIssuance.sol | 1 |
 | L-03 | Initializer can be frontrunned | ReaperStrategyGranarySupplyOnly.sol | 1 |
 | L-04 | Events are not emitted | All Vault Contracts | 4 |
+| L-05 | StabilityPool should have migration function | StabilityPool.sol | 4 |
 | N-01 | Lock Pragma Version | All Vault Contracts  | 4 |
 | N-02 | Outdated Pragma Version | All Contracts | 12 |
 | N-03 | Use require instead of assert | - | 20 |
@@ -182,6 +183,48 @@ All Vault Contracts are affected.
 
 #### Recommendation:
 Add Event-Emit
+
+## [L-05] Stability Pool should have migration function
+
+#### Description: 
+
+The LUSDToken.sol contract has a function to upgrade the protocol, which changes the addresses of the troveManager, stabilityPool and the borrowerOperations
+
+```
+main/Ethos-Core/contracts/LUSDToken.sol
+
+    function upgradeProtocol(
+        address _newTroveManagerAddress,
+        address _newStabilityPoolAddress,
+        address _newBorrowerOperationsAddress
+    ) external {
+        _requireCallerIsGovernance();
+        checkContract(_newTroveManagerAddress);
+        checkContract(_newStabilityPoolAddress);
+        checkContract(_newBorrowerOperationsAddress);
+
+
+        troveManagerAddress = _newTroveManagerAddress;
+        troveManagers[_newTroveManagerAddress] = true;
+        emit TroveManagerAddressChanged(_newTroveManagerAddress);
+
+
+        stabilityPoolAddress = _newStabilityPoolAddress;
+        stabilityPools[_newStabilityPoolAddress] = true;
+        emit StabilityPoolAddressChanged(_newStabilityPoolAddress);
+
+
+        borrowerOperationsAddress = _newBorrowerOperationsAddress;
+        borrowerOperations[_newBorrowerOperationsAddress] = true;
+        emit BorrowerOperationsAddressChanged(_newBorrowerOperationsAddress);
+    }
+```
+
+If the protocol decides to upgrade, the funds in the stability pool should also migrate to the new stability pool address. Otherwise, unsuspecting users might still call `provideToSP()` on the old Stability Pool contract which may not be working as intended anymore. 
+
+#### Contract: 
+
+https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/LUSDToken.sol#L160-L181
 
 ## [N-01] Unlocked pragma
 
