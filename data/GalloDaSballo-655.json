@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "GalloDaSballo",
+  "risk": "2",
+  "title": "FSM Issue - No checks for price deviation when setting new CL feed",
+  "issueId": 655,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/655"
+}
