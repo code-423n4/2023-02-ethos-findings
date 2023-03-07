@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "0xmuxyz",
+  "risk": "3",
+  "title": "`STRATEGIST` still can assign a higher percentage into the `withdrawMaxLoss`, which may lead to a very higher risk for users to lose the principle sent as a collateral",
+  "issueId": 597,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/597"
+}
