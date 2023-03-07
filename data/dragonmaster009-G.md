@@ -109,3 +109,5 @@ At: https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/L
     https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L1531
     https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L1535
     https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L1539
+
+- Use custom errors instead of `require()`
