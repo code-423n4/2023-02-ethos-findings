@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "ronnyx2017",
+  "risk": "2",
+  "title": "ReaperVaultV2._reportLoss function incorrectly calculates the allocBPS proportional to loss",
+  "issueId": 642,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/642"
+}
