@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "codeislight",
+  "risk": "2",
+  "title": "An overflow may occur on an unsafe cast from uint256 to int256",
+  "issueId": 686,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/686"
+}
