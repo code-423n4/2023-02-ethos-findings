@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "rbserver",
+  "risk": "2",
+  "title": "Users cannot deposit new token amounts to vault after `ReaperVaultV2._freeFunds()` is reduced to 0 for such vault",
+  "issueId": 707,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/707"
+}
