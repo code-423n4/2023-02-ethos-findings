@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "0xmuxyz",
+  "risk": "2",
+  "title": "Due to lack of input validation, the `rewardPerSecond` will be `0` when the CommunityIssuance#`fund()` would be called",
+  "issueId": 653,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/653"
+}
