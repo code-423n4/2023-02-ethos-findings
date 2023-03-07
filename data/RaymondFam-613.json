@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "RaymondFam",
+  "risk": "3",
+  "title": "First deposit can be exploited to break share calculation",
+  "issueId": 613,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/613"
+}
