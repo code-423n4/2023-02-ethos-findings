@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Go-Langer",
+  "risk": "3",
+  "title": "Contract not initialized after deployment",
+  "issueId": 815,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/815"
+}
