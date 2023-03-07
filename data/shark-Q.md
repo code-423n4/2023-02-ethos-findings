@@ -64,13 +64,6 @@ contracts/BorrowerOperations.sol
 
 It is recommended to use correct spelling/grammar to improve readability.
 
-File: `BorrowerOperations.sol` [Line 127](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol#L127)
-
-```
-        /// @audit "This makes impossible" --> "This makes it impossible"
-        // This makes impossible to open a trove with zero withdrawn LUSD
-```
-
 File: `TroveManager.sol` [Line 936](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L936)
 
 ```
@@ -220,34 +213,43 @@ Here is 1 other instance of this issue:
 
 - File: `TroveManager.sol` [Line 53](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L53)
 
-## 13. `require()` statements without messages
+## 13. Use `delete` to clear variables instead of zero assignment, i.e. (0, 0x0, false)
 
-It is recommended to add informative error messages to `require()` statements. If no error message is provided, users won't know the cause of failure, leading to frustration.
+A better way to indicate that you are clearing a variable is to use the [`delete`](https://docs.soliditylang.org/en/v0.8.17/types.html#delete) keyword.
 
-Consider adding informative error messages to these instances:
+For example:
 
-File: [TroveManager.sol](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L250)
+File: `ReaperVaultV2.sol` [Line 215](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Vault/contracts/ReaperVaultV2.sol#L215)
 
 ```solidity
-File: Ethos-Core/contracts/TroveManager.sol
+        strategies[_strategy].allocBPS = 0;
+```
 
-250:        require(msg.sender == owner);
+can be changed to:
 
-551:        require(totals.totalDebtInSequence > 0);
+```solidity
+        delete strategies[_strategy].allocBPS;
+```
 
-716:        require(_troveArray.length != 0);
+Here are some other instances of this issue:
 
-754:        require(totals.totalDebtInSequence > 0);
+File: `TroveManager.sol` ([387](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L387), [388](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L388), [468](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L468), [469](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L469), [505](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L505), [506](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L506), [1192](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L1192), [1285](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L1285), [1286](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L1286), [1288](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L1288), [1289](https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/TroveManager.sol#L1289))
 
-1450:        require(redemptionFee < _collateralDrawn);
+```solidity
+387:        singleLiquidation.debtToOffset = 0;
+388:        singleLiquidation.collToSendToSP = 0;
 
-1523:        require(msg.sender == borrowerOperationsAddress);
+468:        debtToOffset = 0;
+469:        collToSendToSP = 0;
 
-1527:        require(msg.sender == address(redemptionHelper));
+505:        singleLiquidation.debtToRedistribute = 0;
+506:        singleLiquidation.collToRedistribute = 0;
 
-1531:        require(msg.sender == borrowerOperationsAddress || msg.sender == address(redemptionHelper));
+1192:       Troves[_borrower][_collateral].stake = 0;
 
-1535:        require(Troves[_borrower][_collateral].status == Status.active);
+1285:       Troves[_borrower][_collateral].coll = 0;
+1286:       Troves[_borrower][_collateral].debt = 0;
 
-1539:        require (TroveOwnersArrayLength > 1 && sortedTroves.getSize(_collateral) > 1);
+1288:       rewardSnapshots[_borrower][_collateral].collAmount = 0;
+1289:       rewardSnapshots[_borrower][_collateral].LUSDDebt = 0;
 ```
