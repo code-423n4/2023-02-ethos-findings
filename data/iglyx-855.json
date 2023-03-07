@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "iglyx",
+  "risk": "2",
+  "title": "ReaperVaultV2 withdrawals can be frozen if Granary market has liquidity shortage",
+  "issueId": 855,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/855"
+}
