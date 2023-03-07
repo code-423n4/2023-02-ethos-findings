@@ -1632,6 +1632,28 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultERC4626.sol
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultERC4626.sol#L273)
 
+##
+
+### [G-31]  INSTEAD OF CALCULATING A STATEVAR WITH KECCAK256() EVERY TIME THE CONTRACT IS MADE PRE CALCULATE THEM BEFORE AND ONLY GIVE THE RESULT TO A CONSTANT
+
+
+File: 2023-02-ethos/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol
+
+        49:  bytes32 public constant KEEPER = keccak256("KEEPER");
+        50:  bytes32 public constant STRATEGIST = keccak256("STRATEGIST");
+        51:  bytes32 public constant GUARDIAN = keccak256("GUARDIAN");
+        52:  bytes32 public constant ADMIN = keccak256("ADMIN");
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/abstract/ReaperBaseStrategyv4.sol#L49-L52)
+
+File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
+
+       73:   bytes32 public constant DEPOSITOR = keccak256("DEPOSITOR");
+       74:   bytes32 public constant STRATEGIST = keccak256("STRATEGIST");
+       75:   bytes32 public constant GUARDIAN = keccak256("GUARDIAN");
+       76:   bytes32 public constant ADMIN = keccak256("ADMIN");
+
+(https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L73-L76)
  
 
 
