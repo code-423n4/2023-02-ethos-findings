@@ -1,4 +1,3 @@
-
 ## Non Critical Issues
 
 
@@ -14,7 +13,7 @@
 
 *Instances (26)*:
 ```solidity
-File: example/ActivePool.sol
+File: ActivePool.sol
 
 96:         collateralConfigAddress = _collateralConfigAddress;
 
@@ -33,7 +32,7 @@ File: example/ActivePool.sol
 ```
 
 ```solidity
-File: example/BorrowerOperations.sol
+File: BorrowerOperations.sol
 
 146:         stabilityPoolAddress = _stabilityPoolAddress;
 
@@ -44,14 +43,14 @@ File: example/BorrowerOperations.sol
 ```
 
 ```solidity
-File: example/LQTY/CommunityIssuance.sol
+File: LQTY/CommunityIssuance.sol
 
 75:         stabilityPoolAddress = _stabilityPoolAddress;
 
 ```
 
 ```solidity
-File: example/LQTY/LQTYStaking.sol
+File: LQTY/LQTYStaking.sol
 
 88:         troveManagerAddress = _troveManagerAddress;
 
@@ -62,7 +61,7 @@ File: example/LQTY/LQTYStaking.sol
 ```
 
 ```solidity
-File: example/LUSDToken.sol
+File: LUSDToken.sol
 
 102:         troveManagerAddress = _troveManagerAddress;
 
@@ -87,7 +86,7 @@ File: example/LUSDToken.sol
 ```
 
 ```solidity
-File: example/TroveManager.sol
+File: TroveManager.sol
 
 266:         borrowerOperationsAddress = _borrowerOperationsAddress;
 
@@ -99,7 +98,7 @@ File: example/TroveManager.sol
 
 *Instances (10)*:
 ```solidity
-File: example/TroveManager.sol
+File: TroveManager.sol
 
 250:         require(msg.sender == owner);
 
@@ -128,7 +127,7 @@ Not all IERC20 implementations `revert()` when there's a failure in `approve()`.
 
 *Instances (5)*:
 ```solidity
-File: example/LUSDToken.sol
+File: LUSDToken.sol
 
 231:         _approve(msg.sender, spender, amount);
 
@@ -147,7 +146,7 @@ TODOs may signal that a feature is missing or not ready for audit, consider reso
 
 *Instances (2)*:
 ```solidity
-File: example/StabilityPool.sol
+File: StabilityPool.sol
 
 335:         /* TODO tess3rac7 unused var, but previously included in ETHGainWithdrawn event log.
 
@@ -160,7 +159,7 @@ Index event fields make the field more quickly accessible to off-chain tools tha
 
 *Instances (91)*:
 ```solidity
-File: example/ActivePool.sol
+File: ActivePool.sol
 
 58:     event CollateralConfigAddressChanged(address _newCollateralConfigAddress);
 
@@ -185,7 +184,7 @@ File: example/ActivePool.sol
 ```
 
 ```solidity
-File: example/BorrowerOperations.sol
+File: BorrowerOperations.sol
 
 92:     event CollateralConfigAddressChanged(address _newCollateralConfigAddress);
 
@@ -218,7 +217,7 @@ File: example/BorrowerOperations.sol
 ```
 
 ```solidity
-File: example/LQTY/CommunityIssuance.sol
+File: LQTY/CommunityIssuance.sol
 
 50:     event OathTokenAddressSet(address _oathTokenAddress);
 
@@ -231,7 +230,7 @@ File: example/LQTY/CommunityIssuance.sol
 ```
 
 ```solidity
-File: example/LQTY/LQTYStaking.sol
+File: LQTY/LQTYStaking.sol
 
 49:     event LQTYTokenAddressSet(address _lqtyTokenAddress);
 
@@ -262,7 +261,7 @@ File: example/LQTY/LQTYStaking.sol
 ```
 
 ```solidity
-File: example/LUSDToken.sol
+File: LUSDToken.sol
 
 78:     event TroveManagerAddressChanged(address _troveManagerAddress);
 
@@ -277,7 +276,7 @@ File: example/LUSDToken.sol
 ```
 
 ```solidity
-File: example/StabilityPool.sol
+File: StabilityPool.sol
 
 233:     event StabilityPoolCollateralBalanceUpdated(address _collateral, uint _newBalance);
 
@@ -324,7 +323,7 @@ File: example/StabilityPool.sol
 ```
 
 ```solidity
-File: example/TroveManager.sol
+File: TroveManager.sol
 
 186:     event BorrowerOperationsAddressChanged(address _newBorrowerOperationsAddress);
 
@@ -380,7 +379,7 @@ File: example/TroveManager.sol
 
 *Instances (2)*:
 ```solidity
-File: example/TroveManager.sol
+File: TroveManager.sol
 
 1045:     function getNominalICR(address _borrower, address _collateral) public view override returns (uint) {
 
@@ -404,7 +403,7 @@ If all arguments are strings and or bytes, `bytes.concat()` should be used inste
 
 *Instances (1)*:
 ```solidity
-File: example/LUSDToken.sol
+File: LUSDToken.sol
 
 283:         bytes32 digest = keccak256(abi.encodePacked('\x19\x01', 
 
@@ -414,7 +413,7 @@ File: example/LUSDToken.sol
 
 *Instances (1)*:
 ```solidity
-File: example/ReaperVaultERC4626.sol
+File: ReaperVaultERC4626.sol
 
 24:     ) ReaperVaultV2(_token, _name, _symbol, _tvlCap, _treasury, _strategists, _multisigRoles) {}
 
@@ -425,7 +424,7 @@ Initializers could be front-run, allowing an attacker to either set their own va
 
 *Instances (3)*:
 ```solidity
-File: example/ReaperStrategyGranarySupplyOnly.sol
+File: ReaperStrategyGranarySupplyOnly.sol
 
 62:     function initialize(
 
@@ -439,7 +438,7 @@ File: example/ReaperStrategyGranarySupplyOnly.sol
 
 *Instances (4)*:
 ```solidity
-File: example/LQTY/CommunityIssuance.sol
+File: LQTY/CommunityIssuance.sol
 
 103:         OathToken.transferFrom(msg.sender, address(this), amount);
 
@@ -448,7 +447,7 @@ File: example/LQTY/CommunityIssuance.sol
 ```
 
 ```solidity
-File: example/LQTY/LQTYStaking.sol
+File: LQTY/LQTYStaking.sol
 
 135:             lusdToken.transfer(msg.sender, LUSDGain);
 
