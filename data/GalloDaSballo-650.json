@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "GalloDaSballo",
+  "risk": "2",
+  "title": "Deposit should use Pool -> Rebase Arb with potential attack too (you lock in guaranteed profits at the detriment of others)",
+  "issueId": 650,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/650"
+}
