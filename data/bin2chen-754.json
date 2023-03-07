@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "bin2chen",
+  "risk": "2",
+  "title": "ReaperVaultERC4626.withdraw() The actual number of withdrawals is not the expected number",
+  "issueId": 754,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/754"
+}
