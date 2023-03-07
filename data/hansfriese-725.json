@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "hansfriese",
+  "risk": "2",
+  "title": "Some tokens do not allow changing allowance from non-zero to non-zero",
+  "issueId": 725,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/725"
+}
