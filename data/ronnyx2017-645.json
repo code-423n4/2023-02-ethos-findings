@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "ronnyx2017",
+  "risk": "2",
+  "title": "the max slippage(loss) allowed when withdrawing cannot be guaranteed",
+  "issueId": 645,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/645"
+}
