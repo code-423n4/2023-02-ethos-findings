@@ -9,38 +9,34 @@ If variables occupying the same slot are both written the same function or by th
 
 > Instances (2) :
 
-> Approximate gas saved : 100000 gas for 5 SLOTS
+> Approximate gas saved : 100000 gas for 5 SLOTS 
+
+if 4 slots 80000 gas saved 
 
 File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultV2.sol
 
      35:  mapping(address => StrategyParams) public strategies; // (32)
-
      42: uint256 public tvlCap; // (32)
-
      44: uint256 public totalAllocBPS;  // (32)
      45: uint256 public totalAllocated;  // (32)
      46: uint256 public lastReport;  //(32)
-
      49:  bool public emergencyShutdown;  //(1)
-
-    55:  uint256 public withdrawMaxLoss = 1;  // (32)
-    56:  uint256 public lockedProfitDegradation; // (32)
-    57:  uint256 public lockedProfit;   // (32)
-
-    78:  address public treasury;  // (20)
+     55:  uint256 public withdrawMaxLoss = 1;  // (32)
+     56:  uint256 public lockedProfitDegradation; // (32)
+     57:  uint256 public lockedProfit;   // (32)
+     78:  address public treasury;  // (20)
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Vault/contracts/ReaperVaultV2.sol#L35-L78)
 
 Variables ordering with 10 slots. 
 
-The variable withdrawMaxLoss stores a value of 1 and there is no place in the contract where a higher value is stored for this variable. Therefore, it is safe to change the type of withdrawMaxLoss to uint64
+The variable withdrawMaxLoss stores a value of 1 and there is no place in the contract where a higher value is stored for this variable. Therefore, it is safe to change the type of withdrawMaxLoss to uint64 can save one slot 
 
       /// @Audit Variable ordering with 8 slots instead of the current 10 slots:
 
-      /// withdrawalQueue, Mapping(32):strategies, uint256(32) : tvlCap, uint256(32) : totalAllocBPS, uint256(32) : totalAllocated, uint256(32) : lastReport,
-             uint256(32) : lockedProfitDegradation, uint256(32) : lockedProfit, uint64 (8): withdrawMaxLoss , bool(1) : emergencyShutdown, 
-             address(20 ) : treasury
-
+      /// withdrawalQueue, Mapping(32):strategies, uint256(32) : tvlCap, uint256(32) : totalAllocBPS, uint256(32) 
+          : totalAllocated, uint256(32) : lastReport,uint256(32) : lockedProfitDegradation, uint256(32) : 
+          lockedProfit, uint64 (8): withdrawMaxLoss , bool(1) : emergencyShutdown, address(20 ) : treasury
         address[] public withdrawalQueue; 
         mapping(address => StrategyParams) public strategies; // (32)
         uint256 public tvlCap; // (32)
@@ -57,7 +53,12 @@ The variable withdrawMaxLoss stores a value of 1 and there is no place in the co
 
 > So reduce 2 Gsset operations, you can save around 40,000 gas (2 x 20,000 gas). 
 
-#### If the sponsor still feels that withdrawMaxLoss should be declared as uint256, then we can order the variables with 9 slots in the same order
+#### If the sponsor still feels that withdrawMaxLoss should be declared as uint256, then we can order the variables with 9 slots in the same order . 
+
+        uint256 public lockedProfit;   // (32)
+        uint256 public withdrawMaxLoss = 1;  // (32)
+        bool public emergencyShutdown;  // (1)
+        address public treasury;  // (20)
 
 File : 2023-02-ethos/Ethos-Core/contracts/ActivePool.sol
 
@@ -85,14 +86,15 @@ Recommended Mitigations :
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L49-L54)
 
-
 ##
 
 ### [G-2]  Structs can be packed into fewer storage slots
 
 > Instances (1) : 
 
-> Approximate gas saved : 20000 gas
+> Total Slots Saved - 3
+
+> Approximate gas saved : 60000 gas
 
 Each slot saved can avoid an extra Gsset (20000 gas) for the first setting of the struct. Subsequent reads as well as writes have smaller gas savings
 
@@ -114,7 +116,58 @@ The variable decimals can be safely declared as uint128 instead of uint256 since
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/CollateralConfig.sol#L27-L32)
 
+FILE : https://github.com/code-423n4/2023-02-ethos/blob/main/Ethos-Core/contracts/BorrowerOperations.sol
 
+        struct LocalVariables_adjustTrove {
+        uint256 collCCR; //32
+        uint256 collMCR; //32
+        uint256 collDecimals; //32
+        uint price; //32
+        uint collChange; //32
+        uint netDebtChange; //32
+        bool isCollIncrease; //1
+        uint debt; //32
+        uint coll; //32
+        uint oldICR; //32
+        uint newICR; //32
+        uint newTCR;//32
+        uint LUSDFee; //32
+        uint newDebt; //32
+        uint newColl; //32
+        uint stake; //32
+    }
+ (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L47-L64)     
+
+> Currently total 16 slots 
+
+  collCCR,collMCR, LUSDFee we can declare uint128 instead of uint266. The collCCR,collMCR always within the particular range. Once set values not increased as per documentations. Only possible to decrease the collCCR,collMCR values so for those situations uint128 is alone enough. There is no chance to overflow .
+
+LUSDfee also each trove has the debt limit. The fee percent is very less which is always between 1-2%from overall debt. So uint128 is more than enough to store LUSDfee 
+
+
+
+        /// @audit Variable ordering with 14 slots instead of the current 16:
+        struct LocalVariables_adjustTrove {
+       
+        uint256 collDecimals; //32
+        uint price; //32
+        uint collChange; //32
+        uint netDebtChange; //32
+        uint debt; //32
+        uint coll; //32
+        uint oldICR; //32
+        uint newICR; //32
+        uint newTCR;//32
+        uint newDebt; //32
+        uint newColl; //32
+        uint stake; //32
+        uint128 collCCR; //16
+        uint128 collMCR; //16
+        uint128 LUSDFee; //16   
+        bool isCollIncrease; //1
+        
+       }
+   
 
 ##        
 
@@ -133,8 +186,9 @@ File : 2023-02-ethos/Ethos-Core/contracts/CollateralConfig.sol
 
 File: 2023-02-ethos/Ethos-Core/contracts/ActivePool.sol
 
-      /// @Audit 
-      setAddresses(),setYieldingPercentage(),setYieldingPercentageDrift(),setYieldClaimThreshold(),setYieldDistributionParams(),manualRebalance(),
+      
+        /// @Audit 
+setAddresses(),setYieldingPercentage(),setYieldingPercentageDrift(),setYieldClaimThreshold(),setYieldDistributionParams(),manualRebalance(),
       26 : contract ActivePool is Ownable, CheckContract, IActivePool {
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/ActivePool.sol#L26)
@@ -178,7 +232,7 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol
 
 ### [G-4] MULTIPLE ADDRESS/ID MAPPINGS CAN BE COMBINED INTO A SINGLE MAPPING OF AN ADDRESS/ID TO A STRUCT, WHERE APPROPRIATE
 
-Saves a storage slot for the mapping. Depending on the circumstances and sizes of types, can avoid a Gsset (20000 gas) per mapping combined. Reads and subsequent writes can also be cheaper when a function requires both values and they both fit in the same storage slot. Finally, if both fields are accessed in the same function, can save ~42 gas per access due to [not having to recalculate the key’s keccak256 hash](https://gist.github.com/IllIllI000/ec23a57daa30a8f8ca8b9681c8ccefb0) (Gkeccak256 - 30 gas) and that calculation’s associated stack operations
+Saves a storage slot for the mapping. Depending on the circumstances and sizes of types, can avoid a Gsset (20000 gas) per mapping combined. Reads and subsequent writes can also be cheaper when a function requires both values and they both fit in the same storage slot. Finally, if both fields are accessed in the same function, can save ~42 gas per access due to not having to recalculate the key’s keccak256 hash (Gkeccak256 - 30 gas) and that calculation’s associated stack operations
 
 
 File : 2023-02-ethos/Ethos-Core/contracts/TroveManager.sol
@@ -376,11 +430,13 @@ The execution Cost : 2086 .
 File : CollateralConfig.sol
 
             for(uint256 i = 0; i < _collaterals.length; i++) {
-            address collateral = _collaterals[i];  //@Audit Declared inside the loop. This should be avoided . Should declare outside the loop
+            address collateral = _collaterals[i];  //@Audit Declared inside the loop. This should be avoided . 
+            Should declare outside the loop
             checkContract(collateral);
             collaterals.push(collateral);
 
-            Config storage config = collateralConfig[collateral];   //@Audit Declared inside the loop. This should be avoided . Should declare outside the 
+            Config storage config = collateralConfig[collateral];   //@Audit Declared inside the loop. This should 
+            be avoided . Should declare outside the 
            loop
             config.allowed = true;
             uint256 decimals = IERC20(collateral).decimals();
@@ -505,7 +561,7 @@ GAS SAVED :
 File :  BorrowerOperations.sol
 
 
-         21 : string constant public NAME = "BorrowerOperations";
+       21 : string constant public NAME = "BorrowerOperations";
 
 (https://github.com/code-423n4/2023-02-ethos/blob/73687f32b934c9d697b97745356cdf8a1f264955/Ethos-Core/contracts/BorrowerOperations.sol#L21)
 
@@ -803,11 +859,35 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperStrategyGranarySupplyOnly.sol
 
 ### [G-13] SPLITTING REQUIRE() STATEMENTS THAT USE && SAVES GAS
 
-Instead of using the && operator in a single require statement to check multiple conditions, using multiple require statements with 1 condition per require statement will save 8 GAS per &&
+Instead of using the && operator in a single require statement to check multiple conditions, using multiple require statements with 1 condition per require statement will save 30 GAS per &&
 
 > Instances (4)
 
-Approximate Saved Gas : 32 gas
+Approximate Saved Gas : 120 gas
+
+PROOF OF WORK (remix without optimizations) :
+
+(https://github.com/sathishpic22/AllGASTestings/blob/main/Require%26%26splitTest)
+
+pragma solidity ^0.8.7;
+contract MappingTest {
+
+int a=10;
+    
+    // Execution Cost 2398
+    function requireTest()public view {
+
+        require(a==10 && a<11,"wrong inputs");
+    }
+    // Execution Cost 2368
+    function requireTest1()public view {
+        require(a==10,"wrong inputs");
+        require(a<11 ,"wrong inputs");
+    }
+
+}
+
+So when splitting require then save 30 gas 
 
 File : 2023-02-ethos/Ethos-Core/contracts/BorrowerOperations.sol
 
@@ -919,13 +999,47 @@ File : 2023-02-ethos/Ethos-Vault/contracts/ReaperVaultERC4626.sol
 
 ##
 
-### [G-15] ADD UNCHECKED {} FOR SUBTRACTIONS WHERE THE OPERANDS CANNOT UNDERFLOW BECAUSE OF A PREVIOUS REQUIRE() OR IF-STATEMENT . This saves 30-40 gas
+### [G-15] ADD UNCHECKED {} FOR SUBTRACTIONS WHERE THE OPERANDS CANNOT UNDERFLOW BECAUSE OF A PREVIOUS REQUIRE() OR IF-STATEMENT . This saves 200-210 gas as per remix 
 
 The unchecked keyword was introduced in Solidity version 0.8.0. Prior to that version. 
 
 > Instances (8) :
 
-> Approximate Saved Gas :  320 gas 
+> Approximate Saved Gas :  1600 gas 
+
+PROOF OF CONCEPT (remix without optimizations):
+
+pragma solidity ^0.8.7;
+contract MappingTest {
+
+// Execution Cost 696
+function Subtraction() public pure {
+int a=20; int b=10; int c=10; int d=30;
+    if(a>b){
+        a=a-b;
+    }
+    if(c<d){
+        c=d-c;
+    }
+   
+}
+//Execution Cost 276
+function uncheckedSubtraction() public pure {
+int a=20; int b=10; int c=10; int d=30;
+    if(a>b){
+        unchecked{a=a-b;}
+        
+    }
+    if(c<d){
+        unchecked{c=d-c;}
+    }
+   
+}
+
+
+}
+
+So clearly for each unchecked possible to save 210 gas 
 
 SOLUTION:
 
