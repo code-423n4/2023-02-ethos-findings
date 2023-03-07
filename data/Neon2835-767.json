@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "Neon2835",
+  "risk": "3",
+  "title": "The design defect of the ActivePool rehypothecation mechanism, ReaperVaultV2 administrators have too much authority and have the conditions and motives to do evil, so make users lack trust in the ETHOS system (crisis of trust)",
+  "issueId": 767,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/767"
+}
