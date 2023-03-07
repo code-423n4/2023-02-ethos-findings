@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "cryptonue",
+  "risk": "2",
+  "title": "PriceFeed contract could ignores ChainLink roundId thus will treat stale price as fresh",
+  "issueId": 687,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/687"
+}
