@@ -1,3 +1,13 @@
+# Tellor delay period of suggested to be 15 minutes instead of 20 minutes
+
+In a case where Chainlink is unable to respond price query, Tellor will be use as an alternative. Due to recent issue of Liquity on Tellor response is possible to be disputed resulting in bad price return, the Tellor provide a failsafe of immutable Liquity by adding a time delay on fetching the price to last 15 minutes in order to prevent abuse of Tellor by disputing a price.
+
+The 15 minutes delay period has been used by Liquity so far, and on their report it's a sweet spot, as the longer delay will result in not fresh / updated price, while to short might tends to 'corrupted' by Tellor disputes.
+
+I'm not sure why Ethos use the 20 minutes, have they did some analytic of the time variance, but shorter delay of latest price is better than lagging in terms of price feeds. 
+
+Thus we recommend to Ethos to keep delay to be 15 minutes instead of 20 minutes.
+
 # Collateral config didn't check duplicate (or if collateral alread exist in list) when `collaterals.push(collateral);`
 
 In `CollateralConfig.sol` the `initialize` function doesn't really check if collateral which currently being pushed to array is not duplicates.
@@ -73,6 +83,8 @@ File: PriceFeed.sol
 528:         return price;
 529:     }
 ```
+
+
 
 # One of mostly used function, `checkContract()` can be replaced
 
