@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "hansfriese",
+  "risk": "2",
+  "title": "The vault might charge more underlying tokens from strategies because `ReaperVaultV2.report()` uses `repayment` wrongly.",
+  "issueId": 733,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/733"
+}
