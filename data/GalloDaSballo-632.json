@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "GalloDaSballo",
+  "risk": "2",
+  "title": "If the strategy incurs a loss the Active Pool will stop working until the shortfall is paid out entirely",
+  "issueId": 632,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/632"
+}
