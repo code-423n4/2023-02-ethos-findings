@@ -12,4 +12,8 @@ function liquidate(address _borrower, address _collateral) external override {
 }
 ```
 
+# Add checkContract for RedemptionHelper
+
+Use `checkContract` to verify the correctness of the `setAddresses` function in RedemptionHelper, just like other contracts such as ActivePool.
+
 
