@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "ast3ros",
+  "risk": "2",
+  "title": "[M-6] Centralization risks - Admin can steal all the funds from Reaper Vault",
+  "issueId": 667,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/667"
+}
