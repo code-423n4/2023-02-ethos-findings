@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "matrix_0wl",
+  "risk": "2",
+  "title": "ActivePool and BorrowerOperations are not protected for the ERC20 approval race condition",
+  "issueId": 647,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/647"
+}
