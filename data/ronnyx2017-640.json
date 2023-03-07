@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "ronnyx2017",
+  "risk": "2",
+  "title": "The loss is double counted in the ReaperStrategyGranarySupplyOnly._harvestCore function",
+  "issueId": 640,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/640"
+}
