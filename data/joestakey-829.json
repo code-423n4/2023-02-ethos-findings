@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "joestakey",
+  "risk": "2",
+  "title": "Incorrect degradation coefficient due to wrong block period assumption",
+  "issueId": 829,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/829"
+}
