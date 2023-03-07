@@ -1,0 +1,8 @@
+{
+  "contest": 216,
+  "handle": "0xNazgul",
+  "risk": "2",
+  "title": "[NAZ-M2] `ReaperVaultERC4626.sol` doesn't fully conform to EIP4626 implementation",
+  "issueId": 811,
+  "issueUrl": "https://github.com/code-423n4/2023-02-ethos-findings/issues/811"
+}
